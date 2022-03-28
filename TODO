@@ -1,0 +1,7 @@
+
+Todo:
+  ☐ データベースの情報取得をproviderを使用し、viewに表示(home_view)
+  ☐ タイトルと時間の確認
+  ☐ reminderの編集
+  ☐ reminderの削除
+  ☐ 通知削除のためにtitle,content,idの以前の状態を使用(おなじintentでないと削除できない)
