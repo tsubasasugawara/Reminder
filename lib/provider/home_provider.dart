@@ -19,9 +19,7 @@ class HomeProvider extends ChangeNotifier {
   }
 
   String dateTimeFormat(int milliseconds) {
-    var dt = DateTime.fromMillisecondsSinceEpoch(
-      DateTime.now().millisecondsSinceEpoch + milliseconds,
-    );
+    var dt = DateTime.fromMillisecondsSinceEpoch(milliseconds);
     var now = DateTime.now();
 
     var diff = dt.difference(now);

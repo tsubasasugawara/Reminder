@@ -32,11 +32,12 @@ class HomeView extends StatelessWidget {
       ),
       body: Center(child: list(context)),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
+        onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const AddReminderView("", "")),
+              builder: (context) => AddReminderView(null, null, null, null),
+            ),
           );
         },
         child: const Icon(
@@ -57,21 +58,32 @@ class HomeView extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           itemCount: provider.model.dataList.length,
           itemBuilder: (BuildContext context, int index) {
-            return Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.green,
-                  width: 2,
-                  style: BorderStyle.solid,
+            return GestureDetector(
+              onTap: () {
+                var dataList = provider.model.dataList;
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddReminderView(
+                      dataList[index]["id"],
+                      dataList[index]["title"],
+                      dataList[index]["content"],
+                      dataList[index]["time"],
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.green,
+                    width: 2,
+                    style: BorderStyle.solid,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.only(bottom: 10),
-              child: GestureDetector(
-                onTap: () {
-                  print("Hello");
-                },
+                padding: const EdgeInsets.all(10),
+                margin: const EdgeInsets.only(bottom: 10),
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   alignment: Alignment.topLeft,
@@ -109,7 +121,6 @@ class HomeView extends StatelessWidget {
                       ),
                       IconButton(
                         onPressed: () async {
-                          print(index);
                           await provider.deleteData(index);
                         },
                         icon: const Icon(

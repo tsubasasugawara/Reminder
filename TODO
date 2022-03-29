@@ -1,7 +1,9 @@
 
 Todo:
-  ☐ データベースの情報取得をproviderを使用し、viewに表示(home_view)
-  ☐ タイトルと時間の確認
-  ☐ reminderの編集
-  ☐ reminderの削除
-  ☐ 通知削除のためにtitle,content,idの以前の状態を使用(おなじintentでないと削除できない)
+  ✔ titleのvalidateが機能していない @done(22-03-28 22:44)
+  ✔ 時間のvalidateが誤作動 @done(22-03-28 23:04)
+  ✔ 登録後の時間のリセット @done(22-03-28 23:04)
+  ✔ 編集 : homeviewで必要な物を取得し、addreminderへ渡す @done(22-03-29 17:20)
+  ✔ 時間の保存の仕方 epochMilliseconds @done(22-03-29 17:33)
+  ✔ 時間の表示がおかしい @done(22-03-29 17:33)
+  ☐ testしやすい関数づくり

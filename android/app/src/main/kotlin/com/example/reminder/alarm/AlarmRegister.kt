@@ -34,7 +34,7 @@ class AlarmRegister(_context: Context) {
         }
 
         val alarmInfo = AlarmManager.AlarmClockInfo(
-            System.currentTimeMillis() + millis,
+            millis,
             null
         )
 

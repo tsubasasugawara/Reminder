@@ -1,132 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:reminder/model/add_reminder_model.dart';
 import 'package:reminder/model/alarm.dart';
 
-class AddReminderProvider extends ChangeNotifier {
-  AddReminderModel model =
-      AddReminderModel("", "", DateTime.now().millisecondsSinceEpoch);
+class AddReminderProvider {
+  late AddReminderModel model;
 
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController contentController = TextEditingController();
+// Operate TextFormField
+  TextEditingController titleController = TextEditingController();
+  TextEditingController contentController = TextEditingController();
 
+// Meanig correct value or not.
   bool titleIsOk = true;
+  bool timeIsOk = false;
 
-  bool timeIsOk = true;
+  final textsize = 20.0;
 
-  AddReminderProvider() {
+  AddReminderProvider(int? id, String? title, String? content, int? time) {
+    // Edited or New.
+    if (id == null || id == 0) {
+      model = AddReminderModel(null, null, null);
+    } else {
+      model = AddReminderModel(id, title, content);
+    }
+    model.dataBeforeEditing["time"] = time;
+
     init();
+
+    titleController.text = model.dataBeforeEditing["title"] ?? "";
+    contentController.text = model.dataBeforeEditing["content"] ?? "";
   }
 
+// id = 0 : all reset.
   void init() {
-    var dt = DateTime.now();
-    model = AddReminderModel("", "", DateTime.now().millisecondsSinceEpoch);
-
-    model.title = "";
-    model.content = "";
-
-    model.year = dt.year;
-    model.month = dt.month;
-    model.day = dt.day;
-    model.hour = dt.hour;
-    model.minute = dt.minute;
-
-    titleController.clear();
-    contentController.clear();
-
-    titleIsOk = true;
     timeIsOk = true;
-    notifyListeners();
   }
 
-  Future<void> selectDate(BuildContext context) async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime(
-          model.year, model.month, model.day, model.hour, model.minute),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(DateTime.now().year + 10),
-      builder: (context, child) {
-        return Theme(
-            data: Theme.of(context).copyWith(
-              dialogBackgroundColor: Colors.black,
-              colorScheme: const ColorScheme.dark(
-                primary: Colors.green,
-                onSurface: Colors.green,
-                onPrimary: Colors.black,
-              ),
-            ),
-            child: child!);
-      },
-    );
-    if (picked != null) {
-      model.year = picked.year;
-      model.month = picked.month;
-      model.day = picked.day;
-      notifyListeners();
-    }
-  }
+  Future insertData(int? _id) async {
+    var title = model.dataBeingEditing["title"];
+    var content = model.dataBeingEditing["content"];
+    var time = model.millisecondsFromEpoch;
 
-  Future<void> selectTime(BuildContext context) async {
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay(hour: model.hour, minute: model.minute),
-      builder: (context, child) {
-        return Theme(
-            data: Theme.of(context).copyWith(
-              dialogBackgroundColor: Colors.black,
-              colorScheme: const ColorScheme.dark(
-                primary: Colors.green,
-                onSurface: Colors.green,
-                onPrimary: Colors.black,
-              ),
-            ),
-            child: child!);
-      },
-    );
-    if (picked != null) {
-      model.hour = picked.hour;
-      model.minute = picked.minute;
-      notifyListeners();
-    }
-  }
-
-  String dateFormat() {
-    return DateFormat("yyyy/MM/dd").format(
-        DateTime(model.year, model.month, model.day, model.hour, model.minute));
-  }
-
-  String timeFormat() {
-    return DateFormat("HH:mm").format(
-        DateTime(model.year, model.month, model.day, model.hour, model.minute));
-  }
-
-  Future<void> insertData() async {
-    var title = model.title;
-    var content = model.content;
-    var time =
-        DateTime(model.year, model.month, model.day, model.hour, model.minute)
-                .millisecondsSinceEpoch -
-            DateTime.now().millisecondsSinceEpoch;
-
-    var id = await model.insert(time);
-
+    var id = await model.updateOrInsert(_id, time);
     if (id != null) {
       await Alarm.alarm(id, title, content, time, false);
+      // notifyListeners();
     }
-    notifyListeners();
   }
 
   titleValidate() {
     titleIsOk = titleController.text != "" ? true : false;
-    notifyListeners();
   }
 
   timeValidate() {
     var diff =
-        DateTime(model.year, model.month, model.day, model.hour, model.minute)
-                .millisecondsSinceEpoch -
-            DateTime.now().millisecondsSinceEpoch;
+        model.millisecondsFromEpoch - DateTime.now().millisecondsSinceEpoch;
+
     if (diff <= 0) {
       timeIsOk = false;
     } else {
@@ -138,22 +66,54 @@ class AddReminderProvider extends ChangeNotifier {
     titleValidate();
     timeValidate();
 
-    if (!timeIsOk) {
+    if (!titleIsOk) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please specify a future date and time."),
+        SnackBar(
+          content: const Text("please enter some text."),
+          action: SnackBarAction(
+            label: "hide",
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            },
+          ),
         ),
       );
+      return;
     }
 
-    if (!(timeIsOk && timeIsOk)) return;
+    if (!timeIsOk) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text("Please specify a future date and time."),
+          action: SnackBarAction(
+            label: "hide",
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            },
+          ),
+        ),
+      );
+      return;
+    }
 
-    insertData();
-    init();
+    insertData(model.id);
+
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Reminder registered."),
+      SnackBar(
+        content: Text(model.id == null ? "Registered" : "Saved"),
+        action: SnackBarAction(
+          label: "hide",
+          onPressed: () {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          },
+        ),
       ),
     );
+
+    if (model.id == null) {
+      init();
+      titleController.clear();
+      contentController.clear();
+    }
   }
 }

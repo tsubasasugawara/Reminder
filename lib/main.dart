@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reminder/provider/add_reminder_provider.dart';
+import 'package:reminder/provider/datetime_provider.dart';
 import 'package:reminder/provider/home_provider.dart';
 import 'package:reminder/view/home_view.dart';
 
@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<AddReminderProvider>(
-          create: (context) => AddReminderProvider(),
+        ChangeNotifierProvider<DateTimeProvider>(
+          create: (context) => DateTimeProvider(),
         ),
         ChangeNotifierProvider<HomeProvider>(
           create: (context) => HomeProvider(),
