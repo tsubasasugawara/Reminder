@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:reminder/provider/datetime_provider.dart';
-import 'package:reminder/provider/home_provider.dart';
+import 'package:reminder/values/strings.dart';
 import 'package:reminder/view/home_view.dart';
 
 void main() {
@@ -13,22 +11,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<DateTimeProvider>(
-          create: (context) => DateTimeProvider(),
-        ),
-        ChangeNotifierProvider<HomeProvider>(
-          create: (context) => HomeProvider(),
-        ),
-      ],
-      child: MaterialApp(
-        title: 'Reminder',
-        theme: ThemeData(
-          primarySwatch: Colors.green,
-        ),
-        home: const HomeView(),
+    return MaterialApp(
+      title: AppStrings.appTitle,
+      theme: ThemeData(
+        primarySwatch: Colors.green,
       ),
+      home: const HomeView(),
     );
   }
 }

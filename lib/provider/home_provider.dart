@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:reminder/model/alarm.dart';
 import 'package:reminder/model/db.dart';
 import 'package:reminder/model/home_model.dart';
+import 'package:reminder/values/strings.dart';
 
 class HomeProvider extends ChangeNotifier {
   late HomeModel model;
@@ -27,29 +29,9 @@ class HomeProvider extends ChangeNotifier {
     String res = "";
 
     if (diff.inMilliseconds <= 0) {
-      res = "notified";
+      res = AppStrings.notifiedMsg;
     } else {
-      var diffDay = diff.inDays;
-      var diffHour = diff.inHours - diffDay * 24;
-      var diffMinute = diff.inMinutes - diffDay * 24 * 24 - diffHour * 24;
-
-      if (diffDay == 1) {
-        res += "$diffDay day, ";
-      } else {
-        res += "$diffDay days, ";
-      }
-
-      if (diffHour == 1) {
-        res += "$diffHour hour and ";
-      } else {
-        res += "$diffHour hours and ";
-      }
-
-      if (diffMinute == 1) {
-        res += "$diffMinute minute later";
-      } else {
-        res += "$diffMinute minutes later";
-      }
+      res = DateFormat.yMd().add_jm().format(dt);
     }
 
     return res;

@@ -10,7 +10,7 @@ class AddReminderModel {
     "content": "",
   };
 
-  var millisecondsFromEpoch = DateTime.now().millisecondsSinceEpoch;
+  late int millisecondsFromEpoch;
 
   var platform = const MethodChannel('com.sugawara.reminder/alarm');
 
@@ -18,6 +18,7 @@ class AddReminderModel {
     int? _id,
     String? title,
     String? content,
+    int? time,
   ) {
     id = _id;
 
@@ -26,22 +27,25 @@ class AddReminderModel {
 
     dataBeingEditing['title'] = title ?? "";
     dataBeingEditing['content'] = content ?? "";
+
+    millisecondsFromEpoch = time ?? DateTime.now().millisecondsSinceEpoch;
   }
 
-  Future<int?> updateOrInsert(int? _id, int time) async {
+  Future<int?> updateOrInsert(int? _id) async {
     var nt = NotificationsTable();
     var title = dataBeingEditing['title'];
     var content = dataBeingEditing['content'];
 
     var num = 0;
     if (_id != null) {
-      num = await nt.update(_id, title, content, 0, time, 0) ?? 0;
+      num = await nt.update(_id, title, content, 0, millisecondsFromEpoch, 0) ??
+          0;
       return id;
     }
 
     if (num == 0) {
-      var id = await nt.insert(
-          dataBeingEditing['title'], dataBeingEditing['content'], 0, time);
+      var id = await nt.insert(dataBeingEditing['title'],
+          dataBeingEditing['content'], 0, millisecondsFromEpoch);
       return id;
     }
     return null;

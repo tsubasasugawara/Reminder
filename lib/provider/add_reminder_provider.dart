@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:reminder/components/snack_bar/snackbar.dart';
 import 'package:reminder/model/add_reminder_model.dart';
 import 'package:reminder/model/alarm.dart';
+import 'package:reminder/values/strings.dart';
 
 class AddReminderProvider {
   late AddReminderModel model;
@@ -17,12 +19,7 @@ class AddReminderProvider {
 
   AddReminderProvider(int? id, String? title, String? content, int? time) {
     // Edited or New.
-    if (id == null || id == 0) {
-      model = AddReminderModel(null, null, null);
-    } else {
-      model = AddReminderModel(id, title, content);
-    }
-    model.dataBeforeEditing["time"] = time;
+    model = AddReminderModel(id, title, content, time);
 
     init();
 
@@ -40,7 +37,7 @@ class AddReminderProvider {
     var content = model.dataBeingEditing["content"];
     var time = model.millisecondsFromEpoch;
 
-    var id = await model.updateOrInsert(_id, time);
+    var id = await model.updateOrInsert(_id);
     if (id != null) {
       await Alarm.alarm(id, title, content, time, false);
       // notifyListeners();
@@ -67,47 +64,29 @@ class AddReminderProvider {
     timeValidate();
 
     if (!titleIsOk) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text("please enter some text."),
-          action: SnackBarAction(
-            label: "hide",
-            onPressed: () {
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            },
-          ),
-        ),
+      ShowSnackBar(
+        context,
+        AppStrings.titleError,
+        ShowSnackBar.error,
       );
       return;
     }
 
     if (!timeIsOk) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text("Please specify a future date and time."),
-          action: SnackBarAction(
-            label: "hide",
-            onPressed: () {
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            },
-          ),
-        ),
+      ShowSnackBar(
+        context,
+        AppStrings.dateTimeError,
+        ShowSnackBar.error,
       );
       return;
     }
 
     insertData(model.id);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(model.id == null ? "Registered" : "Saved"),
-        action: SnackBarAction(
-          label: "hide",
-          onPressed: () {
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          },
-        ),
-      ),
+    ShowSnackBar(
+      context,
+      model.id == null ? AppStrings.edited : AppStrings.saved,
+      ShowSnackBar.successful,
     );
 
     if (model.id == null) {

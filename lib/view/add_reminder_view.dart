@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reminder/components/button/form_control_button.dart';
 import 'package:reminder/provider/add_reminder_provider.dart';
 import 'package:reminder/provider/datetime_provider.dart';
+import 'package:reminder/values/strings.dart';
 import 'package:reminder/view/home_view.dart';
 
 // ignore: must_be_immutable
@@ -20,7 +22,6 @@ class AddReminderView extends StatelessWidget {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -40,7 +41,7 @@ class AddReminderView extends StatelessWidget {
                   ),
                   maxLines: 2,
                   decoration: InputDecoration(
-                    hintText: "Title(required)",
+                    hintText: AppStrings.titleHintText,
                     hintStyle: TextStyle(
                       color: Colors.white60,
                       fontSize: provider.textsize + 8,
@@ -82,7 +83,7 @@ class AddReminderView extends StatelessWidget {
                   ),
                   maxLines: 15,
                   decoration: InputDecoration(
-                    hintText: "Memo(not required)",
+                    hintText: AppStrings.memoHintText,
                     hintStyle: TextStyle(
                       color: Colors.white60,
                       fontSize: provider.textsize,
@@ -122,58 +123,25 @@ class AddReminderView extends StatelessWidget {
                     Container(
                       margin: const EdgeInsets.only(right: 30),
                       child: Center(
-                        child: ElevatedButton.icon(
-                          icon: const Icon(
-                            Icons.cancel,
-                            color: Colors.black,
-                          ),
-                          label: const Text(
-                            "Cancel",
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                          ),
-                          onPressed: () {
+                        child: FormControlButton(
+                          Icons.cancel,
+                          Colors.red,
+                          AppStrings.cancelButton,
+                          () {
                             provider.init();
                             Navigator.pop(context);
                           },
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.red,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 20,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                          ),
                         ),
                       ),
                     ),
                     Center(
-                      child: ElevatedButton.icon(
-                        icon: const Icon(
-                          Icons.save,
-                          color: Colors.black,
-                        ),
-                        label: const Text(
-                          "Save",
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                        ),
-                        onPressed: () {
+                      child: FormControlButton(
+                        Icons.save,
+                        Colors.green,
+                        AppStrings.saveButton,
+                        () {
                           provider.saveBtn(context);
                         },
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 20,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                        ),
                       ),
                     ),
                   ],
@@ -187,65 +155,70 @@ class AddReminderView extends StatelessWidget {
   }
 
   Widget form(context) {
-    return Consumer<DateTimeProvider>(
-      builder: (context, dateTimeProvider, child) {
-        dateTimeProvider.setModel(provider.model.millisecondsFromEpoch);
-        return Container(
-          margin: const EdgeInsets.only(top: 40, bottom: 40),
-          child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                TextButton(
-                  onPressed: () async {
-                    FocusScope.of(context).unfocus();
-                    await dateTimeProvider.selectDate(context);
-                    provider.model.millisecondsFromEpoch =
-                        dateTimeProvider.getMilliSecondsFromEpoch();
-                  },
-                  child: Text(
-                    dateTimeProvider.dateFormat(),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all(
-                      const EdgeInsets.symmetric(vertical: 14, horizontal: 22),
+    return ChangeNotifierProvider(
+      create: (context) =>
+          DateTimeProvider(provider.model.millisecondsFromEpoch),
+      child: Consumer<DateTimeProvider>(
+        builder: (context, dateTimeProvider, child) {
+          return Container(
+            margin: const EdgeInsets.only(top: 40, bottom: 40),
+            child: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  TextButton(
+                    onPressed: () async {
+                      FocusScope.of(context).unfocus();
+                      await dateTimeProvider.selectDate(context);
+                      provider.model.millisecondsFromEpoch =
+                          dateTimeProvider.getMilliSecondsFromEpoch();
+                    },
+                    child: Text(
+                      dateTimeProvider.dateFormat(),
+                      style: const TextStyle(fontSize: 16),
                     ),
-                    shape: MaterialStateProperty.all(
-                      const RoundedRectangleBorder(
-                        side: BorderSide(color: Colors.green, width: 1),
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all(
+                        const EdgeInsets.symmetric(
+                            vertical: 14, horizontal: 22),
+                      ),
+                      shape: MaterialStateProperty.all(
+                        const RoundedRectangleBorder(
+                          side: BorderSide(color: Colors.green, width: 1),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    FocusScope.of(context).unfocus();
-                    await dateTimeProvider.selectTime(context);
-                    provider.model.millisecondsFromEpoch =
-                        dateTimeProvider.getMilliSecondsFromEpoch();
-                  },
-                  child: Text(
-                    dateTimeProvider.timeFormat(),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all(
-                      const EdgeInsets.symmetric(vertical: 14, horizontal: 22),
+                  TextButton(
+                    onPressed: () async {
+                      FocusScope.of(context).unfocus();
+                      await dateTimeProvider.selectTime(context);
+                      provider.model.millisecondsFromEpoch =
+                          dateTimeProvider.getMilliSecondsFromEpoch();
+                    },
+                    child: Text(
+                      dateTimeProvider.timeFormat(),
+                      style: const TextStyle(fontSize: 16),
                     ),
-                    shape: MaterialStateProperty.all(
-                      const RoundedRectangleBorder(
-                        side: BorderSide(color: Colors.green, width: 1),
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all(
+                        const EdgeInsets.symmetric(
+                            vertical: 14, horizontal: 22),
+                      ),
+                      shape: MaterialStateProperty.all(
+                        const RoundedRectangleBorder(
+                          side: BorderSide(color: Colors.green, width: 1),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

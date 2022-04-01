@@ -3,25 +3,24 @@ import 'package:intl/intl.dart';
 import 'package:reminder/model/datetime_model.dart';
 
 class DateTimeProvider extends ChangeNotifier {
-  DateTimeModel model = DateTimeModel(DateTime.now().millisecondsSinceEpoch);
+  late DateTimeModel model;
 
-  DateTimeProvider() {
-    _init();
+  DateTimeProvider(int time) {
+    model = DateTimeModel(time);
+    _init(time);
   }
 
-  void _init() {
-    var dt = DateTime.now();
+  void _init(int? time) {
+    var dt = time == null
+        ? DateTime.now()
+        : DateTime.fromMillisecondsSinceEpoch(time);
     model.year = dt.year;
     model.month = dt.month;
     model.day = dt.day;
     model.hour = dt.hour;
     model.minute = dt.minute;
 
-    model = DateTimeModel(DateTime.now().millisecondsSinceEpoch);
-  }
-
-  void setModel(int milliSeconds) {
-    model = DateTimeModel(milliSeconds);
+    // model = DateTimeModel(DateTime.now().millisecondsSinceEpoch);
   }
 
   Future<void> selectDate(BuildContext context) async {

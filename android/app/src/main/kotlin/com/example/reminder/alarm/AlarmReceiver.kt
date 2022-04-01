@@ -11,6 +11,7 @@ import android.content.Context
 import android.content.Intent
 import com.sugawara.reminder.MainActivity
 import com.sugawara.reminder.R
+// import com.sugawara.reminder.alarm.AlarmRegister
 
 class AlarmReceiver: BroadcastReceiver() {
 
@@ -20,8 +21,11 @@ class AlarmReceiver: BroadcastReceiver() {
 
     @SuppressLint("UnspecifiedImmutableFlag")
     override fun onReceive(context: Context, intent: Intent) {
-        this.createNotificationChannel(context)
-        this.createNotification(context, intent)
+        // if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()) {
+        //     // アラームの再定義処理
+        // }
+            this.createNotificationChannel(context)
+            this.createNotification(context, intent)
     }
 
     private fun createNotificationChannel(context: Context) {

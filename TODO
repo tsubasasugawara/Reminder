@@ -5,5 +5,8 @@ Todo:
   ✔ 登録後の時間のリセット @done(22-03-28 23:04)
   ✔ 編集 : homeviewで必要な物を取得し、addreminderへ渡す @done(22-03-29 17:20)
   ✔ 時間の保存の仕方 epochMilliseconds @done(22-03-29 17:33)
-  ✔ 時間の表示がおかしい @done(22-03-29 17:33)
+  ✔ 時間の表示がおかしい @done(22-03-30 18:33)
+  ✔ HomeProviderもMultiProviderから外す(DateTimeProviderのように) @done(22-03-31 21:20)
+  ☐ アラームをフォルダ分け
+  ☐ alarmの再登録 http://workpiles.com/2014/07/android-alarmmanager-boot/
   ☐ testしやすい関数づくり
