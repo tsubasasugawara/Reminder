@@ -31,7 +31,7 @@ class HomeProvider extends ChangeNotifier {
     if (diff.inMilliseconds <= 0) {
       res = AppStrings.notifiedMsg;
     } else {
-      res = DateFormat.yMd().add_jm().format(dt);
+      res = DateFormat("yyyy/MM/dd").add_Hm().format(dt);
     }
 
     return res;

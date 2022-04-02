@@ -85,7 +85,7 @@ class AddReminderProvider {
 
     ShowSnackBar(
       context,
-      model.id == null ? AppStrings.edited : AppStrings.saved,
+      model.id == null ? AppStrings.saved : AppStrings.edited,
       ShowSnackBar.successful,
     );
 

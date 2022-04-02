@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reminder/components/button/datetime_picker_button.dart';
 import 'package:reminder/components/button/form_control_button.dart';
 import 'package:reminder/provider/add_reminder_provider.dart';
 import 'package:reminder/provider/datetime_provider.dart';
@@ -114,7 +115,7 @@ class AddReminderView extends StatelessWidget {
                   },
                 ),
               ),
-              form(context),
+              dateTimePickers(context),
               Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -154,7 +155,7 @@ class AddReminderView extends StatelessWidget {
     );
   }
 
-  Widget form(context) {
+  Widget dateTimePickers(context) {
     return ChangeNotifierProvider(
       create: (context) =>
           DateTimeProvider(provider.model.millisecondsFromEpoch),
@@ -167,51 +168,23 @@ class AddReminderView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  TextButton(
-                    onPressed: () async {
+                  DateTimePickerButton(
+                    dateTimeProvider.dateFormat(),
+                    () async {
                       FocusScope.of(context).unfocus();
                       await dateTimeProvider.selectDate(context);
                       provider.model.millisecondsFromEpoch =
                           dateTimeProvider.getMilliSecondsFromEpoch();
                     },
-                    child: Text(
-                      dateTimeProvider.dateFormat(),
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all(
-                        const EdgeInsets.symmetric(
-                            vertical: 14, horizontal: 22),
-                      ),
-                      shape: MaterialStateProperty.all(
-                        const RoundedRectangleBorder(
-                          side: BorderSide(color: Colors.green, width: 1),
-                        ),
-                      ),
-                    ),
                   ),
-                  TextButton(
-                    onPressed: () async {
+                  DateTimePickerButton(
+                    dateTimeProvider.timeFormat(),
+                    () async {
                       FocusScope.of(context).unfocus();
                       await dateTimeProvider.selectTime(context);
                       provider.model.millisecondsFromEpoch =
                           dateTimeProvider.getMilliSecondsFromEpoch();
                     },
-                    child: Text(
-                      dateTimeProvider.timeFormat(),
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all(
-                        const EdgeInsets.symmetric(
-                            vertical: 14, horizontal: 22),
-                      ),
-                      shape: MaterialStateProperty.all(
-                        const RoundedRectangleBorder(
-                          side: BorderSide(color: Colors.green, width: 1),
-                        ),
-                      ),
-                    ),
                   ),
                 ],
               ),
