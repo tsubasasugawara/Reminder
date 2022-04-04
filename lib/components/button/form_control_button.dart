@@ -1,41 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:reminder/values/colors.dart';
 
 class FormControlButton extends StatelessWidget {
-  final IconData iconData;
-  final Color buttonColor;
   final String buttonText;
+  final Color textColor;
   final Function() action;
-
-  const FormControlButton(
-      this.iconData, this.buttonColor, this.buttonText, this.action,
-      {Key? key})
-      : super(key: key);
+  // ignore: use_key_in_widget_constructors
+  const FormControlButton(this.buttonText, this.textColor, this.action);
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton.icon(
-      icon: Icon(
-        iconData,
-        color: Colors.black,
-      ),
-      label: Text(
-        buttonText,
-        style: const TextStyle(
-          color: Colors.black,
-        ),
-      ),
+    return ElevatedButton(
       onPressed: () {
         action();
       },
-      style: ElevatedButton.styleFrom(
-        primary: buttonColor,
-        padding: const EdgeInsets.symmetric(
-          vertical: 10,
-          horizontal: 20,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(AppColors.backgroundColor),
+      ),
+      child: Text(
+        buttonText,
+        style: TextStyle(color: textColor),
       ),
     );
   }

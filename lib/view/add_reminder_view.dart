@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reminder/components/button/datetime_picker_button.dart';
 import 'package:reminder/components/button/form_control_button.dart';
-import 'package:reminder/components/text_form_field/add_reminder_text_form.dart';
 import 'package:reminder/provider/add_reminder_provider.dart';
 import 'package:reminder/provider/datetime_provider.dart';
 import 'package:reminder/values/colors.dart';
@@ -25,18 +23,15 @@ class AddReminderView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppColors.backgroundColor,
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.only(
-            left: 10,
-            right: 10,
-          ),
-          child: Column(
-            children: <Widget>[
-              _textForm(context),
-              // _dateTimePickers(context),
-              // _formControlButtons(context),
-            ],
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.only(
+              left: 10,
+              right: 10,
+            ),
+            child: _textForm(context),
           ),
         ),
       ),
@@ -49,107 +44,54 @@ class AddReminderView extends StatelessWidget {
       children: [
         Container(
           margin: const EdgeInsets.only(top: 10),
-          child: AddReminderTextForm(
-            provider.titleController,
-            provider.textsize + 8,
-            (text) {
+          child: TextFormField(
+            controller: provider.titleController,
+            style: TextStyle(
+              color: AppColors.textColor,
+              fontSize: provider.textsize + 8,
+            ),
+            maxLines: 1,
+            decoration: InputDecoration(
+              hintText: AppStrings.titleHintText,
+              hintStyle: TextStyle(
+                color: Colors.white60,
+                fontSize: provider.textsize + 8,
+              ),
+              border: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              contentPadding: const EdgeInsets.all(10),
+            ),
+            onChanged: (text) {
               provider.model.dataBeingEditing["title"] = text;
               provider.titleValidate();
             },
-            null,
-            2,
-            AppStrings.titleHintText,
           ),
         ),
         Container(
           margin: const EdgeInsets.only(top: 20),
-          child: AddReminderTextForm(
-            provider.contentController,
-            provider.textsize,
-            (text) {
+          child: TextFormField(
+            controller: provider.contentController,
+            style: TextStyle(
+              color: AppColors.textColor,
+              fontSize: provider.textsize,
+            ),
+            maxLines: null,
+            decoration: InputDecoration(
+              hintText: AppStrings.memoHintText,
+              hintStyle: TextStyle(
+                color: Colors.white60,
+                fontSize: provider.textsize,
+              ),
+              border: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              contentPadding: const EdgeInsets.all(10),
+            ),
+            onChanged: (text) {
               provider.model.dataBeingEditing["content"] = text;
             },
-            null,
-            15,
-            AppStrings.memoHintText,
           ),
         ),
       ],
-    );
-  }
-
-  Widget _dateTimePickers(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) =>
-          DateTimeProvider(provider.model.dataBeingEditing['time']),
-      child: Consumer<DateTimeProvider>(
-        builder: (context, dateTimeProvider, child) {
-          return Container(
-            margin: const EdgeInsets.only(top: 40, bottom: 40),
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  DateTimePickerButton(
-                    dateTimeProvider.dateFormat(),
-                    () async {
-                      FocusScope.of(context).unfocus();
-                      await dateTimeProvider.selectDate(context);
-                      provider.model.dataBeingEditing['time'] =
-                          dateTimeProvider.getMilliSecondsFromEpoch();
-                    },
-                  ),
-                  DateTimePickerButton(
-                    dateTimeProvider.timeFormat(),
-                    () async {
-                      FocusScope.of(context).unfocus();
-                      await dateTimeProvider.selectTime(context);
-                      provider.model.dataBeingEditing['time'] =
-                          dateTimeProvider.getMilliSecondsFromEpoch();
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _formControlButtons(BuildContext context) {
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            margin: const EdgeInsets.only(right: 30),
-            child: Center(
-              child: FormControlButton(
-                Icons.cancel,
-                Colors.red,
-                AppStrings.cancelButton,
-                () {
-                  provider.init();
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-          ),
-          Center(
-            child: FormControlButton(
-              Icons.save,
-              Colors.green,
-              AppStrings.saveButton,
-              () {
-                provider.saveBtn(context);
-              },
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -160,23 +102,47 @@ class AddReminderView extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          ElevatedButton(
-            onPressed: () {
+          FormControlButton(
+            AppStrings.cancelButton,
+            Colors.red,
+            () {
               provider.init();
               Navigator.pop(context);
             },
-            style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all(AppColors.backgroundColor),
-            ),
-            child: Text(
-              AppStrings.cancelButton,
-              style: const TextStyle(color: Colors.red),
-            ),
           ),
-          // 画面に重ねて表示する(その中にdatepickerとtimepickerを入れる)
-          ElevatedButton.icon(
-            onPressed: () async {},
+          dateTimeSelecter(context),
+          FormControlButton(
+            AppStrings.saveButton,
+            Colors.green,
+            () {
+              provider.saveBtn(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget dateTimeSelecter(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) =>
+          DateTimeProvider(provider.model.dataBeingEditing['time']),
+      child: Consumer<DateTimeProvider>(
+        builder: (context, dateTimeProvider, child) {
+          return ElevatedButton.icon(
+            onPressed: () async {
+              FocusScope.of(context).unfocus();
+
+              final res = await dateTimeProvider.selectDate(context);
+              provider.model.dataBeingEditing['time'] =
+                  dateTimeProvider.getMilliSecondsFromEpoch();
+
+              if (res) {
+                await dateTimeProvider.selectTime(context);
+                provider.model.dataBeingEditing['time'] =
+                    dateTimeProvider.getMilliSecondsFromEpoch();
+              }
+            },
             style: ButtonStyle(
               backgroundColor:
                   MaterialStateProperty.all(AppColors.backgroundColor),
@@ -186,26 +152,11 @@ class AddReminderView extends StatelessWidget {
               color: Colors.green,
             ),
             label: Text(
-              "2022/3/4 23:40",
-              style: TextStyle(color: Colors.green),
+              dateTimeProvider.dateTimeFormat(),
+              style: const TextStyle(color: Colors.green),
             ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              provider.saveBtn(context);
-            },
-            style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all(AppColors.backgroundColor),
-            ),
-            child: Text(
-              AppStrings.saveButton,
-              style: const TextStyle(
-                color: Colors.green,
-              ),
-            ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }

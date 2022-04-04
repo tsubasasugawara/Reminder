@@ -23,7 +23,7 @@ class DateTimeProvider extends ChangeNotifier {
     // model = DateTimeModel(DateTime.now().millisecondsSinceEpoch);
   }
 
-  Future<void> selectDate(BuildContext context) async {
+  Future<bool> selectDate(BuildContext context) async {
     final picked = await showDatePicker(
       context: context,
       initialDate: DateTime(
@@ -48,10 +48,12 @@ class DateTimeProvider extends ChangeNotifier {
       model.month = picked.month;
       model.day = picked.day;
       notifyListeners();
+      return true;
     }
+    return false;
   }
 
-  Future<void> selectTime(BuildContext context) async {
+  Future<bool> selectTime(BuildContext context) async {
     final picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay(hour: model.hour, minute: model.minute),
@@ -72,16 +74,13 @@ class DateTimeProvider extends ChangeNotifier {
       model.hour = picked.hour;
       model.minute = picked.minute;
       notifyListeners();
+      return true;
     }
+    return false;
   }
 
-  String dateFormat() {
-    return DateFormat("yyyy/MM/dd").format(
-        DateTime(model.year, model.month, model.day, model.hour, model.minute));
-  }
-
-  String timeFormat() {
-    return DateFormat("HH:mm").format(
+  String dateTimeFormat() {
+    return DateFormat("yyyy/MM/dd HH:mm").format(
         DateTime(model.year, model.month, model.day, model.hour, model.minute));
   }
 
