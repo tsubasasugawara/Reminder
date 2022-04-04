@@ -17,13 +17,15 @@ class Alarm {
     );
   }
 
-  static Future<void> deleteAlarm(int id, String title, String content) async {
+  static Future<void> deleteAlarm(
+      int id, String title, String content, int time) async {
     await platform.invokeMethod(
       "deleteAlarm",
       <String, dynamic>{
         'id': id,
         'title': title,
         'content': content,
+        'time': time,
       },
     );
   }

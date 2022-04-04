@@ -11,7 +11,7 @@ import android.content.Context
 import android.content.Intent
 import com.sugawara.reminder.MainActivity
 import com.sugawara.reminder.R
-// import com.sugawara.reminder.alarm.AlarmRegister
+import com.sugawara.reminder.alarm.AlarmRegister
 
 class AlarmReceiver: BroadcastReceiver() {
 
@@ -21,9 +21,21 @@ class AlarmReceiver: BroadcastReceiver() {
 
     @SuppressLint("UnspecifiedImmutableFlag")
     override fun onReceive(context: Context, intent: Intent) {
-        // if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()) {
-        //     // アラームの再定義処理
-        // }
+        if(Intent.ACTION_LOCKED_BOOT_COMPLETED.equals(intent.getAction())) {
+            val id = intent.extras?.getInt("id") ?: return
+            val title = intent.extras?.getString("title") ?: return
+            val content = intent.extras?.getString("content") ?: return
+            val time = intent.extras?.getLong("time") ?: return
+            val created = false
+
+            val serviceIntent = Intent(context, AlarmRegister::class.java)
+            context.startService(serviceIntent)
+
+            val register = AlarmRegister(context)
+            register.registAlarm(id, title, content, time, created)
+
+            return
+        }
             this.createNotificationChannel(context)
             this.createNotification(context, intent)
     }
@@ -70,7 +82,7 @@ class AlarmReceiver: BroadcastReceiver() {
         val builder = Notification.Builder(context, CHANNEL_ID)
             .setContentTitle(title)
             .setContentText(content)
-            .setSmallIcon(R.drawable.notification_icon)
+            .setSmallIcon(R.mipmap.launcher_icon)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .setVisibility(Notification.VISIBILITY_PUBLIC)

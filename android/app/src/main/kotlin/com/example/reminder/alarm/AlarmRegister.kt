@@ -21,7 +21,7 @@ class AlarmRegister(_context: Context) {
     ){
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val intent = createIntent(id,title,content)
+        val intent = createIntent(id, title, content, millis)
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             id,
@@ -48,11 +48,12 @@ class AlarmRegister(_context: Context) {
     fun deleteAlarm(
         id: Int,
         title: String,
-        content: String
+        content: String,
+        millis: Long
     ){
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val intent = createIntent(id,title,content)
+        val intent = createIntent(id, title, content, millis)
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             id,
@@ -68,13 +69,15 @@ class AlarmRegister(_context: Context) {
     private fun createIntent(
         id: Int,
         title: String,
-        content: String
+        content: String,
+        millis: Long
     ): Intent {
         return Intent(this.context, AlarmReceiver::class.java)
             .also {
                 it.putExtra("id", id)
                 it.putExtra("title",title)
                 it.putExtra("content",content)
+                it.putExtra("time", millis)
             }
     }
 }

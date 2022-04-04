@@ -21,7 +21,7 @@ class HomeModel {
     try {
       var nt = NotificationsTable();
       var dataList = await nt.select(
-        columns: ['title', 'content'],
+        columns: ['title', 'content', 'time'],
         where: "id = ?",
         whereArgs: [id],
       );

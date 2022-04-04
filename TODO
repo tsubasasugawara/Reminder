@@ -7,6 +7,11 @@ Todo:
   ✔ 時間の保存の仕方 epochMilliseconds @done(22-03-29 17:33)
   ✔ 時間の表示がおかしい @done(22-03-30 18:33)
   ✔ HomeProviderもMultiProviderから外す(DateTimeProviderのように) @done(22-03-31 21:20)
+  ✔ 編集後、過去のアラーム削除 @done(22-04-02 23:21)
+  ✔ 編集したらdataBeingEditingのデータをdataBeforeEditingに保存 @done(22-04-02 23:21)
+  ☐ 簡単に時間登録(10分後や1時間後など)
+  ☐ 画面のデザイン (背景色との差別で見やすくなど)
   ☐ アラームをフォルダ分け
-  ☐ alarmの再登録 http://workpiles.com/2014/07/android-alarmmanager-boot/
+  ☐ 通知のアイコン
   ☐ testしやすい関数づくり
+  ✔ alarmの再登録 http://workpiles.com/2014/07/android-alarmmanager-boot/ @done(22-04-02 23:22)

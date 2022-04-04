@@ -43,7 +43,8 @@ class HomeProvider extends ChangeNotifier {
 
     if (data != null) {
       await NotificationsTable().delete(id);
-      await Alarm.deleteAlarm(id, data[0]['title'], data[0]['content']);
+      await Alarm.deleteAlarm(
+          id, data[0]['title'], data[0]['content'], data[0]['time']);
     }
 
     notifyListeners();

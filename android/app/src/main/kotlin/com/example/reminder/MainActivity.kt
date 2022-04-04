@@ -36,9 +36,10 @@ class MainActivity: FlutterActivity() {
                     val id = methodCall.argument<Int>("id")!!
                     val title = methodCall.argument<String>("title").toString()
                     val content = methodCall.argument<String>("content").toString()
+                    val time = methodCall.argument<Long>("time")!!
 
                     val register = AlarmRegister(context)
-                    register.deleteAlarm(id,title,content)
+                    register.deleteAlarm(id,title,content,time)
                 }
                 // "test" -> {
                 //     result.success(LocalDateTime.now().toString())

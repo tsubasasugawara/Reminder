@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder/provider/home_provider.dart';
+import 'package:reminder/values/colors.dart';
 import 'package:reminder/values/strings.dart';
 import 'package:reminder/view/add_reminder_view.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
 
-  static var textColor = const Color.fromARGB(255, 208, 208, 208);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: AppColors.backgroundColor,
         title: Text(
           AppStrings.appTitle,
-          style: TextStyle(color: textColor),
+          style: const TextStyle(color: AppColors.textColor),
         ),
         actions: <Widget>[
           IconButton(
@@ -25,7 +24,7 @@ class HomeView extends StatelessWidget {
             icon: const Icon(
               Icons.search,
             ),
-            color: textColor,
+            color: AppColors.textColor,
           ),
         ],
       ),
@@ -96,29 +95,33 @@ class HomeView extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              provider.model.dataList[index]['title'],
-                              style: TextStyle(
-                                color: textColor,
-                                fontSize: 24,
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 5),
-                              child: Text(
-                                provider.dateTimeFormat(
-                                  provider.model.dataList[index]['time'],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                provider.model.dataList[index]['title'],
+                                style: const TextStyle(
+                                  color: AppColors.textColor,
+                                  fontSize: 24,
                                 ),
-                                style: TextStyle(
-                                  color: textColor,
-                                  fontSize: 14,
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: false,
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(top: 5),
+                                child: Text(
+                                  provider.dateTimeFormat(
+                                    provider.model.dataList[index]['time'],
+                                  ),
+                                  style: const TextStyle(
+                                    color: AppColors.textColor,
+                                    fontSize: 14,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         IconButton(
                           onPressed: () async {

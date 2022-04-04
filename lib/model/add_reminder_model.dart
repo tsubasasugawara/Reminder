@@ -3,14 +3,20 @@ import 'package:reminder/model/db.dart';
 
 class AddReminderModel {
   late int? id;
-  var dataBeforeEditing = <String, dynamic>{};
+  var dataBeforeEditing = <String, dynamic>{
+    "title": null,
+    "content": null,
+    "time": DateTime.now().millisecondsSinceEpoch,
+  };
   // time : Time difference from now.
   var dataBeingEditing = <String, dynamic>{
     "title": "",
     "content": "",
+    "time": DateTime.now().millisecondsSinceEpoch,
   };
 
-  late int millisecondsFromEpoch;
+  static int update = 0;
+  static int insert = 1;
 
   var platform = const MethodChannel('com.sugawara.reminder/alarm');
 
@@ -24,30 +30,29 @@ class AddReminderModel {
 
     dataBeforeEditing['title'] = title;
     dataBeforeEditing['content'] = content;
+    dataBeforeEditing['time'] = time;
 
     dataBeingEditing['title'] = title ?? "";
     dataBeingEditing['content'] = content ?? "";
-
-    millisecondsFromEpoch = time ?? DateTime.now().millisecondsSinceEpoch;
+    dataBeingEditing['time'] = time ?? dataBeingEditing['time'];
   }
 
-  Future<int?> updateOrInsert(int? _id) async {
+  Future<List<int?>> updateOrInsert(int? _id) async {
     var nt = NotificationsTable();
     var title = dataBeingEditing['title'];
     var content = dataBeingEditing['content'];
+    var time = dataBeingEditing['time'];
 
     var num = 0;
     if (_id != null) {
-      num = await nt.update(_id, title, content, 0, millisecondsFromEpoch, 0) ??
-          0;
-      return id;
+      num = await nt.update(_id, title, content, 0, time, 0) ?? 0;
+      return [id, update];
     }
 
     if (num == 0) {
-      var id = await nt.insert(dataBeingEditing['title'],
-          dataBeingEditing['content'], 0, millisecondsFromEpoch);
-      return id;
+      var id = await nt.insert(title, content, 0, time);
+      return [id, insert];
     }
-    return null;
+    return [null, null];
   }
 }

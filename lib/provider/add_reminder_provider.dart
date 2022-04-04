@@ -27,7 +27,6 @@ class AddReminderProvider {
     contentController.text = model.dataBeforeEditing["content"] ?? "";
   }
 
-// id = 0 : all reset.
   void init() {
     timeIsOk = true;
   }
@@ -35,12 +34,16 @@ class AddReminderProvider {
   Future insertData(int? _id) async {
     var title = model.dataBeingEditing["title"];
     var content = model.dataBeingEditing["content"];
-    var time = model.millisecondsFromEpoch;
+    var time = model.dataBeingEditing['time'];
+    var created = false;
 
-    var id = await model.updateOrInsert(_id);
+    var res = await model.updateOrInsert(_id);
+    var id = res[0];
+    var status = res[1];
+
     if (id != null) {
-      await Alarm.alarm(id, title, content, time, false);
-      // notifyListeners();
+      if (status == AddReminderModel.update) created = true;
+      await Alarm.alarm(id, title, content, time, created);
     }
   }
 
@@ -50,7 +53,7 @@ class AddReminderProvider {
 
   timeValidate() {
     var diff =
-        model.millisecondsFromEpoch - DateTime.now().millisecondsSinceEpoch;
+        model.dataBeingEditing['time'] - DateTime.now().millisecondsSinceEpoch;
 
     if (diff <= 0) {
       timeIsOk = false;
@@ -93,6 +96,12 @@ class AddReminderProvider {
       init();
       titleController.clear();
       contentController.clear();
+    } else {
+      dataBinding();
     }
+  }
+
+  dataBinding() {
+    model.dataBeforeEditing = model.dataBeingEditing;
   }
 }
