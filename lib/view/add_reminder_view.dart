@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder/components/button/form_control_button.dart';
 import 'package:reminder/provider/add_reminder_provider.dart';
@@ -25,14 +26,12 @@ class AddReminderView extends StatelessWidget {
       ),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
-        child: SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.only(
-              left: 10,
-              right: 10,
-            ),
-            child: _textForm(context),
+        child: Container(
+          margin: const EdgeInsets.only(
+            left: 10,
+            right: 10,
           ),
+          child: _textForm(context),
         ),
       ),
       bottomNavigationBar: bottomAppBar(context),
@@ -67,28 +66,33 @@ class AddReminderView extends StatelessWidget {
             },
           ),
         ),
-        Container(
-          margin: const EdgeInsets.only(top: 20),
-          child: TextFormField(
-            controller: provider.contentController,
-            style: TextStyle(
-              color: AppColors.textColor,
-              fontSize: provider.textsize,
-            ),
-            maxLines: null,
-            decoration: InputDecoration(
-              hintText: AppStrings.memoHintText,
-              hintStyle: TextStyle(
-                color: Colors.white60,
-                fontSize: provider.textsize,
+        Expanded(
+          child: Container(
+            margin: const EdgeInsets.only(top: 20),
+            child: Expanded(
+              child: TextFormField(
+                controller: provider.contentController,
+                expands: true,
+                style: TextStyle(
+                  color: AppColors.textColor,
+                  fontSize: provider.textsize,
+                ),
+                maxLines: null,
+                decoration: InputDecoration(
+                  hintText: AppStrings.memoHintText,
+                  hintStyle: TextStyle(
+                    color: Colors.white60,
+                    fontSize: provider.textsize,
+                  ),
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  contentPadding: const EdgeInsets.all(10),
+                ),
+                onChanged: (text) {
+                  provider.model.dataBeingEditing["content"] = text;
+                },
               ),
-              border: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              contentPadding: const EdgeInsets.all(10),
             ),
-            onChanged: (text) {
-              provider.model.dataBeingEditing["content"] = text;
-            },
           ),
         ),
       ],

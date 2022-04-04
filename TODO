@@ -9,8 +9,8 @@ Todo:
   ✔ HomeProviderもMultiProviderから外す(DateTimeProviderのように) @done(22-03-31 21:20)
   ✔ 編集後、過去のアラーム削除 @done(22-04-02 23:21)
   ✔ 編集したらdataBeingEditingのデータをdataBeforeEditingに保存 @done(22-04-02 23:21)
+  ✔ 空いてるスペースをクリックしてもメモの欄にフォーカスする。 @done(22-04-04 23:56)
   ☐ 簡単に時間登録(10分後や1時間後など)
-  ☐ 画面のデザイン (背景色との差別で見やすくなど)
   ☐ アラームをフォルダ分け
   ☐ 通知のアイコン
   ☐ testしやすい関数づくり
