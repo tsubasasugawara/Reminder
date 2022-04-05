@@ -51,11 +51,18 @@ class AddReminderView extends StatelessWidget {
   }
 
   Widget _textForm(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          margin: const EdgeInsets.only(top: 10),
-          child: Focus(
+    return Focus(
+      onFocusChange: (hasFocus) {
+        if (hasFocus) {
+          provider.fabVisible = true;
+        } else {
+          provider.fabVisible = false;
+        }
+      },
+      child: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.only(top: 10),
             child: TextFormField(
               controller: provider.titleController,
               focusNode: provider.titleFocusNode,
@@ -79,26 +86,10 @@ class AddReminderView extends StatelessWidget {
                 provider.titleValidate();
               },
             ),
-            onFocusChange: (hasFocus) {
-              if (hasFocus) {
-                provider.fabVisible = true;
-              } else {
-                provider.fabVisible = false;
-              }
-            },
           ),
-        ),
-        Expanded(
-          child: Container(
-            margin: const EdgeInsets.only(top: 20),
-            child: Focus(
-              onFocusChange: (hasFocus) {
-                if (hasFocus) {
-                  provider.fabVisible = true;
-                } else {
-                  provider.fabVisible = false;
-                }
-              },
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.only(top: 20),
               child: TextFormField(
                 controller: provider.contentController,
                 focusNode: provider.contentFocusNode,
@@ -124,8 +115,8 @@ class AddReminderView extends StatelessWidget {
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
