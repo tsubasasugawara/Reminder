@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home_provider.dart';
 import 'package:reminder/values/colors.dart';
-import 'package:reminder/values/strings.dart';
 import 'package:reminder/view/add_reminder_view.dart';
 
 class HomeView extends StatelessWidget {
@@ -15,7 +15,7 @@ class HomeView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: AppColors.backgroundColor,
         title: Text(
-          AppStrings.appTitle,
+          AppLocalizations.of(context)!.appTitle,
           style: const TextStyle(color: AppColors.textColor),
         ),
         actions: <Widget>[
@@ -74,16 +74,32 @@ class HomeView extends StatelessWidget {
                   );
                 },
                 child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.green,
-                      width: 2,
-                      style: BorderStyle.solid,
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      left: BorderSide(
+                        color: Colors.green,
+                        width: 4,
+                        style: BorderStyle.solid,
+                      ),
+                      top: BorderSide(
+                        color: Color.fromARGB(255, 60, 60, 60),
+                        width: 1,
+                        style: BorderStyle.solid,
+                      ),
+                      right: BorderSide(
+                        color: Color.fromARGB(255, 60, 60, 60),
+                        width: 1,
+                        style: BorderStyle.solid,
+                      ),
+                      bottom: BorderSide(
+                        color: Color.fromARGB(255, 60, 60, 60),
+                        width: 1,
+                        style: BorderStyle.solid,
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(10),
                   ),
                   padding: const EdgeInsets.all(10),
-                  margin: const EdgeInsets.only(bottom: 10),
+                  margin: const EdgeInsets.only(bottom: 20, left: 5),
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     alignment: Alignment.topLeft,
@@ -112,8 +128,8 @@ class HomeView extends StatelessWidget {
                                 margin: const EdgeInsets.only(top: 5),
                                 child: Text(
                                   provider.dateTimeFormat(
-                                    provider.model.dataList[index]['time'],
-                                  ),
+                                      provider.model.dataList[index]['time'],
+                                      context),
                                   style: const TextStyle(
                                     color: AppColors.textColor,
                                     fontSize: 14,

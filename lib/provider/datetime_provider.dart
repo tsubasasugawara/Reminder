@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:reminder/model/datetime_model.dart';
+import 'package:reminder/multilingualization/app_localizations.dart';
 
 class DateTimeProvider extends ChangeNotifier {
   late DateTimeModel model;
@@ -19,8 +20,6 @@ class DateTimeProvider extends ChangeNotifier {
     model.day = dt.day;
     model.hour = dt.hour;
     model.minute = dt.minute;
-
-    // model = DateTimeModel(DateTime.now().millisecondsSinceEpoch);
   }
 
   Future<bool> selectDate(BuildContext context) async {
@@ -79,8 +78,8 @@ class DateTimeProvider extends ChangeNotifier {
     return false;
   }
 
-  String dateTimeFormat() {
-    return DateFormat("yyyy/MM/dd HH:mm").format(
+  String dateTimeFormat(BuildContext context) {
+    return DateFormat(AppLocalizations.of(context)!.dateTimeFormat).format(
         DateTime(model.year, model.month, model.day, model.hour, model.minute));
   }
 

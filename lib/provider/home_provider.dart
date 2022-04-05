@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:reminder/model/alarm.dart';
 import 'package:reminder/model/db.dart';
 import 'package:reminder/model/home_model.dart';
-import 'package:reminder/values/strings.dart';
+import 'package:reminder/multilingualization/app_localizations.dart';
 
 class HomeProvider extends ChangeNotifier {
   late HomeModel model;
@@ -20,7 +20,7 @@ class HomeProvider extends ChangeNotifier {
     }
   }
 
-  String dateTimeFormat(int milliseconds) {
+  String dateTimeFormat(int milliseconds, BuildContext context) {
     var dt = DateTime.fromMillisecondsSinceEpoch(milliseconds);
     var now = DateTime.now();
 
@@ -29,9 +29,9 @@ class HomeProvider extends ChangeNotifier {
     String res = "";
 
     if (diff.inMilliseconds <= 0) {
-      res = AppStrings.notifiedMsg;
+      res = AppLocalizations.of(context)!.notifiedMsg;
     } else {
-      res = DateFormat("yyyy/MM/dd").add_Hm().format(dt);
+      res = DateFormat(AppLocalizations.of(context)!.dateTimeFormat).format(dt);
     }
 
     return res;

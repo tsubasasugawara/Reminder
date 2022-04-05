@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder/components/button/form_control_button.dart';
 import 'package:reminder/provider/add_reminder_provider.dart';
 import 'package:reminder/provider/datetime_provider.dart';
 import 'package:reminder/values/colors.dart';
-import 'package:reminder/values/strings.dart';
+import 'package:reminder/multilingualization/app_localizations.dart';
 
 // ignore: must_be_immutable
 class AddReminderView extends StatelessWidget {
@@ -66,7 +65,7 @@ class AddReminderView extends StatelessWidget {
               ),
               maxLines: 1,
               decoration: InputDecoration(
-                hintText: AppStrings.titleHintText,
+                hintText: AppLocalizations.of(context)!.titleHintText,
                 hintStyle: TextStyle(
                   color: Colors.white60,
                   fontSize: provider.textsize + 8,
@@ -104,7 +103,7 @@ class AddReminderView extends StatelessWidget {
                   ),
                   maxLines: null,
                   decoration: InputDecoration(
-                    hintText: AppStrings.memoHintText,
+                    hintText: AppLocalizations.of(context)!.memoHintText,
                     hintStyle: TextStyle(
                       color: Colors.white60,
                       fontSize: provider.textsize,
@@ -140,7 +139,7 @@ class AddReminderView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           FormControlButton(
-            AppStrings.cancelButton,
+            AppLocalizations.of(context)!.cancelButton,
             Colors.red,
             () {
               provider.init();
@@ -149,7 +148,7 @@ class AddReminderView extends StatelessWidget {
           ),
           dateTimeSelecter(context),
           FormControlButton(
-            AppStrings.saveButton,
+            AppLocalizations.of(context)!.saveButton,
             Colors.green,
             () {
               provider.saveBtn(context);
@@ -189,7 +188,7 @@ class AddReminderView extends StatelessWidget {
               color: Colors.green,
             ),
             label: Text(
-              dateTimeProvider.dateTimeFormat(),
+              dateTimeProvider.dateTimeFormat(context),
               style: const TextStyle(color: Colors.green),
             ),
           );

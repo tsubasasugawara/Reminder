@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:reminder/components/snack_bar/snackbar.dart';
 import 'package:reminder/model/add_reminder_model.dart';
 import 'package:reminder/model/alarm.dart';
-import 'package:reminder/values/strings.dart';
+import 'package:reminder/multilingualization/app_localizations.dart';
 
 class AddReminderProvider {
   late AddReminderModel model;
@@ -74,7 +74,7 @@ class AddReminderProvider {
     if (!titleIsOk) {
       ShowSnackBar(
         context,
-        AppStrings.titleError,
+        AppLocalizations.of(context)!.titleError,
         ShowSnackBar.error,
       );
       return;
@@ -83,7 +83,7 @@ class AddReminderProvider {
     if (!timeIsOk) {
       ShowSnackBar(
         context,
-        AppStrings.dateTimeError,
+        AppLocalizations.of(context)!.dateTimeError,
         ShowSnackBar.error,
       );
       return;
@@ -93,7 +93,9 @@ class AddReminderProvider {
 
     ShowSnackBar(
       context,
-      model.id == null ? AppStrings.saved : AppStrings.edited,
+      model.id == null
+          ? AppLocalizations.of(context)!.saved
+          : AppLocalizations.of(context)!.edited,
       ShowSnackBar.successful,
     );
 

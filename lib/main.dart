@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:reminder/values/strings.dart';
+import 'package:reminder/multilingualization/app_localizations_delegate.dart';
 import 'package:reminder/view/home_view.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,10 +13,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: AppStrings.appTitle,
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
+      localizationsDelegates: const [
+        AppLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('ja'),
+      ],
       home: const HomeView(),
     );
   }
