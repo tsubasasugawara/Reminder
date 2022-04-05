@@ -91,37 +91,35 @@ class AddReminderView extends StatelessWidget {
         Expanded(
           child: Container(
             margin: const EdgeInsets.only(top: 20),
-            child: Expanded(
-              child: Focus(
-                child: TextFormField(
-                  controller: provider.contentController,
-                  focusNode: provider.contentFocusNode,
-                  expands: true,
-                  style: TextStyle(
-                    color: AppColors.textColor,
+            child: Focus(
+              onFocusChange: (hasFocus) {
+                if (hasFocus) {
+                  provider.fabVisible = true;
+                } else {
+                  provider.fabVisible = false;
+                }
+              },
+              child: TextFormField(
+                controller: provider.contentController,
+                focusNode: provider.contentFocusNode,
+                expands: true,
+                style: TextStyle(
+                  color: AppColors.textColor,
+                  fontSize: provider.textsize,
+                ),
+                maxLines: null,
+                decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context)!.memoHintText,
+                  hintStyle: TextStyle(
+                    color: Colors.white60,
                     fontSize: provider.textsize,
                   ),
-                  maxLines: null,
-                  decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context)!.memoHintText,
-                    hintStyle: TextStyle(
-                      color: Colors.white60,
-                      fontSize: provider.textsize,
-                    ),
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    contentPadding: const EdgeInsets.all(10),
-                  ),
-                  onChanged: (text) {
-                    provider.model.dataBeingEditing["content"] = text;
-                  },
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  contentPadding: const EdgeInsets.all(10),
                 ),
-                onFocusChange: (hasFocus) {
-                  if (hasFocus) {
-                    provider.fabVisible = true;
-                  } else {
-                    provider.fabVisible = false;
-                  }
+                onChanged: (text) {
+                  provider.model.dataBeingEditing["content"] = text;
                 },
               ),
             ),
