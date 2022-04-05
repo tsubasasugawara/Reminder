@@ -11,6 +11,11 @@ class AddReminderProvider {
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
 
+  FocusNode titleFocusNode = FocusNode();
+  FocusNode contentFocusNode = FocusNode();
+
+  bool fabVisible = false;
+
 // Meanig correct value or not.
   bool titleIsOk = true;
   bool timeIsOk = false;
@@ -47,11 +52,11 @@ class AddReminderProvider {
     }
   }
 
-  titleValidate() {
+  void titleValidate() {
     titleIsOk = titleController.text != "" ? true : false;
   }
 
-  timeValidate() {
+  void timeValidate() {
     var diff =
         model.dataBeingEditing['time'] - DateTime.now().millisecondsSinceEpoch;
 
@@ -62,7 +67,7 @@ class AddReminderProvider {
     }
   }
 
-  saveBtn(BuildContext context) {
+  void saveBtn(BuildContext context) {
     titleValidate();
     timeValidate();
 
@@ -101,7 +106,7 @@ class AddReminderProvider {
     }
   }
 
-  dataBinding() {
+  void dataBinding() {
     model.dataBeforeEditing = model.dataBeingEditing;
   }
 }
