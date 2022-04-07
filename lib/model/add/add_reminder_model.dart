@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:reminder/model/db.dart';
+import 'package:reminder/model/db/db.dart';
 
 class AddReminderModel {
   late int? id;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:reminder/model/datetime_model.dart';
+import 'package:reminder/model/add/datetime_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
 class DateTimeProvider extends ChangeNotifier {

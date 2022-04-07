@@ -62,9 +62,7 @@ class AlarmRegister(_context: Context) {
         )
 
         alarmManager.cancel(pendingIntent)
-
     }
-
 
     private fun createIntent(
         id: Int,

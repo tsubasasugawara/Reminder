@@ -12,7 +12,8 @@ class Messages {
       required this.edited,
       required this.saveButton,
       required this.cancelButton,
-      required this.dateTimeFormat});
+      required this.dateTimeFormat,
+      required this.delete});
 
   // AppInfo
   // -----------------------------------------------------------------------------------
@@ -41,6 +42,8 @@ class Messages {
   final String saveButton;
   final String cancelButton;
 
+  final String delete;
+
   final String dateTimeFormat;
 
   factory Messages.of(Locale locale) {
@@ -66,6 +69,7 @@ class Messages {
         saveButton: '保存する',
         cancelButton: 'キャンセル',
         dateTimeFormat: 'yyyy/MM/dd HH:mm',
+        delete: '削除する',
       );
 
   factory Messages.en() => Messages(
@@ -80,5 +84,6 @@ class Messages {
         saveButton: 'Save',
         cancelButton: 'Cancel',
         dateTimeFormat: 'MM/dd/yyyy hh:mm aa',
+        delete: 'Delete',
       );
 }

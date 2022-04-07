@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:reminder/model/alarm.dart';
-import 'package:reminder/model/db.dart';
-import 'package:reminder/model/home_model.dart';
+import 'package:reminder/model/alarm/alarm.dart';
+import 'package:reminder/model/db/db.dart';
+import 'package:reminder/model/home/home_list_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
-class HomeProvider extends ChangeNotifier {
-  late HomeModel model;
+class HomeListProvider extends ChangeNotifier {
+  late HomeListModel model;
 
-  HomeProvider() {
-    model = HomeModel();
+  HomeListProvider() {
+    model = HomeListModel();
   }
 
   Future getData() async {
     var data = await model.select();
     if (data != null) {
-      model.dataList = data;
+      var tmp = <Map>[];
+      for (var ele in data) {
+        tmp.add(Map.of(ele));
+      }
+      model.dataList = tmp;
       notifyListeners();
     }
   }
@@ -48,5 +52,17 @@ class HomeProvider extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  void checkBox(Map list, int id, value) {
+    if (list[id] == null) {
+      list.addEntries(
+        [
+          MapEntry(id, value),
+        ],
+      );
+    } else {
+      list[id] = value;
+    }
   }
 }

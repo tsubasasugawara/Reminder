@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder/components/button/form_control_button.dart';
-import 'package:reminder/provider/add_reminder_provider.dart';
-import 'package:reminder/provider/datetime_provider.dart';
+import 'package:reminder/provider/add/add_reminder_provider.dart';
+import 'package:reminder/provider/add/datetime_provider.dart';
 import 'package:reminder/values/colors.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
