@@ -18,15 +18,6 @@ class HomeView extends StatelessWidget {
           AppLocalizations.of(context)!.appTitle,
           style: const TextStyle(color: AppColors.textColor),
         ),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.search,
-            ),
-            color: AppColors.textColor,
-          ),
-        ],
       ),
       body: Center(child: list(context)),
       floatingActionButton: FloatingActionButton(
