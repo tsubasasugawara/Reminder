@@ -41,9 +41,9 @@ class MainActivity: FlutterActivity() {
                     val register = AlarmRegister(context)
                     register.deleteAlarm(id,title,content,time)
                 }
-                "test" -> {
+                // "test" -> {
                 //     result.success(LocalDateTime.now().toString())
-                }
+                // }
             }
         }
     }

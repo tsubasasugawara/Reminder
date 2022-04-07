@@ -1,7 +1,7 @@
-import 'package:reminder/model/db/db.dart';
+import 'package:reminder/model/db.dart';
 
-class HomeListModel {
-  HomeListModel();
+class HomeModel {
+  HomeModel();
 
   List<Map> dataList = <Map>[];
 

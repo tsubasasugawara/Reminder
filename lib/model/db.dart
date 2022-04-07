@@ -74,20 +74,6 @@ class NotificationsTable {
     }
   }
 
-  Future<List<Map>?> selectById(List<int> idList) async {
-    try {
-      String where = "id IN (?";
-      for (var i = 1; i < idList.length; i++) {
-        where += ", ?";
-      }
-      where += ")";
-
-      return await select(where: where, whereArgs: idList);
-    } catch (e) {
-      return null;
-    }
-  }
-
   Future<int?> insert(
     String title,
     String content,
@@ -129,28 +115,6 @@ class NotificationsTable {
         'DELETE FROM $tableName WHERE id = ?',
         [id],
       );
-      await db?.close();
-      return numOfChanged;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  Future<int?> deleteById(List<int> idList) async {
-    if (idList.isEmpty) {
-      return null;
-    }
-
-    try {
-      var db = await _opendb();
-
-      var sql = "DELETE FROM $tableName WHERE id IN (?";
-      for (var i = 1; i < idList.length; i++) {
-        sql += ", ?";
-      }
-      sql += ")";
-
-      var numOfChanged = await db?.rawDelete(sql, idList);
       await db?.close();
       return numOfChanged;
     } catch (e) {
