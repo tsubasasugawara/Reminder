@@ -13,7 +13,8 @@ class Messages {
     required this.saveButton,
     required this.cancelButton,
     required this.dateTimeFormat,
-    required this.setAlarm,
+    required this.setAlarmOff,
+    required this.setAlarmOn,
   });
 
   // AppInfo
@@ -45,7 +46,8 @@ class Messages {
 
   final String dateTimeFormat;
 
-  final String setAlarm;
+  final String setAlarmOff;
+  final String setAlarmOn;
 
   factory Messages.of(Locale locale) {
     switch (locale.languageCode) {
@@ -70,7 +72,8 @@ class Messages {
         saveButton: '保存する',
         cancelButton: 'キャンセル',
         dateTimeFormat: 'yyyy/MM/dd HH:mm',
-        setAlarm: 'アラームはオフです',
+        setAlarmOff: 'オフ',
+        setAlarmOn: 'オン',
       );
 
   factory Messages.en() => Messages(
@@ -85,6 +88,7 @@ class Messages {
         saveButton: 'Save',
         cancelButton: 'Cancel',
         dateTimeFormat: 'MM/dd/yyyy hh:mm aa',
-        setAlarm: 'This reminder is off.',
+        setAlarmOff: 'Off',
+        setAlarmOn: 'On',
       );
 }

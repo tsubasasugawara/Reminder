@@ -1,26 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:reminder/multilingualization/app_localizations.dart';
+import 'package:reminder/values/colors.dart';
 
-class AlarmSwitchButton extends ChangeNotifier {
-  AlarmSwitchButton(this.setAlarm);
+class AlarmSwitchButtonProvider extends ChangeNotifier {
+  AlarmSwitchButtonProvider(this.setAlarm);
 
   int setAlarm;
 
-  Widget changeIcon(Function() action) {
+  Widget changeIcon(BuildContext context, Function() action) {
     if (setAlarm == 0) {
-      return IconButton(
+      return ElevatedButton.icon(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(
+            AppColors.backgroundColor,
+          ),
+        ),
         onPressed: () {
           _changeSetAlarm();
           action();
         },
         icon: const Icon(Icons.alarm_off),
+        label: Text(AppLocalizations.of(context)!.setAlarmOff),
       );
     } else {
-      return IconButton(
+      return ElevatedButton.icon(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(
+            AppColors.backgroundColor,
+          ),
+        ),
         onPressed: () {
           _changeSetAlarm();
           action();
         },
         icon: const Icon(Icons.alarm_on),
+        label: Text(AppLocalizations.of(context)!.setAlarmOn),
       );
     }
   }

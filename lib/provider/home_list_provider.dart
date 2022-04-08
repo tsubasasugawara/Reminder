@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:reminder/model/alarm.dart';
 import 'package:reminder/model/db.dart';
-import 'package:reminder/model/home_model.dart';
+import 'package:reminder/model/home_list_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
-class HomeProvider extends ChangeNotifier {
-  late HomeModel model;
+class HomeListProvider extends ChangeNotifier {
+  late HomeListModel model;
 
-  HomeProvider() {
-    model = HomeModel();
+  HomeListProvider() {
+    model = HomeListModel();
+    getData();
   }
 
-  Future getData() async {
+  Future<void> getData() async {
     var data = await model.select();
     if (data != null) {
       model.dataList = data;
@@ -24,7 +25,7 @@ class HomeProvider extends ChangeNotifier {
     if (setAlarm == 1) {
       return dateTimeFormat(milliseconds, context);
     } else {
-      return AppLocalizations.of(context)!.setAlarm;
+      return AppLocalizations.of(context)!.setAlarmOff;
     }
   }
 
@@ -45,16 +46,25 @@ class HomeProvider extends ChangeNotifier {
     return res;
   }
 
-  Future deleteData(int index) async {
+  Future<void> deleteFromDbAndAlarm(int index, Function() action) async {
     var id = model.dataList[index]['id'];
     var data = await model.selectById(id);
 
-    if (data != null) {
-      await NotificationsTable().delete(id);
-      await Alarm.deleteAlarm(
-          id, data[0]['title'], data[0]['content'], data[0]['time']);
-    }
+    if (data == null) return;
 
-    notifyListeners();
+    _deleteData(id);
+    action();
+    _deleteAlarm(id, data);
+
+    return;
+  }
+
+  Future<void> _deleteData(int id) async {
+    await NotificationsTable().delete(id);
+  }
+
+  Future<void> _deleteAlarm(int id, List<Map> data) async {
+    await Alarm.deleteAlarm(
+        id, data[0]['title'], data[0]['content'], data[0]['time']);
   }
 }

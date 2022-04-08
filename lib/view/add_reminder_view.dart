@@ -26,11 +26,12 @@ class AddReminderView extends StatelessWidget {
         backgroundColor: AppColors.backgroundColor,
         actions: [
           ChangeNotifierProvider(
-            create: (context) =>
-                AlarmSwitchButton(provider.model.dataBeforeEditing["setAlarm"]),
-            child: Consumer<AlarmSwitchButton>(
+            create: (context) => AlarmSwitchButtonProvider(
+                provider.model.dataBeforeEditing["setAlarm"]),
+            child: Consumer<AlarmSwitchButtonProvider>(
               builder: (context, alarmSwitchProvider, child) {
                 return alarmSwitchProvider.changeIcon(
+                  context,
                   () {
                     provider.model.dataBeingEditing["setAlarm"] =
                         alarmSwitchProvider.setAlarm;
