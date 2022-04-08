@@ -6,7 +6,7 @@ class NotificationData {
   String content;
   int frequency;
   int time;
-  int notified;
+  int setAlarm; // 0(false):アラームを設定しない, 1(true):設定する
 
   NotificationData(
     this.id,
@@ -14,7 +14,7 @@ class NotificationData {
     this.content,
     this.frequency,
     this.time,
-    this.notified,
+    this.setAlarm,
   );
 }
 
@@ -35,7 +35,7 @@ class NotificationsTable {
           content TEXT,
           frequency INTEGER,
           time INTEGER not null,
-          notified INTEGER not null
+          setAlarm INTEGER not null
         )''');
       });
       return db;
@@ -74,17 +74,13 @@ class NotificationsTable {
     }
   }
 
-  Future<int?> insert(
-    String title,
-    String content,
-    int frequency,
-    int time,
-  ) async {
+  Future<int?> insert(String title, String content, int frequency, int time,
+      int setAlarm) async {
     try {
       var db = await _opendb();
       int? id = await db?.rawInsert(
-        'INSERT INTO $tableName (title, content, frequency, time, notified) VALUES (?, ?, ?, ?, ?)',
-        [title, content, frequency, time, 0],
+        'INSERT INTO $tableName (title, content, frequency, time, setAlarm) VALUES (?, ?, ?, ?, ?)',
+        [title, content, frequency, time, setAlarm],
       );
       await db?.close();
       return id;
@@ -94,12 +90,12 @@ class NotificationsTable {
   }
 
   Future<int?> update(int id, String title, String content, int frequency,
-      int time, int notified) async {
+      int time, int setAlarm) async {
     try {
       var db = await _opendb();
       var numOfChanged = await db?.rawUpdate(
-        'UPDATE $tableName SET title = ?, content = ?, frequency = ?, time = ?, notified = ? WHERE id = ?',
-        [title, content, frequency, time, notified, id],
+        'UPDATE $tableName SET title = ?, content = ?, frequency = ?, time = ?, setAlarm = ? WHERE id = ?',
+        [title, content, frequency, time, setAlarm, id],
       );
       await db?.close();
       return numOfChanged;

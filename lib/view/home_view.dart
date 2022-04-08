@@ -25,7 +25,8 @@ class HomeView extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AddReminderView(null, null, null, null),
+              builder: (context) =>
+                  AddReminderView(null, null, null, null, null),
             ),
           );
         },
@@ -60,6 +61,7 @@ class HomeView extends StatelessWidget {
                         dataList[index]["title"],
                         dataList[index]["content"],
                         dataList[index]["time"],
+                        dataList[index]["setAlarm"],
                       ),
                     ),
                   );
@@ -118,7 +120,9 @@ class HomeView extends StatelessWidget {
                               Container(
                                 margin: const EdgeInsets.only(top: 5),
                                 child: Text(
-                                  provider.dateTimeFormat(
+                                  provider.alarmOnOff(
+                                      provider.model.dataList[index]
+                                          ["setAlarm"],
                                       provider.model.dataList[index]['time'],
                                       context),
                                   style: const TextStyle(

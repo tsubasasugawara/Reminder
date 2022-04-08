@@ -22,9 +22,10 @@ class AddReminderProvider {
 
   final textsize = 20.0;
 
-  AddReminderProvider(int? id, String? title, String? content, int? time) {
+  AddReminderProvider(
+      int? id, String? title, String? content, int? time, int? setAlarm) {
     // Edited or New.
-    model = AddReminderModel(id, title, content, time);
+    model = AddReminderModel(id, title, content, time, setAlarm);
 
     init();
 
@@ -36,19 +37,28 @@ class AddReminderProvider {
     timeIsOk = true;
   }
 
-  Future insertData(int? _id) async {
-    var title = model.dataBeingEditing["title"];
-    var content = model.dataBeingEditing["content"];
-    var time = model.dataBeingEditing['time'];
-    var created = false;
-
+  Future<void> registerAlarm(int? _id) async {
     var res = await model.updateOrInsert(_id);
     var id = res[0];
     var status = res[1];
 
-    if (id != null) {
-      if (status == AddReminderModel.update) created = true;
-      await Alarm.alarm(id, title, content, time, created);
+    if (id == null) return;
+
+    if (model.dataBeingEditing["setAlarm"] == 1) {
+      await Alarm.alarm(
+        id,
+        model.dataBeingEditing["title"],
+        model.dataBeingEditing["content"],
+        model.dataBeingEditing['time'],
+        status == AddReminderModel.update ? true : false,
+      );
+    } else {
+      await Alarm.deleteAlarm(
+        id,
+        model.dataBeforeEditing["title"] ?? model.dataBeingEditing["title"],
+        model.dataBeforeEditing["content"] ?? model.dataBeingEditing["content"],
+        model.dataBeforeEditing['time'] ?? model.dataBeingEditing["time"],
+      );
     }
   }
 
@@ -67,9 +77,8 @@ class AddReminderProvider {
     }
   }
 
-  void saveBtn(BuildContext context) {
+  Future<void> saveBtn(BuildContext context) async {
     titleValidate();
-    timeValidate();
 
     if (!titleIsOk) {
       ShowSnackBar(
@@ -80,16 +89,19 @@ class AddReminderProvider {
       return;
     }
 
-    if (!timeIsOk) {
-      ShowSnackBar(
-        context,
-        AppLocalizations.of(context)!.dateTimeError,
-        ShowSnackBar.error,
-      );
-      return;
+    if (model.dataBeingEditing["setAlarm"] == 1) {
+      timeValidate();
+      if (!timeIsOk) {
+        ShowSnackBar(
+          context,
+          AppLocalizations.of(context)!.dateTimeError,
+          ShowSnackBar.error,
+        );
+        return;
+      }
     }
 
-    insertData(model.id);
+    registerAlarm(model.id);
 
     ShowSnackBar(
       context,

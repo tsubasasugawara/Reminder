@@ -20,6 +20,14 @@ class HomeProvider extends ChangeNotifier {
     }
   }
 
+  String alarmOnOff(int setAlarm, int milliseconds, BuildContext context) {
+    if (setAlarm == 1) {
+      return dateTimeFormat(milliseconds, context);
+    } else {
+      return "This reminder is off.";
+    }
+  }
+
   String dateTimeFormat(int milliseconds, BuildContext context) {
     var dt = DateTime.fromMillisecondsSinceEpoch(milliseconds);
     var now = DateTime.now();

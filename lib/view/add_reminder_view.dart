@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder/components/button/form_control_button.dart';
 import 'package:reminder/provider/add_reminder_provider.dart';
+import 'package:reminder/provider/alarm_switch_button.dart';
 import 'package:reminder/provider/datetime_provider.dart';
 import 'package:reminder/values/colors.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
@@ -10,10 +11,11 @@ import 'package:reminder/multilingualization/app_localizations.dart';
 class AddReminderView extends StatelessWidget {
   late AddReminderProvider provider;
 
-  AddReminderView(int? id, String? title, String? content, int? time,
+  AddReminderView(
+      int? id, String? title, String? content, int? time, int? setAlarm,
       {Key? key})
       : super(key: key) {
-    provider = AddReminderProvider(id, title, content, time);
+    provider = AddReminderProvider(id, title, content, time, setAlarm);
   }
 
   @override
@@ -22,6 +24,22 @@ class AddReminderView extends StatelessWidget {
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
         backgroundColor: AppColors.backgroundColor,
+        actions: [
+          ChangeNotifierProvider(
+            create: (context) =>
+                AlarmSwitchButton(provider.model.dataBeforeEditing["setAlarm"]),
+            child: Consumer<AlarmSwitchButton>(
+              builder: (context, alarmSwitchProvider, child) {
+                return alarmSwitchProvider.changeIcon(
+                  () {
+                    provider.model.dataBeingEditing["setAlarm"] =
+                        alarmSwitchProvider.setAlarm;
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
