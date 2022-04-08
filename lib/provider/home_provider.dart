@@ -24,7 +24,7 @@ class HomeProvider extends ChangeNotifier {
     if (setAlarm == 1) {
       return dateTimeFormat(milliseconds, context);
     } else {
-      return "This reminder is off.";
+      return AppLocalizations.of(context)!.setAlarm;
     }
   }
 

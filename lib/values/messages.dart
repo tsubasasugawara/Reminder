@@ -1,18 +1,20 @@
 import 'package:flutter/cupertino.dart';
 
 class Messages {
-  Messages(
-      {required this.appTitle,
-      required this.notifiedMsg,
-      required this.titleHintText,
-      required this.memoHintText,
-      required this.titleError,
-      required this.dateTimeError,
-      required this.saved,
-      required this.edited,
-      required this.saveButton,
-      required this.cancelButton,
-      required this.dateTimeFormat});
+  Messages({
+    required this.appTitle,
+    required this.notifiedMsg,
+    required this.titleHintText,
+    required this.memoHintText,
+    required this.titleError,
+    required this.dateTimeError,
+    required this.saved,
+    required this.edited,
+    required this.saveButton,
+    required this.cancelButton,
+    required this.dateTimeFormat,
+    required this.setAlarm,
+  });
 
   // AppInfo
   // -----------------------------------------------------------------------------------
@@ -43,6 +45,8 @@ class Messages {
 
   final String dateTimeFormat;
 
+  final String setAlarm;
+
   factory Messages.of(Locale locale) {
     switch (locale.languageCode) {
       case 'ja':
@@ -66,6 +70,7 @@ class Messages {
         saveButton: '保存する',
         cancelButton: 'キャンセル',
         dateTimeFormat: 'yyyy/MM/dd HH:mm',
+        setAlarm: 'アラームはオフです',
       );
 
   factory Messages.en() => Messages(
@@ -80,5 +85,6 @@ class Messages {
         saveButton: 'Save',
         cancelButton: 'Cancel',
         dateTimeFormat: 'MM/dd/yyyy hh:mm aa',
+        setAlarm: 'This reminder is off.',
       );
 }
