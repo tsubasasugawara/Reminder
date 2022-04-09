@@ -55,7 +55,7 @@ android {
             debuggable true
             applicationIdSuffix ".debug"
             minifyEnabled true // コードの圧縮
-            useProguard false // デバッグ版では難読化と最適化は行わず，未使用のコードのみ削除
+            useProguard false // 難読化と最適化は行わず，未使用のコードのみ削除
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro', 'shrinker-rules.pro'
         }
         release {

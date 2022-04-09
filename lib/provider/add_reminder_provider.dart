@@ -101,7 +101,7 @@ class AddReminderProvider {
       }
     }
 
-    registerAlarm(model.id);
+    await registerAlarm(model.id);
 
     ShowSnackBar(
       context,

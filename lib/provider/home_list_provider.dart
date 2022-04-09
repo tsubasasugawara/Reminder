@@ -6,19 +6,18 @@ import 'package:reminder/model/home_list_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
 class HomeListProvider extends ChangeNotifier {
-  late HomeListModel model;
+  HomeListModel model = HomeListModel();
 
   HomeListProvider() {
-    model = HomeListModel();
     getData();
   }
 
   Future<void> getData() async {
     var data = await model.select();
-    if (data != null) {
-      model.dataList = data;
-      notifyListeners();
-    }
+    if (data == null) return;
+
+    model.dataList = data;
+    notifyListeners();
   }
 
   String alarmOnOff(int setAlarm, int milliseconds, BuildContext context) {

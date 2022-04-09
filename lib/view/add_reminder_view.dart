@@ -151,7 +151,7 @@ class AddReminderView extends StatelessWidget {
             Colors.red,
             () {
               provider.init();
-              Navigator.pop(context);
+              Navigator.of(context).pop();
             },
           ),
           dateTimeSelecter(context),
