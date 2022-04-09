@@ -9,7 +9,7 @@ class HomeListModel {
     try {
       var nt = NotificationsTable();
       var dataList = await nt.select(
-        columns: ['id', 'title', 'content', 'time', 'setAlarm'],
+        columns: ['id', 'title', 'content', 'time', 'set_alarm'],
         orderBy: 'id DESC',
       );
       return dataList;

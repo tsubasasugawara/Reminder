@@ -39,7 +39,7 @@ class HomeView extends StatelessWidget {
                               dataList[index]["title"],
                               dataList[index]["content"],
                               dataList[index]["time"],
-                              dataList[index]["setAlarm"],
+                              dataList[index]["set_alarm"],
                             );
                           },
                         ),
@@ -53,7 +53,7 @@ class HomeView extends StatelessWidget {
                         gradient: LinearGradient(
                           stops: const [0.02, 0.02],
                           colors: [
-                            provider.model.dataList[index]["setAlarm"] == 1
+                            provider.model.dataList[index]["set_alarm"] == 1
                                 ? Colors.green
                                 : Colors.red,
                             AppColors.listBackground,
@@ -90,7 +90,7 @@ class HomeView extends StatelessWidget {
                                     child: Text(
                                       provider.alarmOnOff(
                                           provider.model.dataList[index]
-                                              ["setAlarm"],
+                                              ["set_alarm"],
                                           provider.model.dataList[index]
                                               ['time'],
                                           context),

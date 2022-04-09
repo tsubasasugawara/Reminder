@@ -44,7 +44,7 @@ class AddReminderProvider {
 
     if (id == null) return;
 
-    if (model.dataBeingEditing["setAlarm"] == 0) {
+    if (model.dataBeingEditing["set_alarm"] == 0) {
       await Alarm.deleteAlarm(
         id,
         model.dataBeforeEditing["title"] ?? model.dataBeingEditing["title"],
@@ -89,7 +89,7 @@ class AddReminderProvider {
       return;
     }
 
-    if (model.dataBeingEditing["setAlarm"] == 1) {
+    if (model.dataBeingEditing["set_alarm"] == 1) {
       timeValidate();
       if (!timeIsOk) {
         ShowSnackBar(

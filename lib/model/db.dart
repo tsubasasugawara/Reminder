@@ -35,11 +35,15 @@ class NotificationsTable {
           content TEXT,
           frequency INTEGER,
           time INTEGER not null,
-          setAlarm INTEGER not null
+          set_alarm INTEGER not null
         )''');
       });
       return db;
     } catch (e) {
+      assert(() {
+        print(e);
+        return true;
+      }());
       return null;
     }
   }
@@ -70,6 +74,10 @@ class NotificationsTable {
       await db?.close();
       return dataList;
     } catch (e) {
+      assert(() {
+        print(e);
+        return true;
+      }());
       return null;
     }
   }
@@ -84,12 +92,16 @@ class NotificationsTable {
     try {
       var db = await _opendb();
       int? id = await db?.rawInsert(
-        'INSERT INTO $tableName (title, content, frequency, time, setAlarm) VALUES (?, ?, ?, ?, ?)',
+        'INSERT INTO $tableName (title, content, frequency, time, set_alarm) VALUES (?, ?, ?, ?, ?)',
         [title, content, frequency, time, setAlarm],
       );
       await db?.close();
       return id;
     } catch (e) {
+      assert(() {
+        print(e);
+        return true;
+      }());
       return null;
     }
   }
@@ -105,12 +117,16 @@ class NotificationsTable {
     try {
       var db = await _opendb();
       var numOfChanged = await db?.rawUpdate(
-        'UPDATE $tableName SET title = ?, content = ?, frequency = ?, time = ?, setAlarm = ? WHERE id = ?',
+        'UPDATE $tableName SET title = ?, content = ?, frequency = ?, time = ?, set_alarm = ? WHERE id = ?',
         [title, content, frequency, time, setAlarm, id],
       );
       await db?.close();
       return numOfChanged;
     } catch (e) {
+      assert(() {
+        print(e);
+        return true;
+      }());
       return null;
     }
   }
@@ -125,6 +141,10 @@ class NotificationsTable {
       await db?.close();
       return numOfChanged;
     } catch (e) {
+      assert(() {
+        print(e);
+        return true;
+      }());
       return null;
     }
   }

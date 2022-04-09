@@ -6,14 +6,14 @@ class AddReminderModel {
     "title": null,
     "content": null,
     "time": DateTime.now().millisecondsSinceEpoch,
-    "setAlarm": 1,
+    "set_alarm": 1,
   };
   // time : Time difference from now.
   var dataBeingEditing = <String, dynamic>{
     "title": "",
     "content": "",
     "time": DateTime.now().millisecondsSinceEpoch,
-    "setAlarm": 1,
+    "set_alarm": 1,
   };
 
   static int update = 0;
@@ -26,12 +26,12 @@ class AddReminderModel {
     dataBeforeEditing['title'] = title;
     dataBeforeEditing['content'] = content;
     dataBeforeEditing['time'] = time;
-    dataBeforeEditing['setAlarm'] = setAlarm ?? 1;
+    dataBeforeEditing['set_alarm'] = setAlarm ?? 1;
 
     dataBeingEditing['title'] = title ?? "";
     dataBeingEditing['content'] = content ?? "";
     dataBeingEditing['time'] = time ?? dataBeingEditing['time'];
-    dataBeingEditing['setAlarm'] = setAlarm ?? 1;
+    dataBeingEditing['set_alarm'] = setAlarm ?? 1;
   }
 
   Future<List<int?>> updateOrInsert() async {
@@ -39,7 +39,7 @@ class AddReminderModel {
     var title = dataBeingEditing['title'];
     var content = dataBeingEditing['content'];
     var time = dataBeingEditing['time'];
-    var setAlarm = dataBeingEditing['setAlarm'];
+    var setAlarm = dataBeingEditing['set_alarm'];
 
     if (id != null) {
       var resId = await nt.update(id!, title, content, 0, time, setAlarm) ?? 0;
