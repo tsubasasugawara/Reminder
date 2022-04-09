@@ -15,6 +15,7 @@ class Messages {
     required this.dateTimeFormat,
     required this.setAlarmOff,
     required this.setAlarmOn,
+    required this.deletedAlarm,
   });
 
   // AppInfo
@@ -46,6 +47,8 @@ class Messages {
 
   final String dateTimeFormat;
 
+  final String deletedAlarm;
+
   final String setAlarmOff;
   final String setAlarmOn;
 
@@ -74,6 +77,7 @@ class Messages {
         dateTimeFormat: 'yyyy/MM/dd HH:mm',
         setAlarmOff: 'オフ',
         setAlarmOn: 'オン',
+        deletedAlarm: '削除しました',
       );
 
   factory Messages.en() => Messages(
@@ -90,5 +94,6 @@ class Messages {
         dateTimeFormat: 'MM/dd/yyyy hh:mm aa',
         setAlarmOff: 'Off',
         setAlarmOn: 'On',
+        deletedAlarm: 'Deleted.',
       );
 }

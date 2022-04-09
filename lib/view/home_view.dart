@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reminder/components/snack_bar/snackbar.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home_list_provider.dart';
 import 'package:reminder/values/colors.dart';
@@ -104,12 +105,17 @@ class HomeView extends StatelessWidget {
                               ),
                             ),
                             IconButton(
-                              onPressed: () async {
+                              onPressed: () {
                                 provider.deleteFromDbAndAlarm(
                                   index,
                                   () {
                                     provider.getData();
                                   },
+                                );
+                                ShowSnackBar(
+                                  context,
+                                  AppLocalizations.of(context)!.deletedAlarm,
+                                  Colors.red,
                                 );
                               },
                               icon: const Icon(

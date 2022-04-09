@@ -51,9 +51,9 @@ class HomeListProvider extends ChangeNotifier {
 
     if (data == null) return;
 
-    _deleteData(id);
+    await _deleteData(id);
     action();
-    _deleteAlarm(id, data);
+    await _deleteAlarm(id, data);
 
     return;
   }
