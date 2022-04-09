@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:reminder/model/db.dart';
 
 class AddReminderModel {
@@ -20,8 +19,6 @@ class AddReminderModel {
   static int update = 0;
   static int insert = 1;
 
-  var platform = const MethodChannel('com.sugawara.reminder/alarm');
-
   AddReminderModel(
       int? _id, String? title, String? content, int? time, int? setAlarm) {
     id = _id;
@@ -37,23 +34,19 @@ class AddReminderModel {
     dataBeingEditing['setAlarm'] = setAlarm ?? 1;
   }
 
-  Future<List<int?>> updateOrInsert(int? _id) async {
+  Future<List<int?>> updateOrInsert() async {
     var nt = NotificationsTable();
     var title = dataBeingEditing['title'];
     var content = dataBeingEditing['content'];
     var time = dataBeingEditing['time'];
     var setAlarm = dataBeingEditing['setAlarm'];
 
-    var num = 0;
-    if (_id != null) {
-      num = await nt.update(_id, title, content, 0, time, setAlarm) ?? 0;
-      return [id, update];
+    if (id != null) {
+      var resId = await nt.update(id!, title, content, 0, time, setAlarm) ?? 0;
+      return [resId, update];
     }
 
-    if (num == 0) {
-      var id = await nt.insert(title, content, 0, time, setAlarm);
-      return [id, insert];
-    }
-    return [null, null];
+    var resId = await nt.insert(title, content, 0, time, setAlarm);
+    return [resId, insert];
   }
 }

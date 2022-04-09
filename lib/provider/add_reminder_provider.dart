@@ -37,27 +37,27 @@ class AddReminderProvider {
     timeIsOk = true;
   }
 
-  Future<void> registerAlarm(int? _id) async {
-    var res = await model.updateOrInsert(_id);
+  Future<void> registerAlarm() async {
+    var res = await model.updateOrInsert();
     var id = res[0];
     var status = res[1];
 
     if (id == null) return;
 
-    if (model.dataBeingEditing["setAlarm"] == 1) {
+    if (model.dataBeingEditing["setAlarm"] == 0) {
+      await Alarm.deleteAlarm(
+        id,
+        model.dataBeforeEditing["title"] ?? model.dataBeingEditing["title"],
+        model.dataBeforeEditing["content"] ?? model.dataBeingEditing["content"],
+        model.dataBeforeEditing['time'] ?? model.dataBeingEditing["time"],
+      );
+    } else {
       await Alarm.alarm(
         id,
         model.dataBeingEditing["title"],
         model.dataBeingEditing["content"],
         model.dataBeingEditing['time'],
         status == AddReminderModel.update ? true : false,
-      );
-    } else {
-      await Alarm.deleteAlarm(
-        id,
-        model.dataBeforeEditing["title"] ?? model.dataBeingEditing["title"],
-        model.dataBeforeEditing["content"] ?? model.dataBeingEditing["content"],
-        model.dataBeforeEditing['time'] ?? model.dataBeingEditing["time"],
       );
     }
   }
@@ -101,7 +101,7 @@ class AddReminderProvider {
       }
     }
 
-    await registerAlarm(model.id);
+    registerAlarm();
 
     ShowSnackBar(
       context,
@@ -116,11 +116,7 @@ class AddReminderProvider {
       titleController.clear();
       contentController.clear();
     } else {
-      dataBinding();
+      model.dataBeforeEditing = model.dataBeingEditing;
     }
-  }
-
-  void dataBinding() {
-    model.dataBeforeEditing = model.dataBeingEditing;
   }
 }

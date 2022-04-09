@@ -1,11 +1,9 @@
 import 'package:flutter/services.dart';
 
 class Alarm {
-  static var platform = const MethodChannel('com.sugawara.reminder/alarm');
-
   static Future<void> alarm(
       int id, String title, String content, int time, bool created) async {
-    await platform.invokeMethod(
+    await const MethodChannel('com.sugawara.reminder/alarm').invokeMethod(
       "alarm",
       <String, dynamic>{
         'id': id,
@@ -19,7 +17,7 @@ class Alarm {
 
   static Future<void> deleteAlarm(
       int id, String title, String content, int time) async {
-    await platform.invokeMethod(
+    await const MethodChannel('com.sugawara.reminder/alarm').invokeMethod(
       "deleteAlarm",
       <String, dynamic>{
         'id': id,

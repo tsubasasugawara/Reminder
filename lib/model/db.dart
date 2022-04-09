@@ -74,8 +74,13 @@ class NotificationsTable {
     }
   }
 
-  Future<int?> insert(String title, String content, int frequency, int time,
-      int setAlarm) async {
+  Future<int?> insert(
+    String title,
+    String content,
+    int frequency,
+    int time,
+    int setAlarm,
+  ) async {
     try {
       var db = await _opendb();
       int? id = await db?.rawInsert(
@@ -89,8 +94,14 @@ class NotificationsTable {
     }
   }
 
-  Future<int?> update(int id, String title, String content, int frequency,
-      int time, int setAlarm) async {
+  Future<int?> update(
+    int id,
+    String title,
+    String content,
+    int frequency,
+    int time,
+    int setAlarm,
+  ) async {
     try {
       var db = await _opendb();
       var numOfChanged = await db?.rawUpdate(

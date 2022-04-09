@@ -44,7 +44,7 @@ class HomeView extends StatelessWidget {
                           },
                         ),
                       );
-                      await provider.getData();
+                      provider.getData();
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -107,8 +107,8 @@ class HomeView extends StatelessWidget {
                               onPressed: () async {
                                 provider.deleteFromDbAndAlarm(
                                   index,
-                                  () async {
-                                    await provider.getData();
+                                  () {
+                                    provider.getData();
                                   },
                                 );
                               },
@@ -135,7 +135,7 @@ class HomeView extends StatelessWidget {
                     },
                   ),
                 );
-                await provider.getData();
+                provider.getData();
               },
               child: const Icon(
                 Icons.add,
