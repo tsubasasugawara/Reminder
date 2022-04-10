@@ -1,0 +1,148 @@
+import 'dart:math' as math;
+import 'package:flutter/material.dart';
+
+class DateAndTimePicker {
+  static const Size _calendarPortraitDialogSize = Size(330.0, 518.0);
+  static const Size _calendarLandscapeDialogSize = Size(496.0, 346.0);
+  static const Duration _dialogSizeAnimationDuration =
+      Duration(milliseconds: 200);
+
+  int year = 0;
+  int month = 0;
+  int day = 0;
+  int hour = 0;
+  int minute = 0;
+
+  DateAndTimePicker(DateTime dt) {
+    year = dt.year;
+    month = dt.month;
+    day = dt.day;
+    hour = dt.hour;
+    minute = dt.minute;
+  }
+
+  Future<DateTime?> showDateTimePicker(
+    BuildContext context,
+    Color backgroundColor,
+    ThemeData themeData,
+  ) async {
+    final double textScaleFactor =
+        math.min(MediaQuery.of(context).textScaleFactor, 1.3);
+    final Size dialogSize = _dialogSize(context) * textScaleFactor;
+
+    return await showDialog(
+      context: context,
+      builder: (context) {
+        return Theme(
+            data: themeData,
+            child: Dialog(
+              insetPadding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+              clipBehavior: Clip.antiAlias,
+              child: AnimatedContainer(
+                width: dialogSize.width,
+                height: dialogSize.height,
+                duration: _dialogSizeAnimationDuration,
+                curve: Curves.easeIn,
+                child: MediaQuery(
+                  data: MediaQuery.of(context).copyWith(
+                    textScaleFactor: textScaleFactor,
+                  ),
+                  child: Builder(
+                    builder: (BuildContext context) {
+                      return Material(
+                        color: backgroundColor,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(
+                              child: CalendarDatePicker(
+                                firstDate: DateTime.now(),
+                                initialDate:
+                                    DateTime(year, month, day, hour, minute),
+                                lastDate: DateTime(
+                                  DateTime.now().year + 10,
+                                  DateTime.now().month,
+                                  DateTime.now().day,
+                                ),
+                                onDateChanged: (DateTime value) {
+                                  year = value.year;
+                                  month = value.month;
+                                  day = value.day;
+                                },
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 10.0),
+                              child: ElevatedButton.icon(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      const Color.fromARGB(255, 50, 50, 50)),
+                                ),
+                                onPressed: () async {
+                                  var picked = await showTimePicker(
+                                    context: context,
+                                    initialTime:
+                                        TimeOfDay(hour: hour, minute: minute),
+                                    builder: (context, child) {
+                                      return child!;
+                                    },
+                                  );
+                                  if (picked != null) {
+                                    hour = picked.hour;
+                                    minute = picked.minute;
+                                  }
+                                },
+                                icon: const Icon(Icons.watch_later_outlined),
+                                label: Text(
+                                  "08:00 PM",
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text(
+                                    "cancel",
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(
+                                      context,
+                                      DateTime(year, month, day, hour, minute),
+                                    );
+                                  },
+                                  child: const Text("OK"),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ));
+      },
+    ).then((value) => value);
+  }
+
+  Size _dialogSize(BuildContext context) {
+    final Orientation orientation = MediaQuery.of(context).orientation;
+    switch (orientation) {
+      case Orientation.portrait:
+        return _calendarPortraitDialogSize;
+      case Orientation.landscape:
+        return _calendarLandscapeDialogSize;
+    }
+  }
+}

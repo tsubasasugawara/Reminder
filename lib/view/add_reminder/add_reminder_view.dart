@@ -6,6 +6,7 @@ import 'package:reminder/provider/add_reminder/datetime_provider.dart';
 import 'package:reminder/values/colors.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/view/add_reminder/button/form_control_button.dart';
+import 'package:reminder/components/datetimepicker/date_and_time_picker.dart';
 
 // ignore: must_be_immutable
 class AddReminderView extends StatelessWidget {
@@ -184,6 +185,22 @@ class AddReminderView extends StatelessWidget {
           return ElevatedButton.icon(
             onPressed: () async {
               FocusScope.of(context).unfocus();
+
+              // var dt = dateTimeProvider.model;
+              // var res = await DateAndTimePicker(
+              //   DateTime(dt.year, dt.month, dt.day, dt.hour, dt.minute),
+              // ).showDateTimePicker(
+              //   context,
+              //   const Color.fromARGB(255, 20, 20, 20),
+              //   Theme.of(context).copyWith(
+              //     colorScheme: const ColorScheme.dark(
+              //       primary: Colors.green,
+              //       onSurface: Colors.white,
+              //       onPrimary: Colors.white,
+              //     ),
+              //   ),
+              // );
+              // print(res);
 
               final res = await dateTimeProvider.selectDate(context);
               provider.model.dataBeingEditing['time'] =
