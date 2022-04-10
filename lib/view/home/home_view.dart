@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder/components/snack_bar/snackbar.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
-import 'package:reminder/provider/home_list_provider.dart';
+import 'package:reminder/provider/home/home_list_provider.dart';
 import 'package:reminder/values/colors.dart';
-import 'package:reminder/view/add_reminder_view.dart';
+import 'package:reminder/view/add_reminder/add_reminder_view.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);

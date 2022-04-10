@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reminder/multilingualization/app_localizations_delegate.dart';
-import 'package:reminder/view/home_view.dart';
+import 'package:reminder/view/home/home_view.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {

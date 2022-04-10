@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reminder/components/snack_bar/snackbar.dart';
-import 'package:reminder/model/add_reminder_model.dart';
+import 'package:reminder/model/add_reminder/add_reminder_model.dart';
 import 'package:reminder/model/alarm.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 

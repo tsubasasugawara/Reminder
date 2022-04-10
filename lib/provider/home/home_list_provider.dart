@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:reminder/model/alarm.dart';
 import 'package:reminder/model/db.dart';
-import 'package:reminder/model/home_list_model.dart';
+import 'package:reminder/model/home/home_list_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
 class HomeListProvider extends ChangeNotifier {
