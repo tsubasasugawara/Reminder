@@ -37,13 +37,19 @@ class AddReminderProvider {
     timeIsOk = true;
   }
 
-  Future<void> registerAlarm() async {
+  Future<List<int>?> saveToDb() async {
     var res = await model.updateOrInsert();
     var id = res[0];
     var status = res[1];
 
-    if (id == null) return;
+    if (id == null || status == null) {
+      return null;
+    } else {
+      return [id, status];
+    }
+  }
 
+  Future<void> registerAlarm(int id, int status) async {
     if (model.dataBeingEditing["set_alarm"] == 0) {
       await Alarm.deleteAlarm(
         id,
@@ -101,7 +107,10 @@ class AddReminderProvider {
       }
     }
 
-    registerAlarm();
+    var res = await saveToDb();
+    if (res == null) return;
+
+    registerAlarm(res[0], res[1]);
 
     ShowSnackBar(
       context,

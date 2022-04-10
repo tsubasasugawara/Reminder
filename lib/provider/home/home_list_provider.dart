@@ -29,7 +29,7 @@ class HomeListProvider extends ChangeNotifier {
       [DateTime.now().millisecondsSinceEpoch],
       null,
     );
-    notifyListeners();
+    getData();
   }
 
   String alarmOnOff(int setAlarm, int milliseconds, BuildContext context) {
@@ -57,21 +57,26 @@ class HomeListProvider extends ChangeNotifier {
     return res;
   }
 
-  Future<void> deleteFromDbAndAlarm(int index, Function() action) async {
+  Future<bool> deleteFromDbAndAlarm(int index, Function() action) async {
     var id = model.dataList[index]['id'];
     var data = await model.selectById(id);
 
-    if (data == null) return;
+    if (data == null) return false;
 
-    await _deleteData(id);
+    var res = await _deleteData(id);
     action();
     await _deleteAlarm(id, data);
 
-    return;
+    return res;
   }
 
-  Future<void> _deleteData(int id) async {
-    await NotificationsTable().delete(id);
+  Future<bool> _deleteData(int id) async {
+    var res = await NotificationsTable().delete(id);
+    if (res != null && res >= 1) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future<void> _deleteAlarm(int id, List<Map> data) async {

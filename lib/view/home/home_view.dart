@@ -110,18 +110,21 @@ class HomeView extends StatelessWidget {
                                 ),
                               ),
                               IconButton(
-                                onPressed: () {
-                                  provider.deleteFromDbAndAlarm(
+                                onPressed: () async {
+                                  var res = await provider.deleteFromDbAndAlarm(
                                     index,
                                     () {
                                       provider.getData();
                                     },
                                   );
-                                  ShowSnackBar(
-                                    context,
-                                    AppLocalizations.of(context)!.deletedAlarm,
-                                    Colors.red,
-                                  );
+                                  if (res) {
+                                    ShowSnackBar(
+                                      context,
+                                      AppLocalizations.of(context)!
+                                          .deletedAlarm,
+                                      Colors.red,
+                                    );
+                                  }
                                 },
                                 icon: const Icon(
                                   Icons.delete,
