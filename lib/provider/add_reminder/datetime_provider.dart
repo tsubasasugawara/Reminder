@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:reminder/components/datetimepicker/date_time_picker.dart';
 import 'package:reminder/model/add_reminder/datetime_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
@@ -22,60 +23,30 @@ class DateTimeProvider extends ChangeNotifier {
     model.minute = dt.minute;
   }
 
-  Future<bool> selectDate(BuildContext context) async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime(
-          model.year, model.month, model.day, model.hour, model.minute),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(DateTime.now().year + 10),
-      builder: (context, child) {
-        return Theme(
-            data: Theme.of(context).copyWith(
-              dialogBackgroundColor: Colors.black,
-              colorScheme: const ColorScheme.dark(
-                primary: Colors.green,
-                onSurface: Colors.green,
-                onPrimary: Colors.black,
-              ),
-            ),
-            child: child!);
-      },
+  Future selectDateTime(BuildContext context) async {
+    var res = await DateTimePicker(
+      DateTime(model.year, model.month, model.day, model.hour, model.minute),
+    ).showDateTimePicker(
+      context,
+      const Color.fromARGB(255, 20, 20, 20),
+      Theme.of(context).copyWith(
+        colorScheme: const ColorScheme.dark(
+          primary: Colors.green,
+          onSurface: Colors.white,
+          onPrimary: Colors.white,
+        ),
+      ),
     );
-    if (picked != null) {
-      model.year = picked.year;
-      model.month = picked.month;
-      model.day = picked.day;
-      notifyListeners();
-      return true;
-    }
-    return false;
+    if (res != null) _setvalue(res);
+    notifyListeners();
   }
 
-  Future<bool> selectTime(BuildContext context) async {
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay(hour: model.hour, minute: model.minute),
-      builder: (context, child) {
-        return Theme(
-            data: Theme.of(context).copyWith(
-              dialogBackgroundColor: Colors.black,
-              colorScheme: const ColorScheme.dark(
-                primary: Colors.green,
-                onSurface: Colors.green,
-                onPrimary: Colors.black,
-              ),
-            ),
-            child: child!);
-      },
-    );
-    if (picked != null) {
-      model.hour = picked.hour;
-      model.minute = picked.minute;
-      notifyListeners();
-      return true;
-    }
-    return false;
+  void _setvalue(DateTime dt) {
+    model.year = dt.year;
+    model.month = dt.month;
+    model.day = dt.day;
+    model.hour = dt.hour;
+    model.minute = dt.minute;
   }
 
   String dateTimeFormat(BuildContext context) {

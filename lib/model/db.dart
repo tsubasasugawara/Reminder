@@ -108,18 +108,19 @@ class NotificationsTable {
   }
 
   Future<int?> update(
-    int id,
-    String title,
-    String content,
-    int frequency,
-    int time,
-    int setAlarm,
+    Map<String, Object?> values,
+    String? where,
+    List<Object?>? whereArgs,
+    ConflictAlgorithm? conflictAlgorithm,
   ) async {
     try {
       var db = await _opendb();
-      var numOfChanged = await db?.rawUpdate(
-        'UPDATE $tableName SET title = ?, content = ?, frequency = ?, time = ?, set_alarm = ? WHERE id = ?',
-        [title, content, frequency, time, setAlarm, id],
+      var numOfChanged = await db?.update(
+        tableName,
+        values,
+        where: where,
+        whereArgs: whereArgs,
+        conflictAlgorithm: conflictAlgorithm,
       );
       await db?.close();
       return numOfChanged;

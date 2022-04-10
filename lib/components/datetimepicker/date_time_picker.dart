@@ -1,7 +1,11 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:reminder/components/datetimepicker/time_provider.dart';
+import 'package:reminder/multilingualization/app_localizations.dart';
 
-class DateAndTimePicker {
+class DateTimePicker {
   static const Size _calendarPortraitDialogSize = Size(330.0, 518.0);
   static const Size _calendarLandscapeDialogSize = Size(496.0, 346.0);
   static const Duration _dialogSizeAnimationDuration =
@@ -13,7 +17,7 @@ class DateAndTimePicker {
   int hour = 0;
   int minute = 0;
 
-  DateAndTimePicker(DateTime dt) {
+  DateTimePicker(DateTime dt) {
     year = dt.year;
     month = dt.month;
     day = dt.day;
@@ -73,31 +77,53 @@ class DateAndTimePicker {
                                 },
                               ),
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 10.0),
-                              child: ElevatedButton.icon(
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      const Color.fromARGB(255, 50, 50, 50)),
-                                ),
-                                onPressed: () async {
-                                  var picked = await showTimePicker(
-                                    context: context,
-                                    initialTime:
-                                        TimeOfDay(hour: hour, minute: minute),
-                                    builder: (context, child) {
-                                      return child!;
+                            ChangeNotifierProvider(
+                              create: (BuildContext context) =>
+                                  TimeProvider(hour, minute),
+                              child: Consumer<TimeProvider>(
+                                builder: (context, timeProvider, child) =>
+                                    Container(
+                                  margin: const EdgeInsets.only(bottom: 10.0),
+                                  child: ElevatedButton.icon(
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              const Color.fromARGB(
+                                                  255, 50, 50, 50)),
+                                    ),
+                                    onPressed: () async {
+                                      var picked = await showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay(
+                                            hour: hour, minute: minute),
+                                        builder: (context, child) {
+                                          return child!;
+                                        },
+                                      );
+                                      if (picked != null) {
+                                        hour = picked.hour;
+                                        minute = picked.minute;
+                                        timeProvider.changeTime(hour, minute);
+                                      }
                                     },
-                                  );
-                                  if (picked != null) {
-                                    hour = picked.hour;
-                                    minute = picked.minute;
-                                  }
-                                },
-                                icon: const Icon(Icons.watch_later_outlined),
-                                label: Text(
-                                  "08:00 PM",
-                                  style: const TextStyle(color: Colors.white),
+                                    icon:
+                                        const Icon(Icons.watch_later_outlined),
+                                    label: Text(
+                                      DateFormat(AppLocalizations.of(context)!
+                                              .timeFormat)
+                                          .format(
+                                        DateTime(
+                                          year,
+                                          month,
+                                          day,
+                                          hour,
+                                          minute,
+                                        ),
+                                      ),
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),

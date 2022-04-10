@@ -10,6 +10,7 @@ class HomeListProvider extends ChangeNotifier {
 
   HomeListProvider() {
     getData();
+    update();
   }
 
   Future<void> getData() async {
@@ -17,6 +18,17 @@ class HomeListProvider extends ChangeNotifier {
     if (data == null) return;
 
     model.dataList = data;
+    notifyListeners();
+  }
+
+  Future<void> update() async {
+    var nt = NotificationsTable();
+    await nt.update(
+      {"set_alarm": 0},
+      "time <= ?",
+      [DateTime.now().millisecondsSinceEpoch],
+      null,
+    );
     notifyListeners();
   }
 

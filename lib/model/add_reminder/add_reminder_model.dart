@@ -42,7 +42,14 @@ class AddReminderModel {
     var setAlarm = dataBeingEditing['set_alarm'];
 
     if (id != null) {
-      var resId = await nt.update(id!, title, content, 0, time, setAlarm) ?? 0;
+      var values = {
+        "title": title,
+        "content": content,
+        "frequency": 0,
+        "time": time,
+        "set_alarm": setAlarm
+      };
+      var resId = await nt.update(values, 'id = ?', [id], null);
       return [resId, update];
     }
 
