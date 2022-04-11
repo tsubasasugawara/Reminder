@@ -21,21 +21,21 @@ class AlarmReceiver: BroadcastReceiver() {
 
     @SuppressLint("UnspecifiedImmutableFlag")
     override fun onReceive(context: Context, intent: Intent) {
-        if(Intent.ACTION_LOCKED_BOOT_COMPLETED.equals(intent.getAction())) {
-            val id = intent.extras?.getInt("id") ?: return
-            val title = intent.extras?.getString("title") ?: return
-            val content = intent.extras?.getString("content") ?: return
-            val time = intent.extras?.getLong("time") ?: return
-            val created = false
+        // if(Intent.ACTION_LOCKED_BOOT_COMPLETED.equals(intent.getAction())) {
+        //     val id = intent.extras?.getInt("id") ?: return
+        //     val title = intent.extras?.getString("title") ?: return
+        //     val content = intent.extras?.getString("content") ?: return
+        //     val time = intent.extras?.getLong("time") ?: return
+        //     val created = false
 
-            val serviceIntent = Intent(context, AlarmRegister::class.java)
-            context.startService(serviceIntent)
+        //     val serviceIntent = Intent(context, AlarmRegister::class.java)
+        //     context.startService(serviceIntent)
 
-            val register = AlarmRegister(context)
-            register.registAlarm(id, title, content, time, created)
+        //     val register = AlarmRegister(context)
+        //     register.registAlarm(id, title, content, time, created)
 
-            return
-        }
+        //     return
+        // }
             this.createNotificationChannel(context)
             this.createNotification(context, intent)
     }

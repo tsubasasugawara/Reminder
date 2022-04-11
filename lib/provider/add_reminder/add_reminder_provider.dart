@@ -51,19 +51,24 @@ class AddReminderProvider {
 
   Future<void> registerAlarm(int id, int status) async {
     if (model.dataBeingEditing["set_alarm"] == 0) {
-      await Alarm.deleteAlarm(
+      Alarm.deleteAlarm(
         id,
         model.dataBeforeEditing["title"] ?? model.dataBeingEditing["title"],
         model.dataBeforeEditing["content"] ?? model.dataBeingEditing["content"],
         model.dataBeforeEditing['time'] ?? model.dataBeingEditing["time"],
       );
     } else {
-      await Alarm.alarm(
+      Alarm.deleteAlarm(
+        id,
+        model.dataBeforeEditing["title"] ?? model.dataBeingEditing["title"],
+        model.dataBeforeEditing["content"] ?? model.dataBeingEditing["content"],
+        model.dataBeforeEditing['time'] ?? model.dataBeingEditing["time"],
+      );
+      Alarm.alarm(
         id,
         model.dataBeingEditing["title"],
         model.dataBeingEditing["content"],
         model.dataBeingEditing['time'],
-        status == AddReminderModel.update ? true : false,
       );
     }
   }

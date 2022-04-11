@@ -80,7 +80,7 @@ class HomeListProvider extends ChangeNotifier {
   }
 
   Future<void> _deleteAlarm(int id, List<Map> data) async {
-    await Alarm.deleteAlarm(
+    Alarm.deleteAlarm(
         id, data[0]['title'], data[0]['content'], data[0]['time']);
   }
 }

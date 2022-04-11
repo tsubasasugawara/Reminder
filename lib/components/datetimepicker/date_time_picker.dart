@@ -134,9 +134,9 @@ class DateTimePicker {
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: const Text(
-                                    "cancel",
-                                    style: TextStyle(color: Colors.grey),
+                                  child: Text(
+                                    AppLocalizations.of(context)!.cancelButton,
+                                    style: const TextStyle(color: Colors.grey),
                                   ),
                                 ),
                                 TextButton(
@@ -146,7 +146,9 @@ class DateTimePicker {
                                       DateTime(year, month, day, hour, minute),
                                     );
                                   },
-                                  child: const Text("OK"),
+                                  child: Text(
+                                    AppLocalizations.of(context)!.ok,
+                                  ),
                                 ),
                               ],
                             ),

@@ -17,7 +17,7 @@ class AlarmRegister(_context: Context) {
         title: String,
         content: String,
         millis: Long,
-        created: Boolean
+        // created: Boolean
     ){
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
@@ -29,9 +29,9 @@ class AlarmRegister(_context: Context) {
             PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        if(created) {
-            alarmManager.cancel(pendingIntent)
-        }
+        // if(created) {
+        //     alarmManager.cancel(pendingIntent)
+        // }
 
         val alarmInfo = AlarmManager.AlarmClockInfo(
             millis,

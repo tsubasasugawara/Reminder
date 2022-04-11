@@ -26,11 +26,10 @@ class MainActivity: FlutterActivity() {
                     val title = methodCall.argument<String>("title").toString()
                     val content = methodCall.argument<String>("content").toString()
                     val time = methodCall.argument<Long>("time")!!
-                    val created = methodCall.argument<Boolean>("created")!!
                     // Log.d("TEST", "id:${id} title:${title} content:${content}")
                     val register = AlarmRegister(context)
 
-                    register.registAlarm(id,title,content,time,created)
+                    register.registAlarm(id,title,content,time)
                 }
                 "deleteAlarm" -> {
                     val id = methodCall.argument<Int>("id")!!

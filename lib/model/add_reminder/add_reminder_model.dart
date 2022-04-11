@@ -50,7 +50,12 @@ class AddReminderModel {
         "set_alarm": setAlarm
       };
       var resId = await nt.update(values, 'id = ?', [id], null);
-      return [resId, update];
+
+      if (resId != null && resId >= 1) {
+        return [id, update];
+      } else {
+        return [null, null];
+      }
     }
 
     var resId = await nt.insert(title, content, 0, time, setAlarm);
