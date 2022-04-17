@@ -25,6 +25,16 @@ class DateTimePicker {
     minute = dt.minute;
   }
 
+  DateTime setDateTime() {
+    var dt = DateTime(year, month, day, hour, minute);
+    var dtn = DateTime.now();
+    if (dt.millisecondsSinceEpoch - dtn.millisecondsSinceEpoch < 0) {
+      return dtn;
+    } else {
+      return dt;
+    }
+  }
+
   Future<DateTime?> showDateTimePicker(
     BuildContext context,
     Color backgroundColor,
@@ -63,8 +73,7 @@ class DateTimePicker {
                             Expanded(
                               child: CalendarDatePicker(
                                 firstDate: DateTime.now(),
-                                initialDate:
-                                    DateTime(year, month, day, hour, minute),
+                                initialDate: setDateTime(),
                                 lastDate: DateTime(
                                   DateTime.now().year + 10,
                                   DateTime.now().month,
