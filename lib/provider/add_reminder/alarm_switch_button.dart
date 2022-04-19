@@ -14,6 +14,9 @@ class AlarmSwitchButtonProvider extends ChangeNotifier {
           backgroundColor: MaterialStateProperty.all(
             AppColors.backgroundColor,
           ),
+          foregroundColor: MaterialStateProperty.all(
+            AppColors.hintTextColor,
+          ),
         ),
         onPressed: () {
           _changeSetAlarm();
@@ -27,6 +30,9 @@ class AlarmSwitchButtonProvider extends ChangeNotifier {
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(
             AppColors.backgroundColor,
+          ),
+          foregroundColor: MaterialStateProperty.all(
+            AppColors.mainColor,
           ),
         ),
         onPressed: () {
