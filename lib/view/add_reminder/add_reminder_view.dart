@@ -21,7 +21,6 @@ class AddReminderView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
       appBar: _appBar(context),
       body: _textForm(context),
       floatingActionButton: _fab(context),
@@ -31,7 +30,6 @@ class AddReminderView extends StatelessWidget {
 
   PreferredSizeWidget _appBar(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.backgroundColor,
       actions: [
         ChangeNotifierProvider(
           create: (context) => AlarmSwitchButtonProvider(
@@ -149,14 +147,13 @@ class AddReminderView extends StatelessWidget {
 
   Widget _bottomAppBar(BuildContext context) {
     return BottomAppBar(
-      color: AppColors.backgroundColor,
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           FormControlButton(
             AppLocalizations.of(context)!.cancelButton,
-            Colors.red,
+            AppColors.error,
             () {
               provider.init();
               Navigator.of(context).pop();
@@ -165,7 +162,7 @@ class AddReminderView extends StatelessWidget {
           _dateTimeSelecter(context),
           FormControlButton(
             AppLocalizations.of(context)!.saveButton,
-            Colors.green,
+            AppColors.mainColor,
             () {
               provider.saveBtn(context);
             },
@@ -195,11 +192,11 @@ class AddReminderView extends StatelessWidget {
             ),
             icon: const Icon(
               Icons.calendar_month,
-              color: Colors.green,
+              color: AppColors.mainColor,
             ),
             label: Text(
               dateTimeProvider.dateTimeFormat(context),
-              style: const TextStyle(color: Colors.green),
+              style: const TextStyle(color: AppColors.mainColor),
             ),
           );
         },

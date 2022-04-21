@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:reminder/components/snack_bar/snackbar.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
-import 'package:reminder/provider/home/home_list_provider.dart';
+import 'package:reminder/provider/home/home_provider.dart';
 import 'package:reminder/values/colors.dart';
 import 'package:reminder/view/add_reminder/add_reminder_view.dart';
 
 // ignore: must_be_immutable
 class HomeList extends StatelessWidget {
-  HomeListProvider provider;
+  HomeProvider provider;
   HomeList(this.provider, {Key? key}) : super(key: key);
 
   @override
@@ -41,82 +41,79 @@ class HomeList extends StatelessWidget {
                 provider.getData();
               },
               child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  gradient: LinearGradient(
-                    stops: const [0.02, 0.02],
-                    colors: [
-                      provider.model.dataList[index]["set_alarm"] == 1
-                          ? AppColors.mainColor
-                          : AppColors.error,
-                      AppColors.listBackground,
-                    ],
-                  ),
-                ),
-                padding: const EdgeInsets.all(10),
-                margin: const EdgeInsets.only(bottom: 20, left: 5),
+                margin: const EdgeInsets.only(bottom: 15),
                 child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  alignment: Alignment.topLeft,
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 5,
-                    horizontal: 10,
+                  decoration: const BoxDecoration(
+                    color: AppColors.listBackground,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              provider.model.dataList[index]['title'],
-                              style: const TextStyle(
-                                color: AppColors.textColor,
-                                fontSize: 24,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: false,
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 5),
-                              child: Text(
-                                provider.alarmOnOff(
-                                    provider.model.dataList[index]["set_alarm"],
-                                    provider.model.dataList[index]['time'],
-                                    context),
+                  padding: const EdgeInsets.all(10),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    alignment: Alignment.topLeft,
+                    margin: const EdgeInsets.symmetric(
+                      vertical: 5,
+                      horizontal: 10,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                provider.model.dataList[index]['title'],
                                 style: const TextStyle(
                                   color: AppColors.textColor,
-                                  fontSize: 14,
+                                  fontSize: 24,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: false,
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(top: 5),
+                                child: Text(
+                                  provider.alarmOnOff(
+                                      provider.model.dataList[index]
+                                          ["set_alarm"],
+                                      provider.model.dataList[index]['time'],
+                                      context),
+                                  style: const TextStyle(
+                                    color: AppColors.textColor,
+                                    fontSize: 14,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () async {
-                          var res = await provider.deleteFromDbAndAlarm(
-                            index,
-                            () {
-                              provider.getData();
-                            },
-                          );
-                          if (res) {
-                            ShowSnackBar(
-                              context,
-                              AppLocalizations.of(context)!.deletedAlarm,
-                              AppColors.error,
+                        IconButton(
+                          onPressed: () async {
+                            var res = await provider.deleteFromDbAndAlarm(
+                              index,
+                              () {
+                                provider.getData();
+                              },
                             );
-                          }
-                        },
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Colors.grey,
-                          size: 30,
+                            if (res) {
+                              ShowSnackBar(
+                                context,
+                                AppLocalizations.of(context)!.deletedAlarm,
+                                AppColors.error,
+                              );
+                            }
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.grey,
+                            size: 30,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

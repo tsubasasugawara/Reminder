@@ -18,6 +18,8 @@ class Messages {
     required this.deletedAlarm,
     required this.timeFormat,
     required this.ok,
+    required this.home,
+    required this.setting,
   });
 
   // AppInfo
@@ -58,6 +60,9 @@ class Messages {
 
   final String ok;
 
+  final String home;
+  final String setting;
+
   factory Messages.of(Locale locale) {
     switch (locale.languageCode) {
       case 'ja':
@@ -86,6 +91,8 @@ class Messages {
         deletedAlarm: '削除しました',
         timeFormat: 'HH:mm',
         ok: "完了",
+        home: "ホーム",
+        setting: "設定",
       );
 
   factory Messages.en() => Messages(
@@ -105,5 +112,7 @@ class Messages {
         deletedAlarm: 'Deleted.',
         timeFormat: 'hh:mm aa',
         ok: "OK",
+        home: "HOME",
+        setting: "SETTINGS",
       );
 }

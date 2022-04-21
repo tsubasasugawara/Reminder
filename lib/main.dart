@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:reminder/multilingualization/app_localizations_delegate.dart';
 import 'package:reminder/values/colors.dart';
-import 'package:reminder/view/home/home_view.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:reminder/view/main_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,6 +20,11 @@ class MyApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(
           backgroundColor: AppColors.backgroundColor,
         ),
+        bottomAppBarColor: AppColors.backgroundColor,
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: AppColors.backgroundColor,
+          unselectedItemColor: AppColors.textColor,
+        ),
       ),
       localizationsDelegates: const [
         AppLocalizationsDelegate(),
@@ -31,7 +36,7 @@ class MyApp extends StatelessWidget {
         Locale('en'),
         Locale('ja'),
       ],
-      home: const HomeView(),
+      home: MainView(),
     );
   }
 }

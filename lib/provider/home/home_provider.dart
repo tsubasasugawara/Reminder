@@ -5,11 +5,10 @@ import 'package:reminder/model/db/db.dart';
 import 'package:reminder/model/home/home_list_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
-class HomeListProvider extends ChangeNotifier {
+class HomeProvider extends ChangeNotifier {
   HomeListModel model = HomeListModel();
 
-  HomeListProvider() {
-    getData();
+  HomeProvider() {
     update();
   }
 
