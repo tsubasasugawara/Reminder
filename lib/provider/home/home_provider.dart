@@ -4,6 +4,7 @@ import 'package:reminder/model/alarm/alarm.dart';
 import 'package:reminder/model/db/db.dart';
 import 'package:reminder/model/home/home_list_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
+import 'package:reminder/view/add_reminder/add_reminder_view.dart';
 
 class HomeProvider extends ChangeNotifier {
   HomeListModel model = HomeListModel();
@@ -81,5 +82,26 @@ class HomeProvider extends ChangeNotifier {
   Future<void> _deleteAlarm(int id, List<Map> data) async {
     Alarm.deleteAlarm(
         id, data[0]['title'], data[0]['content'], data[0]['time']);
+  }
+
+  Future<void> showEditor(
+    BuildContext context,
+    int? id,
+    String? title,
+    String? content,
+    int? time,
+    int? setAlarm,
+  ) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) => Center(
+        child: Container(
+          color: Colors.white,
+          width: MediaQuery.of(context).size.width * 0.8,
+          height: MediaQuery.of(context).size.height * 0.7,
+        ),
+      ),
+    );
+    return;
   }
 }

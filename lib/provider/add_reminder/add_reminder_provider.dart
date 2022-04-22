@@ -11,13 +11,9 @@ class AddReminderProvider {
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
 
-  FocusNode titleFocusNode = FocusNode();
-  FocusNode contentFocusNode = FocusNode();
+  bool isKeyboardShown = false;
 
-  bool fabVisible = false;
-
-// Meanig correct value or not.
-  bool titleIsOk = true;
+  bool titleIsOk = false;
   bool timeIsOk = false;
 
   final textsize = 20.0;
