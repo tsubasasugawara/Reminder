@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reminder/model/db/db.dart';
 import 'package:reminder/provider/add_reminder/add_reminder_provider.dart';
 import 'package:reminder/provider/add_reminder/alarm_switch_button.dart';
-import 'package:reminder/provider/add_reminder/datetime_provider.dart';
+import 'package:reminder/provider/datetime_provider.dart';
 import 'package:reminder/values/colors.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/view/add_reminder/button/form_control_button.dart';
@@ -11,10 +12,14 @@ import 'package:reminder/view/add_reminder/button/form_control_button.dart';
 class AddReminderView extends StatelessWidget {
   late AddReminderProvider provider;
 
-  AddReminderView(
-      int? id, String? title, String? content, int? time, int? setAlarm,
-      {Key? key})
-      : super(key: key) {
+  AddReminderView({
+    Key? key,
+    int? id,
+    String? title,
+    String? content,
+    int? time,
+    int? setAlarm,
+  }) : super(key: key) {
     provider = AddReminderProvider(id, title, content, time, setAlarm);
   }
 
@@ -35,14 +40,15 @@ class AddReminderView extends StatelessWidget {
       actions: [
         ChangeNotifierProvider(
           create: (context) => AlarmSwitchButtonProvider(
-              provider.model.dataBeingEditing["set_alarm"]),
+            provider.getInt(NotificationsTable.setAlarmKey, false),
+          ),
           child: Consumer<AlarmSwitchButtonProvider>(
             builder: (context, alarmSwitchProvider, child) {
               return alarmSwitchProvider.changeIcon(
                 context,
                 () {
-                  provider.model.dataBeingEditing["set_alarm"] =
-                      alarmSwitchProvider.setAlarm;
+                  provider.setInt(NotificationsTable.setAlarmKey, false,
+                      alarmSwitchProvider.setAlarm);
                 },
               );
             },
@@ -82,8 +88,7 @@ class AddReminderView extends StatelessWidget {
                   contentPadding: const EdgeInsets.all(10),
                 ),
                 onChanged: (text) {
-                  provider.model.dataBeingEditing["title"] = text;
-                  provider.titleValidate();
+                  provider.setString(NotificationsTable.titleKey, false, text);
                 },
               ),
             ),
@@ -109,7 +114,8 @@ class AddReminderView extends StatelessWidget {
                     contentPadding: const EdgeInsets.all(10),
                   ),
                   onChanged: (text) {
-                    provider.model.dataBeingEditing["content"] = text;
+                    provider.setString(
+                        NotificationsTable.contentKey, false, text);
                   },
                 ),
               ),
@@ -146,7 +152,6 @@ class AddReminderView extends StatelessWidget {
             AppLocalizations.of(context)!.cancelButton,
             AppColors.error,
             () {
-              provider.init();
               Navigator.of(context).pop();
             },
           ),
@@ -165,8 +170,9 @@ class AddReminderView extends StatelessWidget {
 
   Widget _dateTimeSelecter(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) =>
-          DateTimeProvider(provider.model.dataBeingEditing['time']),
+      create: (context) => DateTimeProvider(
+        provider.getInt(NotificationsTable.timeKey, false),
+      ),
       child: Consumer<DateTimeProvider>(
         builder: (context, dateTimeProvider, child) {
           return ElevatedButton.icon(
@@ -174,8 +180,8 @@ class AddReminderView extends StatelessWidget {
               FocusScope.of(context).unfocus();
 
               await dateTimeProvider.selectDateTime(context);
-              provider.model.dataBeingEditing['time'] =
-                  dateTimeProvider.getMilliSecondsFromEpoch();
+              provider.setInt(NotificationsTable.timeKey, false,
+                  dateTimeProvider.getMilliSecondsFromEpoch());
             },
             style: ButtonStyle(
               backgroundColor:

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:reminder/components/snack_bar/snackbar.dart';
 import 'package:reminder/model/alarm/alarm.dart';
 import 'package:reminder/model/db/db.dart';
 import 'package:reminder/model/home/home_list_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
+import 'package:reminder/values/colors.dart';
 import 'package:reminder/view/add_reminder/add_reminder_view.dart';
 
 class HomeProvider extends ChangeNotifier {
@@ -32,7 +34,18 @@ class HomeProvider extends ChangeNotifier {
     getData();
   }
 
-  String alarmOnOff(int setAlarm, int milliseconds, BuildContext context) {
+  String getString(int index, String key) {
+    return model.dataList[index][key];
+  }
+
+  int getDataListLength() {
+    return model.dataList.length;
+  }
+
+  String alarmOnOff(int index, BuildContext context) {
+    int setAlarm = model.dataList[index]["set_alarm"];
+    int milliseconds = model.dataList[index]['time'];
+
     if (setAlarm == 1) {
       return dateTimeFormat(milliseconds, context);
     } else {
@@ -84,14 +97,51 @@ class HomeProvider extends ChangeNotifier {
         id, data[0]['title'], data[0]['content'], data[0]['time']);
   }
 
+  Future<void> deleteButton(BuildContext context, int index) async {
+    var res = await deleteFromDbAndAlarm(
+      index,
+      () {
+        getData();
+      },
+    );
+    if (res) {
+      ShowSnackBar(
+        context,
+        AppLocalizations.of(context)!.deletedAlarm,
+        AppColors.error,
+      );
+    }
+    return;
+  }
+
+  Future<void> moveToAddView(BuildContext context, {int? index}) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          if (index != null) {
+            return AddReminderView(
+              id: model.dataList[index]["id"],
+              title: model.dataList[index]["title"],
+              content: model.dataList[index]["content"],
+              time: model.dataList[index]["time"],
+              setAlarm: model.dataList[index]["set_alarm"],
+            );
+          }
+          return AddReminderView();
+        },
+      ),
+    );
+    getData();
+  }
+
   Future<void> showEditor(
-    BuildContext context,
+    BuildContext context, {
     int? id,
     String? title,
     String? content,
     int? time,
     int? setAlarm,
-  ) async {
+  }) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) => Center(

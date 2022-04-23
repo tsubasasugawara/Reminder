@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reminder/main.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/home_provider.dart';
 import 'package:reminder/provider/main_provider.dart';
 import 'package:reminder/values/colors.dart';
-import 'package:reminder/view/add_reminder/add_reminder_view.dart';
 import 'package:reminder/view/home/home_list.dart';
 
+// ignore: must_be_immutable
 class HomeView extends StatelessWidget {
   MainProvider mainProvider;
   HomeView(this.mainProvider, {Key? key}) : super(key: key);
@@ -30,14 +29,7 @@ class HomeView extends StatelessWidget {
                 FloatingActionButtonLocation.centerDocked,
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
-                await Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return AddReminderView(null, null, null, null, null);
-                    },
-                  ),
-                );
-                provider.getData();
+                await provider.moveToAddView(context);
               },
               child: const Icon(
                 Icons.add,

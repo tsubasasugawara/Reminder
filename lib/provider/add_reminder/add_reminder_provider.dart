@@ -2,19 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:reminder/components/snack_bar/snackbar.dart';
 import 'package:reminder/model/add_reminder/add_reminder_model.dart';
 import 'package:reminder/model/alarm/alarm.dart';
+import 'package:reminder/model/db/db.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
 class AddReminderProvider {
   late AddReminderModel model;
 
-// Operate TextFormField
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
 
   bool isKeyboardShown = false;
-
-  bool titleIsOk = false;
-  bool timeIsOk = false;
 
   final textsize = 20.0;
 
@@ -23,14 +20,34 @@ class AddReminderProvider {
     // Edited or New.
     model = AddReminderModel(id, title, content, time, setAlarm);
 
-    init();
-
-    titleController.text = model.dataBeforeEditing["title"] ?? "";
-    contentController.text = model.dataBeforeEditing["content"] ?? "";
+    titleController.text =
+        model.dataBeforeEditing[NotificationsTable.titleKey] ?? "";
+    contentController.text =
+        model.dataBeforeEditing[NotificationsTable.contentKey] ?? "";
   }
 
-  void init() {
-    timeIsOk = true;
+  void setInt(String key, bool before, int value) {
+    if (before) {
+      model.dataBeforeEditing[key] = value;
+    } else {
+      model.dataBeingEditing[key] = value;
+    }
+  }
+
+  void setString(String key, bool before, String value) {
+    if (before) {
+      model.dataBeforeEditing[key] = value;
+    } else {
+      model.dataBeingEditing[key] = value;
+    }
+  }
+
+  int getInt(String key, bool before) {
+    if (before) {
+      return model.dataBeforeEditing[key];
+    } else {
+      return model.dataBeingEditing[key];
+    }
   }
 
   Future<List<int>?> saveToDb() async {
@@ -46,48 +63,45 @@ class AddReminderProvider {
   }
 
   Future<void> registerAlarm(int id, int status) async {
-    if (model.dataBeingEditing["set_alarm"] == 0) {
-      Alarm.deleteAlarm(
-        id,
-        model.dataBeforeEditing["title"] ?? model.dataBeingEditing["title"],
-        model.dataBeforeEditing["content"] ?? model.dataBeingEditing["content"],
-        model.dataBeforeEditing['time'] ?? model.dataBeingEditing["time"],
-      );
-    } else {
-      Alarm.deleteAlarm(
-        id,
-        model.dataBeforeEditing["title"] ?? model.dataBeingEditing["title"],
-        model.dataBeforeEditing["content"] ?? model.dataBeingEditing["content"],
-        model.dataBeforeEditing['time'] ?? model.dataBeingEditing["time"],
-      );
-      Alarm.alarm(
-        id,
-        model.dataBeingEditing["title"],
-        model.dataBeingEditing["content"],
-        model.dataBeingEditing['time'],
-      );
-    }
+    Alarm.deleteAlarm(
+      id,
+      model.dataBeforeEditing[NotificationsTable.titleKey] ??
+          model.dataBeingEditing[NotificationsTable.titleKey],
+      model.dataBeforeEditing[NotificationsTable.contentKey] ??
+          model.dataBeingEditing[NotificationsTable.contentKey],
+      model.dataBeforeEditing[NotificationsTable.timeKey] ??
+          model.dataBeingEditing[NotificationsTable.timeKey],
+    );
+    if (model.dataBeingEditing[NotificationsTable.setAlarmKey] == 0) return;
+
+    Alarm.alarm(
+      id,
+      model.dataBeingEditing[NotificationsTable.titleKey],
+      model.dataBeingEditing[NotificationsTable.contentKey],
+      model.dataBeingEditing[NotificationsTable.timeKey],
+    );
   }
 
-  void titleValidate() {
-    titleIsOk = titleController.text != "" ? true : false;
+  bool _titleValidate() {
+    return titleController.text != "" ? true : false;
   }
 
-  void timeValidate() {
-    var diff =
-        model.dataBeingEditing['time'] - DateTime.now().millisecondsSinceEpoch;
+  bool _timeValidate() {
+    var diff = model.dataBeingEditing[NotificationsTable.timeKey] -
+        DateTime.now().millisecondsSinceEpoch;
 
     if (diff <= 0) {
-      timeIsOk = false;
-    } else {
-      timeIsOk = true;
+      return false;
     }
+    return true;
+  }
+
+  bool _checkSettingAlarm(int num) {
+    return num == 0 ? false : true;
   }
 
   Future<void> saveBtn(BuildContext context) async {
-    titleValidate();
-
-    if (!titleIsOk) {
+    if (_titleValidate() == false) {
       ShowSnackBar(
         context,
         AppLocalizations.of(context)!.titleError,
@@ -96,16 +110,15 @@ class AddReminderProvider {
       return;
     }
 
-    if (model.dataBeingEditing["set_alarm"] == 1) {
-      timeValidate();
-      if (!timeIsOk) {
-        ShowSnackBar(
-          context,
-          AppLocalizations.of(context)!.dateTimeError,
-          ShowSnackBar.error,
-        );
-        return;
-      }
+    if (_checkSettingAlarm(
+            model.dataBeingEditing[NotificationsTable.setAlarmKey]) &&
+        _timeValidate() == false) {
+      ShowSnackBar(
+        context,
+        AppLocalizations.of(context)!.dateTimeError,
+        ShowSnackBar.error,
+      );
+      return;
     }
 
     var res = await saveToDb();
@@ -122,7 +135,6 @@ class AddReminderProvider {
     );
 
     if (model.id == null) {
-      init();
       titleController.clear();
       contentController.clear();
     } else {

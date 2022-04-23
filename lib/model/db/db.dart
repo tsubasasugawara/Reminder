@@ -1,26 +1,14 @@
 // ignore_for_file: avoid_print
 import 'package:sqflite/sqflite.dart';
 
-class NotificationData {
-  int id;
-  String title;
-  String content;
-  int frequency;
-  int time;
-  int setAlarm; // 0(false):アラームを設定しない, 1(true):設定する
-
-  NotificationData(
-    this.id,
-    this.title,
-    this.content,
-    this.frequency,
-    this.time,
-    this.setAlarm,
-  );
-}
-
 class NotificationsTable {
   static String tableName = "notifications";
+  static const idKey = "id";
+  static const titleKey = "title";
+  static const contentKey = "content";
+  static const frequencyKey = "frequency";
+  static const timeKey = "time";
+  static const setAlarmKey = "set_alarm";
 
   Future<Database?> _opendb() async {
     try {

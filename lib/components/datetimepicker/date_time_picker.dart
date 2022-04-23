@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder/components/datetimepicker/time_provider.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
+import 'package:reminder/values/colors.dart';
 
 class DateTimePicker {
   static const Size _calendarPortraitDialogSize = Size(330.0, 518.0);
@@ -96,9 +97,8 @@ class DateTimePicker {
                                   child: ElevatedButton.icon(
                                     style: ButtonStyle(
                                       backgroundColor:
-                                          MaterialStateProperty.all(
-                                              const Color.fromARGB(
-                                                  255, 50, 50, 50)),
+                                          MaterialStateProperty.all(AppColors
+                                              .displayTimePickerButtonColor),
                                     ),
                                     onPressed: () async {
                                       var picked = await showTimePicker(

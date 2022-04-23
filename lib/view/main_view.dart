@@ -4,7 +4,7 @@ import 'package:reminder/provider/main_provider.dart';
 
 // ignore: must_be_immutable
 class MainView extends StatelessWidget {
-  MainView({Key? key}) : super(key: key);
+  const MainView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

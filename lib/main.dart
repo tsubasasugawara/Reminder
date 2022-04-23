@@ -15,7 +15,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: AppColors.mainMaterialColor,
         scaffoldBackgroundColor: AppColors.backgroundColor,
         appBarTheme: const AppBarTheme(
           backgroundColor: AppColors.backgroundColor,
@@ -23,7 +22,16 @@ class MyApp extends StatelessWidget {
         bottomAppBarColor: AppColors.backgroundColor,
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: AppColors.backgroundColor,
+          selectedItemColor: AppColors.mainColor,
           unselectedItemColor: AppColors.textColor,
+        ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: AppColors.mainColor,
+        ),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: AppColors.mainColor,
+          selectionColor: AppColors.mainColor,
+          selectionHandleColor: AppColors.mainColor,
         ),
       ),
       localizationsDelegates: const [
@@ -36,7 +44,7 @@ class MyApp extends StatelessWidget {
         Locale('en'),
         Locale('ja'),
       ],
-      home: MainView(),
+      home: const MainView(),
     );
   }
 }

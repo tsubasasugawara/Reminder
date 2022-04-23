@@ -4,6 +4,7 @@ import 'package:reminder/provider/main_provider.dart';
 import 'package:reminder/values/colors.dart';
 import 'package:reminder/view/add_reminder/add_reminder_view.dart';
 
+// ignore: must_be_immutable
 class SettingView extends StatelessWidget {
   MainProvider mainProvider;
   SettingView(this.mainProvider, {Key? key}) : super(key: key);
@@ -24,7 +25,7 @@ class SettingView extends StatelessWidget {
           await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) {
-                return AddReminderView(null, null, null, null, null);
+                return AddReminderView();
               },
             ),
           );

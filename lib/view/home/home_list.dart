@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:reminder/components/snack_bar/snackbar.dart';
-import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/home_provider.dart';
 import 'package:reminder/values/colors.dart';
-import 'package:reminder/view/add_reminder/add_reminder_view.dart';
 
 // ignore: must_be_immutable
 class HomeList extends StatelessWidget {
@@ -17,28 +14,15 @@ class HomeList extends StatelessWidget {
         onRefresh: () async {
           await provider.update();
         },
+        color: AppColors.mainColor,
         backgroundColor: AppColors.backgroundColor,
         child: ListView.builder(
           padding: const EdgeInsets.all(8),
-          itemCount: provider.model.dataList.length,
+          itemCount: provider.getDataListLength(),
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
               onTap: () async {
-                var dataList = provider.model.dataList;
-                await Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return AddReminderView(
-                        dataList[index]["id"],
-                        dataList[index]["title"],
-                        dataList[index]["content"],
-                        dataList[index]["time"],
-                        dataList[index]["set_alarm"],
-                      );
-                    },
-                  ),
-                );
-                provider.getData();
+                await provider.moveToAddView(context, index: index);
               },
               child: Container(
                 margin: const EdgeInsets.only(bottom: 15),
@@ -65,7 +49,7 @@ class HomeList extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                provider.model.dataList[index]['title'],
+                                provider.getString(index, "title"),
                                 style: const TextStyle(
                                   color: AppColors.textColor,
                                   fontSize: 24,
@@ -76,11 +60,7 @@ class HomeList extends StatelessWidget {
                               Container(
                                 margin: const EdgeInsets.only(top: 5),
                                 child: Text(
-                                  provider.alarmOnOff(
-                                      provider.model.dataList[index]
-                                          ["set_alarm"],
-                                      provider.model.dataList[index]['time'],
-                                      context),
+                                  provider.alarmOnOff(index, context),
                                   style: const TextStyle(
                                     color: AppColors.textColor,
                                     fontSize: 14,
@@ -92,19 +72,7 @@ class HomeList extends StatelessWidget {
                         ),
                         IconButton(
                           onPressed: () async {
-                            var res = await provider.deleteFromDbAndAlarm(
-                              index,
-                              () {
-                                provider.getData();
-                              },
-                            );
-                            if (res) {
-                              ShowSnackBar(
-                                context,
-                                AppLocalizations.of(context)!.deletedAlarm,
-                                AppColors.error,
-                              );
-                            }
+                            provider.deleteButton(context, index);
                           },
                           icon: const Icon(
                             Icons.delete,
