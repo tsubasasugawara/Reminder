@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/home_provider.dart';
 import 'package:reminder/provider/main_provider.dart';
-import 'package:reminder/values/colors.dart';
 import 'package:reminder/view/home/home_list.dart';
 
 // ignore: must_be_immutable
@@ -21,7 +20,7 @@ class HomeView extends StatelessWidget {
             appBar: AppBar(
               title: Text(
                 AppLocalizations.of(context)!.appTitle,
-                style: const TextStyle(color: AppColors.textColor),
+                style: Theme.of(context).textTheme.headline6,
               ),
             ),
             body: HomeList(provider),
@@ -31,12 +30,12 @@ class HomeView extends StatelessWidget {
               onPressed: () async {
                 await provider.moveToAddView(context);
               },
-              child: const Icon(
+              child: Icon(
                 Icons.add,
                 size: 30,
-                color: AppColors.backgroundColor,
+                color: Theme.of(context).backgroundColor,
               ),
-              backgroundColor: AppColors.mainColor,
+              backgroundColor: Theme.of(context).primaryColor,
             ),
             bottomNavigationBar: BottomNavigationBar(
               currentIndex: mainProvider.index,

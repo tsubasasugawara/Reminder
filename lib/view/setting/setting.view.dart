@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/main_provider.dart';
-import 'package:reminder/values/colors.dart';
 import 'package:reminder/view/add_reminder/add_reminder_view.dart';
 
 // ignore: must_be_immutable
@@ -15,7 +14,7 @@ class SettingView extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context)!.setting,
-          style: const TextStyle(color: AppColors.textColor),
+          style: Theme.of(context).textTheme.headline6,
         ),
       ),
       body: Container(),
@@ -30,12 +29,12 @@ class SettingView extends StatelessWidget {
             ),
           );
         },
-        child: const Icon(
+        child: Icon(
           Icons.add,
           size: 30,
-          color: AppColors.backgroundColor,
+          color: Theme.of(context).backgroundColor,
         ),
-        backgroundColor: AppColors.mainColor,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: mainProvider.index,

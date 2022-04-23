@@ -4,7 +4,6 @@ import 'package:reminder/model/db/db.dart';
 import 'package:reminder/provider/add_reminder/add_reminder_provider.dart';
 import 'package:reminder/provider/add_reminder/alarm_switch_button.dart';
 import 'package:reminder/provider/datetime_provider.dart';
-import 'package:reminder/values/colors.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/view/add_reminder/button/form_control_button.dart';
 
@@ -72,17 +71,16 @@ class AddReminderView extends StatelessWidget {
               margin: const EdgeInsets.only(top: 10),
               child: TextFormField(
                 controller: provider.titleController,
-                style: TextStyle(
-                  color: AppColors.textColor,
-                  fontSize: provider.textsize + 8,
-                ),
+                style: Theme.of(context).textTheme.bodyText1?.apply(
+                      fontSizeDelta: 6,
+                    ),
                 maxLines: 1,
                 decoration: InputDecoration(
                   hintText: AppLocalizations.of(context)!.titleHintText,
-                  hintStyle: TextStyle(
-                    color: Colors.white60,
-                    fontSize: provider.textsize + 8,
-                  ),
+                  hintStyle: Theme.of(context).textTheme.bodyText1?.apply(
+                        fontSizeDelta: 6,
+                        color: Theme.of(context).hintColor,
+                      ),
                   border: InputBorder.none,
                   focusedBorder: InputBorder.none,
                   contentPadding: const EdgeInsets.all(10),
@@ -98,17 +96,13 @@ class AddReminderView extends StatelessWidget {
                 child: TextFormField(
                   controller: provider.contentController,
                   expands: true,
-                  style: TextStyle(
-                    color: AppColors.textColor,
-                    fontSize: provider.textsize,
-                  ),
+                  style: Theme.of(context).textTheme.bodyText1,
                   maxLines: null,
                   decoration: InputDecoration(
                     hintText: AppLocalizations.of(context)!.memoHintText,
-                    hintStyle: TextStyle(
-                      color: Colors.white60,
-                      fontSize: provider.textsize,
-                    ),
+                    hintStyle: Theme.of(context).textTheme.bodyText1?.apply(
+                          color: Theme.of(context).hintColor,
+                        ),
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,
                     contentPadding: const EdgeInsets.all(10),
@@ -150,7 +144,7 @@ class AddReminderView extends StatelessWidget {
         children: [
           FormControlButton(
             AppLocalizations.of(context)!.cancelButton,
-            AppColors.error,
+            Theme.of(context).errorColor,
             () {
               Navigator.of(context).pop();
             },
@@ -158,7 +152,7 @@ class AddReminderView extends StatelessWidget {
           _dateTimeSelecter(context),
           FormControlButton(
             AppLocalizations.of(context)!.saveButton,
-            AppColors.mainColor,
+            Theme.of(context).primaryColor,
             () {
               provider.saveBtn(context);
             },
@@ -175,7 +169,7 @@ class AddReminderView extends StatelessWidget {
       ),
       child: Consumer<DateTimeProvider>(
         builder: (context, dateTimeProvider, child) {
-          return ElevatedButton.icon(
+          return TextButton.icon(
             onPressed: () async {
               FocusScope.of(context).unfocus();
 
@@ -185,15 +179,15 @@ class AddReminderView extends StatelessWidget {
             },
             style: ButtonStyle(
               backgroundColor:
-                  MaterialStateProperty.all(AppColors.backgroundColor),
+                  MaterialStateProperty.all(Theme.of(context).backgroundColor),
             ),
-            icon: const Icon(
+            icon: Icon(
               Icons.calendar_month,
-              color: AppColors.mainColor,
+              color: Theme.of(context).primaryColor,
             ),
             label: Text(
               dateTimeProvider.dateTimeFormat(context),
-              style: const TextStyle(color: AppColors.mainColor),
+              style: TextStyle(color: Theme.of(context).primaryColor),
             ),
           );
         },

@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:reminder/components/datetimepicker/date_time_picker.dart';
 import 'package:reminder/model/add_reminder/datetime_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
-import 'package:reminder/values/colors.dart';
 
 class DateTimeProvider extends ChangeNotifier {
   late DateTimeModel model;
@@ -29,10 +28,10 @@ class DateTimeProvider extends ChangeNotifier {
       DateTime(model.year, model.month, model.day, model.hour, model.minute),
     ).showDateTimePicker(
       context,
-      AppColors.dateTimePickerBackground,
+      Theme.of(context).dialogBackgroundColor,
       Theme.of(context).copyWith(
-        colorScheme: const ColorScheme.dark(
-          primary: AppColors.mainColor,
+        colorScheme: ColorScheme.dark(
+          primary: Theme.of(context).primaryColor,
           onSurface: Colors.white,
           onPrimary: Colors.white,
         ),

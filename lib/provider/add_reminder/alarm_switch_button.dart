@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
-import 'package:reminder/values/colors.dart';
 
 class AlarmSwitchButtonProvider extends ChangeNotifier {
   AlarmSwitchButtonProvider(this.setAlarm);
@@ -9,13 +8,13 @@ class AlarmSwitchButtonProvider extends ChangeNotifier {
 
   Widget changeIcon(BuildContext context, Function() action) {
     if (setAlarm == 0) {
-      return ElevatedButton.icon(
+      return TextButton.icon(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(
-            AppColors.backgroundColor,
+            Theme.of(context).backgroundColor,
           ),
           foregroundColor: MaterialStateProperty.all(
-            AppColors.hintTextColor,
+            Theme.of(context).hintColor,
           ),
         ),
         onPressed: () {
@@ -26,13 +25,13 @@ class AlarmSwitchButtonProvider extends ChangeNotifier {
         label: Text(AppLocalizations.of(context)!.setAlarmOff),
       );
     } else {
-      return ElevatedButton.icon(
+      return TextButton.icon(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(
-            AppColors.backgroundColor,
+            Theme.of(context).backgroundColor,
           ),
           foregroundColor: MaterialStateProperty.all(
-            AppColors.mainColor,
+            Theme.of(context).primaryColor,
           ),
         ),
         onPressed: () {

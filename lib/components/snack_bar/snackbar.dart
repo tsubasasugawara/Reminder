@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:reminder/values/colors.dart';
 
 class ShowSnackBar {
-  static const successful = AppColors.mainColor;
-  static const error = AppColors.error;
-
   ShowSnackBar(BuildContext context, String text, Color backgroundColor) {
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(

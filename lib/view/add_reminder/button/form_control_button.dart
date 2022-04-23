@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:reminder/values/colors.dart';
 
 class FormControlButton extends StatelessWidget {
   final String buttonText;
@@ -10,12 +9,13 @@ class FormControlButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return TextButton(
       onPressed: () {
         action();
       },
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(AppColors.backgroundColor),
+        backgroundColor:
+            MaterialStateProperty.all(Theme.of(context).backgroundColor),
       ),
       child: Text(
         buttonText,

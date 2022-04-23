@@ -105,7 +105,7 @@ class AddReminderProvider {
       ShowSnackBar(
         context,
         AppLocalizations.of(context)!.titleError,
-        ShowSnackBar.error,
+        Theme.of(context).errorColor,
       );
       return;
     }
@@ -116,7 +116,7 @@ class AddReminderProvider {
       ShowSnackBar(
         context,
         AppLocalizations.of(context)!.dateTimeError,
-        ShowSnackBar.error,
+        Theme.of(context).errorColor,
       );
       return;
     }
@@ -131,7 +131,7 @@ class AddReminderProvider {
       model.id == null
           ? AppLocalizations.of(context)!.saved
           : AppLocalizations.of(context)!.edited,
-      ShowSnackBar.successful,
+      Theme.of(context).primaryColor,
     );
 
     if (model.id == null) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:reminder/provider/home/home_provider.dart';
-import 'package:reminder/values/colors.dart';
 
 // ignore: must_be_immutable
 class HomeList extends StatelessWidget {
@@ -14,8 +13,8 @@ class HomeList extends StatelessWidget {
         onRefresh: () async {
           await provider.update();
         },
-        color: AppColors.mainColor,
-        backgroundColor: AppColors.backgroundColor,
+        color: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).backgroundColor,
         child: ListView.builder(
           padding: const EdgeInsets.all(8),
           itemCount: provider.getDataListLength(),
@@ -28,10 +27,10 @@ class HomeList extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 15),
                 child: Container(
                   decoration: const BoxDecoration(
-                    color: AppColors.listBackground,
                     borderRadius: BorderRadius.all(
-                      Radius.circular(10),
+                      Radius.circular(15),
                     ),
+                    color: Color.fromARGB(255, 55, 55, 55),
                   ),
                   padding: const EdgeInsets.all(10),
                   child: Container(
@@ -50,10 +49,12 @@ class HomeList extends StatelessWidget {
                             children: [
                               Text(
                                 provider.getString(index, "title"),
-                                style: const TextStyle(
-                                  color: AppColors.textColor,
-                                  fontSize: 24,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    ?.apply(
+                                      fontSizeDelta: 6,
+                                    ),
                                 overflow: TextOverflow.ellipsis,
                                 softWrap: false,
                               ),
@@ -61,10 +62,7 @@ class HomeList extends StatelessWidget {
                                 margin: const EdgeInsets.only(top: 5),
                                 child: Text(
                                   provider.alarmOnOff(index, context),
-                                  style: const TextStyle(
-                                    color: AppColors.textColor,
-                                    fontSize: 14,
-                                  ),
+                                  style: Theme.of(context).textTheme.bodyText1,
                                 ),
                               ),
                             ],
@@ -74,9 +72,9 @@ class HomeList extends StatelessWidget {
                           onPressed: () async {
                             provider.deleteButton(context, index);
                           },
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.delete,
-                            color: Colors.grey,
+                            color: Theme.of(context).hintColor,
                             size: 30,
                           ),
                         ),

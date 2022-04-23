@@ -5,7 +5,6 @@ import 'package:reminder/model/alarm/alarm.dart';
 import 'package:reminder/model/db/db.dart';
 import 'package:reminder/model/home/home_list_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
-import 'package:reminder/values/colors.dart';
 import 'package:reminder/view/add_reminder/add_reminder_view.dart';
 
 class HomeProvider extends ChangeNotifier {
@@ -108,7 +107,7 @@ class HomeProvider extends ChangeNotifier {
       ShowSnackBar(
         context,
         AppLocalizations.of(context)!.deletedAlarm,
-        AppColors.error,
+        Theme.of(context).primaryColor,
       );
     }
     return;
