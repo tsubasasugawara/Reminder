@@ -94,11 +94,6 @@ class DateTimePicker {
                                     Container(
                                   margin: const EdgeInsets.only(bottom: 10.0),
                                   child: ElevatedButton.icon(
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              Theme.of(context).primaryColor),
-                                    ),
                                     onPressed: () async {
                                       var picked = await showTimePicker(
                                         context: context,

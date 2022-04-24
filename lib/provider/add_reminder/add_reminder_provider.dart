@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:reminder/components/snack_bar/snackbar.dart';
 import 'package:reminder/model/add_reminder/add_reminder_model.dart';
-import 'package:reminder/model/alarm/alarm.dart';
 import 'package:reminder/model/db/db.dart';
+import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
 class AddReminderProvider {
@@ -63,7 +63,7 @@ class AddReminderProvider {
   }
 
   Future<void> registerAlarm(int id, int status) async {
-    Alarm.deleteAlarm(
+    KotlinMethodCalling.deleteAlarm(
       id,
       model.dataBeforeEditing[NotificationsTable.titleKey] ??
           model.dataBeingEditing[NotificationsTable.titleKey],
@@ -74,7 +74,7 @@ class AddReminderProvider {
     );
     if (model.dataBeingEditing[NotificationsTable.setAlarmKey] == 0) return;
 
-    Alarm.alarm(
+    KotlinMethodCalling.alarm(
       id,
       model.dataBeingEditing[NotificationsTable.titleKey],
       model.dataBeingEditing[NotificationsTable.contentKey],

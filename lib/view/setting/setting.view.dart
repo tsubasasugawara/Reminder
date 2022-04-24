@@ -17,7 +17,7 @@ class SettingView extends StatelessWidget {
           style: Theme.of(context).textTheme.headline6,
         ),
       ),
-      body: Container(),
+      body: _body(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
@@ -55,6 +55,14 @@ class SettingView extends StatelessWidget {
             label: AppLocalizations.of(context)!.setting,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _body(BuildContext context) {
+    return SingleChildScrollView(
+      child: Container(
+        margin: const EdgeInsets.only(top: 20),
       ),
     );
   }

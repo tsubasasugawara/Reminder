@@ -13,8 +13,8 @@ class HomeList extends StatelessWidget {
         onRefresh: () async {
           await provider.update();
         },
-        color: Theme.of(context).primaryColor,
-        backgroundColor: Theme.of(context).backgroundColor,
+        color: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).primaryColor,
         child: ListView.builder(
           padding: const EdgeInsets.all(8),
           itemCount: provider.getDataListLength(),

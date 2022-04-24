@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:reminder/components/snack_bar/snackbar.dart';
-import 'package:reminder/model/alarm/alarm.dart';
 import 'package:reminder/model/db/db.dart';
 import 'package:reminder/model/home/home_list_model.dart';
+import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/view/add_reminder/add_reminder_view.dart';
 
@@ -92,7 +92,7 @@ class HomeProvider extends ChangeNotifier {
   }
 
   Future<void> _deleteAlarm(int id, List<Map> data) async {
-    Alarm.deleteAlarm(
+    KotlinMethodCalling.deleteAlarm(
         id, data[0]['title'], data[0]['content'], data[0]['time']);
   }
 
