@@ -6,52 +6,44 @@ import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart'
 import 'package:reminder/multilingualization/app_localizations.dart';
 
 class AddReminderProvider {
-  late AddReminderModel model;
+  late AddReminderModel _model;
 
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
 
   bool isKeyboardShown = false;
 
-  final textsize = 20.0;
-
   AddReminderProvider(
       int? id, String? title, String? content, int? time, int? setAlarm) {
     // Edited or New.
-    model = AddReminderModel(id, title, content, time, setAlarm);
+    _model = AddReminderModel(id, title, content, time, setAlarm);
 
-    titleController.text =
-        model.dataBeforeEditing[NotificationsTable.titleKey] ?? "";
-    contentController.text =
-        model.dataBeforeEditing[NotificationsTable.contentKey] ?? "";
+    var before = _model.getBeforeEditingData();
+
+    titleController.text = before[NotificationsTable.titleKey] ?? "";
+    contentController.text = before[NotificationsTable.contentKey] ?? "";
   }
 
-  void setInt(String key, bool before, int value) {
-    if (before) {
-      model.dataBeforeEditing[key] = value;
-    } else {
-      model.dataBeingEditing[key] = value;
-    }
+  void setData({
+    String? title,
+    String? content,
+    int? time,
+    int? setAlarm,
+  }) {
+    _model.editData(
+      title: title,
+      content: content,
+      time: time,
+      setAlarm: setAlarm,
+    );
   }
 
-  void setString(String key, bool before, String value) {
-    if (before) {
-      model.dataBeforeEditing[key] = value;
-    } else {
-      model.dataBeingEditing[key] = value;
-    }
-  }
-
-  int getInt(String key, bool before) {
-    if (before) {
-      return model.dataBeforeEditing[key];
-    } else {
-      return model.dataBeingEditing[key];
-    }
+  dynamic getData(String key) {
+    return _model.getBeingEditingData()[key];
   }
 
   Future<List<int>?> saveToDb() async {
-    var res = await model.updateOrInsert();
+    var res = await _model.updateOrInsert();
     var id = res[0];
     var status = res[1];
 
@@ -63,22 +55,23 @@ class AddReminderProvider {
   }
 
   Future<void> registerAlarm(int id, int status) async {
+    var before = _model.getBeforeEditingData();
+    var being = _model.getBeingEditingData();
+
     KotlinMethodCalling.deleteAlarm(
       id,
-      model.dataBeforeEditing[NotificationsTable.titleKey] ??
-          model.dataBeingEditing[NotificationsTable.titleKey],
-      model.dataBeforeEditing[NotificationsTable.contentKey] ??
-          model.dataBeingEditing[NotificationsTable.contentKey],
-      model.dataBeforeEditing[NotificationsTable.timeKey] ??
-          model.dataBeingEditing[NotificationsTable.timeKey],
+      before[NotificationsTable.titleKey] ?? being[NotificationsTable.titleKey],
+      before[NotificationsTable.contentKey] ??
+          being[NotificationsTable.contentKey],
+      before[NotificationsTable.timeKey] ?? being[NotificationsTable.timeKey],
     );
-    if (model.dataBeingEditing[NotificationsTable.setAlarmKey] == 0) return;
+    if (being[NotificationsTable.setAlarmKey] == 0) return;
 
     KotlinMethodCalling.alarm(
       id,
-      model.dataBeingEditing[NotificationsTable.titleKey],
-      model.dataBeingEditing[NotificationsTable.contentKey],
-      model.dataBeingEditing[NotificationsTable.timeKey],
+      being[NotificationsTable.titleKey],
+      being[NotificationsTable.contentKey],
+      being[NotificationsTable.timeKey],
     );
   }
 
@@ -87,7 +80,7 @@ class AddReminderProvider {
   }
 
   bool _timeValidate() {
-    var diff = model.dataBeingEditing[NotificationsTable.timeKey] -
+    var diff = _model.getBeingEditingData()[NotificationsTable.timeKey] -
         DateTime.now().millisecondsSinceEpoch;
 
     if (diff <= 0) {
@@ -111,7 +104,7 @@ class AddReminderProvider {
     }
 
     if (_checkSettingAlarm(
-            model.dataBeingEditing[NotificationsTable.setAlarmKey]) &&
+            _model.getBeingEditingData()[NotificationsTable.setAlarmKey]) &&
         _timeValidate() == false) {
       ShowSnackBar(
         context,
@@ -128,17 +121,17 @@ class AddReminderProvider {
 
     ShowSnackBar(
       context,
-      model.id == null
+      _model.id == null
           ? AppLocalizations.of(context)!.saved
           : AppLocalizations.of(context)!.edited,
       Theme.of(context).primaryColor,
     );
 
-    if (model.id == null) {
+    if (_model.id == null) {
       titleController.clear();
       contentController.clear();
     } else {
-      model.dataBeforeEditing = model.dataBeingEditing;
+      _model.copyToBeforeEditingData();
     }
   }
 }

@@ -133,24 +133,24 @@ class HomeProvider extends ChangeNotifier {
     getData();
   }
 
-  Future<void> showEditor(
-    BuildContext context, {
-    int? id,
-    String? title,
-    String? content,
-    int? time,
-    int? setAlarm,
-  }) async {
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) => Center(
-        child: Container(
-          color: Colors.white,
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.7,
-        ),
-      ),
-    );
-    return;
-  }
+  // Future<void> showEditor(
+  //   BuildContext context, {
+  //   int? id,
+  //   String? title,
+  //   String? content,
+  //   int? time,
+  //   int? setAlarm,
+  // }) async {
+  //   await showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) => Center(
+  //       child: Container(
+  //         color: Colors.white,
+  //         width: MediaQuery.of(context).size.width * 0.8,
+  //         height: MediaQuery.of(context).size.height * 0.7,
+  //       ),
+  //     ),
+  //   );
+  //   return;
+  // }
 }

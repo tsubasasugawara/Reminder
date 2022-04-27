@@ -16,16 +16,12 @@ class DateTimeProvider extends ChangeNotifier {
     var dt = time == null
         ? DateTime.now()
         : DateTime.fromMillisecondsSinceEpoch(time);
-    model.year = dt.year;
-    model.month = dt.month;
-    model.day = dt.day;
-    model.hour = dt.hour;
-    model.minute = dt.minute;
+    model.changeDateTimeVariables(dt);
   }
 
   Future selectDateTime(BuildContext context) async {
     var res = await DateTimePicker(
-      DateTime(model.year, model.month, model.day, model.hour, model.minute),
+      model.createDateTime(),
     ).showDateTimePicker(
       context,
       Theme.of(context).dialogBackgroundColor,
@@ -37,26 +33,17 @@ class DateTimeProvider extends ChangeNotifier {
         ),
       ),
     );
-    if (res != null) _setvalue(res);
+    if (res != null) model.changeDateTimeVariables(res);
     notifyListeners();
-  }
-
-  void _setvalue(DateTime dt) {
-    model.year = dt.year;
-    model.month = dt.month;
-    model.day = dt.day;
-    model.hour = dt.hour;
-    model.minute = dt.minute;
   }
 
   String dateTimeFormat(BuildContext context) {
     return DateFormat(AppLocalizations.of(context)!.dateTimeFormat).format(
-        DateTime(model.year, model.month, model.day, model.hour, model.minute));
+      model.createDateTime(),
+    );
   }
 
   int getMilliSecondsFromEpoch() {
-    return DateTime(
-            model.year, model.month, model.day, model.hour, model.minute)
-        .millisecondsSinceEpoch;
+    return (model.createDateTime()).millisecondsSinceEpoch;
   }
 }

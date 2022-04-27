@@ -39,15 +39,14 @@ class AddReminderView extends StatelessWidget {
       actions: [
         ChangeNotifierProvider(
           create: (context) => AlarmSwitchButtonProvider(
-            provider.getInt(NotificationsTable.setAlarmKey, false),
+            provider.getData(NotificationsTable.setAlarmKey),
           ),
           child: Consumer<AlarmSwitchButtonProvider>(
             builder: (context, alarmSwitchProvider, child) {
               return alarmSwitchProvider.changeIcon(
                 context,
                 () {
-                  provider.setInt(NotificationsTable.setAlarmKey, false,
-                      alarmSwitchProvider.setAlarm);
+                  provider.setData(setAlarm: alarmSwitchProvider.setAlarm);
                 },
               );
             },
@@ -86,7 +85,7 @@ class AddReminderView extends StatelessWidget {
                   contentPadding: const EdgeInsets.all(10),
                 ),
                 onChanged: (text) {
-                  provider.setString(NotificationsTable.titleKey, false, text);
+                  provider.setData(title: text);
                 },
               ),
             ),
@@ -108,8 +107,7 @@ class AddReminderView extends StatelessWidget {
                     contentPadding: const EdgeInsets.all(10),
                   ),
                   onChanged: (text) {
-                    provider.setString(
-                        NotificationsTable.contentKey, false, text);
+                    provider.setData(content: text);
                   },
                 ),
               ),
@@ -165,7 +163,7 @@ class AddReminderView extends StatelessWidget {
   Widget _dateTimeSelecter(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => DateTimeProvider(
-        provider.getInt(NotificationsTable.timeKey, false),
+        provider.getData(NotificationsTable.timeKey),
       ),
       child: Consumer<DateTimeProvider>(
         builder: (context, dateTimeProvider, child) {
@@ -174,8 +172,9 @@ class AddReminderView extends StatelessWidget {
               FocusScope.of(context).unfocus();
 
               await dateTimeProvider.selectDateTime(context);
-              provider.setInt(NotificationsTable.timeKey, false,
-                  dateTimeProvider.getMilliSecondsFromEpoch());
+              provider.setData(
+                time: dateTimeProvider.getMilliSecondsFromEpoch(),
+              );
             },
             style: ButtonStyle(
               backgroundColor:

@@ -50,10 +50,11 @@ class HomeView extends StatelessWidget {
                   label: AppLocalizations.of(context)!.home,
                 ),
                 BottomNavigationBarItem(
-                    icon: const Icon(
-                      Icons.settings,
-                    ),
-                    label: AppLocalizations.of(context)!.setting),
+                  icon: const Icon(
+                    Icons.settings,
+                  ),
+                  label: AppLocalizations.of(context)!.setting,
+                ),
               ],
             ),
           );
