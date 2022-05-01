@@ -9,7 +9,7 @@ class SettingView extends StatelessWidget {
   MainProvider mainProvider;
   List<int> colors = [
     0xffc0c0c0,
-    0xff0000ff,
+    0xff00bfff,
     0xff00ff00,
     0xffff0000,
     0xffffe4b5,
@@ -88,7 +88,7 @@ class SettingView extends StatelessWidget {
             },
             columnCount: 4,
             colors: colors,
-            checkedItemIndex: 0,
+            checkedItemIndex: 5,
             mainAxisSpacing: 25,
             crossAxisSpacing: 25,
             checkedItemIconSize: 30,

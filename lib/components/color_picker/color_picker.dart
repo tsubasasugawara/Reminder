@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:reminder/components/color_picker/color_picker_provider.dart';
 
 // ignore: must_be_immutable
@@ -6,9 +7,9 @@ class ColorPicker extends StatelessWidget {
   late Function(int, int) onPressed;
   late List<int> colors;
   late int columnCount;
-  late int checkedItemIndex;
   late double mainAxisSpacing;
   late double crossAxisSpacing;
+  late int checkedItemIndex;
   late double checkedItemIconSize;
 
   ColorPicker({
@@ -29,30 +30,36 @@ class ColorPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      itemCount: colors.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: columnCount,
-        mainAxisSpacing: mainAxisSpacing,
-        crossAxisSpacing: crossAxisSpacing,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        return ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            shape: const CircleBorder(),
-            primary: Color(colors[index]),
+    return ChangeNotifierProvider(
+      create: (context) => ColorPickerProvider(checkedItemIndex),
+      child: Consumer<ColorPickerProvider>(builder: (context, provider, child) {
+        return GridView.builder(
+          itemCount: colors.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: columnCount,
+            mainAxisSpacing: mainAxisSpacing,
+            crossAxisSpacing: crossAxisSpacing,
           ),
-          onPressed: () {
-            onPressed(colors[index], index);
+          itemBuilder: (BuildContext context, int index) {
+            return ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                primary: Color(colors[index]),
+              ),
+              onPressed: () {
+                onPressed(colors[index], index);
+                provider.changeCheckedItemIndex(index);
+              },
+              child: provider.getCheckedItemIndex() == index
+                  ? Icon(
+                      Icons.check,
+                      size: checkedItemIconSize,
+                    )
+                  : null,
+            );
           },
-          child: checkedItemIndex == index
-              ? Icon(
-                  Icons.check,
-                  size: checkedItemIconSize,
-                )
-              : null,
         );
-      },
+      }),
     );
   }
 }
