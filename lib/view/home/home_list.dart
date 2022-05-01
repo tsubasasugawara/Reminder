@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reminder/model/db/db.dart';
 import 'package:reminder/provider/home/home_provider.dart';
 
 // ignore: must_be_immutable
@@ -67,6 +68,19 @@ class HomeList extends StatelessWidget {
                               ),
                             ],
                           ),
+                        ),
+                        Container(
+                          child: provider.getInt(
+                                      index, NotificationsTable.setAlarmKey) ==
+                                  1
+                              ? Icon(
+                                  Icons.alarm_on,
+                                  color: Theme.of(context).primaryColor,
+                                )
+                              : Icon(
+                                  Icons.alarm_off,
+                                  color: Theme.of(context).hintColor,
+                                ),
                         ),
                         IconButton(
                           onPressed: () async {

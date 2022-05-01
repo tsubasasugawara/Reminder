@@ -37,6 +37,10 @@ class HomeProvider extends ChangeNotifier {
     return model.dataList[index][key];
   }
 
+  int getInt(int index, String key) {
+    return model.dataList[index][key];
+  }
+
   int getDataListLength() {
     return model.dataList.length;
   }
