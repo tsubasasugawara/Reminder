@@ -30,6 +30,7 @@ class MainActivity: FlutterActivity() {
                     val register = AlarmRegister(context)
 
                     register.registAlarm(id,title,content,time)
+                    result.success(null);
                 }
                 "deleteAlarm" -> {
                     val id = methodCall.argument<Int>("id")!!
@@ -39,6 +40,7 @@ class MainActivity: FlutterActivity() {
 
                     val register = AlarmRegister(context)
                     register.deleteAlarm(id,title,content,time)
+                    result.success(null);
                 }
                 "saveSetting" -> {
                     val dataType = methodCall.argument<String>("dataType")!!
@@ -59,6 +61,7 @@ class MainActivity: FlutterActivity() {
                             sp.saveBoolean(key, value)
                         }
                     }
+                    result.success(null);
                 }
                 "getSetting" -> {
                     val dataType = methodCall.argument<String>("dataType")!!
@@ -79,6 +82,7 @@ class MainActivity: FlutterActivity() {
                             result.success(res)
                         }
                     }
+                    result.success(null);
                 }
             }
         }
