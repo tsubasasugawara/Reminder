@@ -8,7 +8,10 @@ class ShowSnackBar {
         backgroundColor: backgroundColor,
         content: Text(
           text,
-          style: const TextStyle(fontWeight: FontWeight.w600),
+          style: const TextStyle(
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+          ),
         ),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(

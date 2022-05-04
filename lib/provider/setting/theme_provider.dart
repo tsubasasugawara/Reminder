@@ -5,7 +5,7 @@ class ThemeProvider extends ChangeNotifier {
   List<int> colors = [
     0xffc0c0c0,
     0xff00bfff,
-    0xff00ff00,
+    0xff4CAF50,
     0xffff0000,
     0xffffe4b5,
     0xff00ffff,

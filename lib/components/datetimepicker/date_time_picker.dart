@@ -139,7 +139,9 @@ class DateTimePicker {
                                   },
                                   child: Text(
                                     AppLocalizations.of(context)!.cancelButton,
-                                    style: const TextStyle(color: Colors.grey),
+                                    style: TextStyle(
+                                      color: Theme.of(context).hintColor,
+                                    ),
                                   ),
                                 ),
                                 TextButton(
