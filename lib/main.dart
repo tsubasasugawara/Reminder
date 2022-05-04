@@ -6,6 +6,8 @@ import 'package:reminder/provider/main_provider.dart';
 import 'package:reminder/provider/setting/theme_provider.dart';
 import 'package:reminder/view/main_view.dart';
 
+import 'provider/home/home_provider.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -22,6 +24,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => ThemeProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => HomeProvider(),
         ),
       ],
       child: Consumer<ThemeProvider>(

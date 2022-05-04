@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:reminder/view/home/home_view.dart';
+import 'package:reminder/view/home/home_list.dart';
 import 'package:reminder/view/setting/setting.view.dart';
 
 class MainProvider extends ChangeNotifier {
@@ -13,11 +13,11 @@ class MainProvider extends ChangeNotifier {
   Widget setWidget() {
     switch (index) {
       case 0:
-        return HomeView();
+        return const HomeList();
       case 1:
-        return SettingView();
+        return const SettingView();
       default:
-        return HomeView();
+        return const HomeList();
     }
   }
 }

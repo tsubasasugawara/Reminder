@@ -18,6 +18,7 @@ class ThemeProvider extends ChangeNotifier {
   ];
 
   late Color primaryColor;
+
   Color backgroundColor = const Color.fromARGB(255, 10, 10, 10);
   Color textColor = const Color.fromARGB(255, 225, 225, 225);
   Color hintTextColor = Colors.grey;
@@ -27,15 +28,13 @@ class ThemeProvider extends ChangeNotifier {
 
   String primaryColorKey = "primaryColor";
 
-  int greenCode = 0xff00ff00;
-
   ThemeProvider() {
     primaryColor = backgroundColor;
   }
 
   Future<void> setPrimaryColor() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int colorCode = prefs.getInt(primaryColorKey) ?? greenCode;
+    int colorCode = prefs.getInt(primaryColorKey) ?? 0xff00ff00;
     primaryColor = Color(colorCode);
   }
 
