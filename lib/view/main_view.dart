@@ -8,13 +8,10 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: ((context) => MainProvider()),
-      child: Consumer<MainProvider>(
-        builder: (context, provider, child) {
-          return provider.setWidget();
-        },
-      ),
+    return Consumer<MainProvider>(
+      builder: (context, provider, child) {
+        return provider.setWidget();
+      },
     );
   }
 }

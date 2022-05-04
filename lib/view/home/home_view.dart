@@ -7,8 +7,7 @@ import 'package:reminder/view/home/home_list.dart';
 
 // ignore: must_be_immutable
 class HomeView extends StatelessWidget {
-  MainProvider mainProvider;
-  HomeView(this.mainProvider, {Key? key}) : super(key: key);
+  HomeView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,25 +36,27 @@ class HomeView extends StatelessWidget {
               ),
               backgroundColor: Theme.of(context).primaryColor,
             ),
-            bottomNavigationBar: BottomNavigationBar(
-              currentIndex: mainProvider.index,
-              onTap: (int index) {
-                mainProvider.changeIndex(index);
-              },
-              items: [
-                BottomNavigationBarItem(
-                  icon: const Icon(
-                    Icons.home,
+            bottomNavigationBar: Consumer<MainProvider>(
+              builder: (context, provider, child) => BottomNavigationBar(
+                currentIndex: provider.index,
+                onTap: (int index) {
+                  provider.changeIndex(index);
+                },
+                items: [
+                  BottomNavigationBarItem(
+                    icon: const Icon(
+                      Icons.home,
+                    ),
+                    label: AppLocalizations.of(context)!.home,
                   ),
-                  label: AppLocalizations.of(context)!.home,
-                ),
-                BottomNavigationBarItem(
-                  icon: const Icon(
-                    Icons.settings,
+                  BottomNavigationBarItem(
+                    icon: const Icon(
+                      Icons.settings,
+                    ),
+                    label: AppLocalizations.of(context)!.setting,
                   ),
-                  label: AppLocalizations.of(context)!.setting,
-                ),
-              ],
+                ],
+              ),
             ),
           );
         }),

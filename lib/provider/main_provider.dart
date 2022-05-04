@@ -13,11 +13,11 @@ class MainProvider extends ChangeNotifier {
   Widget setWidget() {
     switch (index) {
       case 0:
-        return HomeView(this);
+        return HomeView();
       case 1:
-        return SettingView(this);
+        return SettingView();
       default:
-        return HomeView(this);
+        return HomeView();
     }
   }
 }

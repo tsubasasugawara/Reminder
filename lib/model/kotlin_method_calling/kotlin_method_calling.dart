@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 
 class KotlinMethodCalling {
   static String channelName = "com.sugawara.reminder/alarm";
+  static String primaryColorKey = "primaryColor";
 
   static Future<void> alarm(
     int id,
@@ -35,30 +36,5 @@ class KotlinMethodCalling {
         'time': time,
       },
     );
-  }
-
-  static Future<void> saveSetting(
-    String key,
-    dynamic value,
-  ) async {
-    await MethodChannel(KotlinMethodCalling.channelName)
-        .invokeMethod("saveSetting", <String, dynamic>{
-      'key': key,
-      'dataType': value.runtimeType,
-      'value': value,
-    });
-  }
-
-  static Future<dynamic> getSetting(
-    String key,
-    String dataType,
-  ) async {
-    var res = await MethodChannel(KotlinMethodCalling.channelName)
-        .invokeMethod("getSetting", <String, dynamic>{
-      'key': key,
-      'dataType': dataType,
-    });
-
-    return res;
   }
 }

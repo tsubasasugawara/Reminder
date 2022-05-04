@@ -42,48 +42,6 @@ class MainActivity: FlutterActivity() {
                     register.deleteAlarm(id,title,content,time)
                     result.success(null);
                 }
-                "saveSetting" -> {
-                    val dataType = methodCall.argument<String>("dataType")!!
-                    val key = methodCall.argument<String>("key")!!
-                    val sp = SharedPreference(context)
-
-                    when(dataType) {
-                        "int" -> {
-                            val value = methodCall.argument<Int>("value")!!
-                            sp.saveInt(key, value)
-                        }
-                        "String" -> {
-                            val value = methodCall.argument<String>("value")!!
-                            sp.saveString(key, value)
-                        }
-                        "bool" -> {
-                            val value = methodCall.argument<Boolean>("value")!!
-                            sp.saveBoolean(key, value)
-                        }
-                    }
-                    result.success(null);
-                }
-                "getSetting" -> {
-                    val dataType = methodCall.argument<String>("dataType")!!
-                    val key = methodCall.argument<String>("key")!!
-                    val sp = SharedPreference(context)
-
-                    when(dataType) {
-                        "int" -> {
-                            val res = sp.getInt(key)
-                            result.success(res)
-                        }
-                        "String" -> {
-                            val res = sp.getString(key)
-                            result.success(res)
-                        }
-                        "bool" -> {
-                            val res = sp.getBoolean(key)
-                            result.success(res)
-                        }
-                    }
-                    result.success(null);
-                }
             }
         }
     }

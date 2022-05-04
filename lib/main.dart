@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:reminder/multilingualization/app_localizations_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:reminder/values/theme.dart';
+import 'package:reminder/provider/main_provider.dart';
+import 'package:reminder/provider/setting/theme_provider.dart';
 import 'package:reminder/view/main_view.dart';
 
 void main() {
@@ -13,19 +15,37 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: AppTheme().getTheme(),
-      localizationsDelegates: const [
-        AppLocalizationsDelegate(),
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => MainProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ThemeProvider(),
+        ),
       ],
-      supportedLocales: const [
-        Locale('en'),
-        Locale('ja'),
-      ],
-      home: const MainView(),
+      child: Consumer<ThemeProvider>(
+        builder: (context, provider, child) {
+          return FutureBuilder(
+            future: provider.setPrimaryColor(),
+            builder: (BuildContext context, AsyncSnapshot<void> snapshot) =>
+                MaterialApp(
+              theme: provider.getTheme(),
+              localizationsDelegates: const [
+                AppLocalizationsDelegate(),
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: const [
+                Locale('en'),
+                Locale('ja'),
+              ],
+              home: const MainView(),
+            ),
+          );
+        },
+      ),
     );
   }
 }

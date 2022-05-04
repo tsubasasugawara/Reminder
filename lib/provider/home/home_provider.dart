@@ -96,7 +96,7 @@ class HomeProvider extends ChangeNotifier {
   }
 
   Future<void> _deleteAlarm(int id, List<Map> data) async {
-    KotlinMethodCalling.deleteAlarm(
+    await KotlinMethodCalling.deleteAlarm(
         id, data[0]['title'], data[0]['content'], data[0]['time']);
   }
 

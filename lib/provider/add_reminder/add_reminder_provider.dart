@@ -58,7 +58,7 @@ class AddReminderProvider {
     var before = _model.getBeforeEditingData();
     var being = _model.getBeingEditingData();
 
-    KotlinMethodCalling.deleteAlarm(
+    await KotlinMethodCalling.deleteAlarm(
       id,
       before[NotificationsTable.titleKey] ?? being[NotificationsTable.titleKey],
       before[NotificationsTable.contentKey] ??
@@ -67,7 +67,7 @@ class AddReminderProvider {
     );
     if (being[NotificationsTable.setAlarmKey] == 0) return;
 
-    KotlinMethodCalling.alarm(
+    await KotlinMethodCalling.alarm(
       id,
       being[NotificationsTable.titleKey],
       being[NotificationsTable.contentKey],

@@ -1,27 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:reminder/components/color_picker/color_picker.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/main_provider.dart';
+import 'package:reminder/provider/setting/theme_provider.dart';
 import 'package:reminder/view/add_reminder/add_reminder_view.dart';
 
 // ignore: must_be_immutable
 class SettingView extends StatelessWidget {
-  MainProvider mainProvider;
-  List<int> colors = [
-    0xffc0c0c0,
-    0xff00bfff,
-    0xff00ff00,
-    0xffff0000,
-    0xffffe4b5,
-    0xff00ffff,
-    0xffffff00,
-    0xffff00ff,
-    0xffa52a2a,
-    0xff4169e1,
-    0xffffa500,
-    0xff9400d3,
-  ];
-  SettingView(this.mainProvider, {Key? key}) : super(key: key);
+  const SettingView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,25 +38,27 @@ class SettingView extends StatelessWidget {
         ),
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: mainProvider.index,
-        onTap: (int index) {
-          mainProvider.changeIndex(index);
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: const Icon(
-              Icons.home,
+      bottomNavigationBar: Consumer<MainProvider>(
+        builder: (context, provider, child) => BottomNavigationBar(
+          currentIndex: provider.index,
+          onTap: (int index) {
+            provider.changeIndex(index);
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: const Icon(
+                Icons.home,
+              ),
+              label: AppLocalizations.of(context)!.home,
             ),
-            label: AppLocalizations.of(context)!.home,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(
-              Icons.settings,
+            BottomNavigationBarItem(
+              icon: const Icon(
+                Icons.settings,
+              ),
+              label: AppLocalizations.of(context)!.setting,
             ),
-            label: AppLocalizations.of(context)!.setting,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -79,19 +68,20 @@ class SettingView extends StatelessWidget {
       margin: const EdgeInsets.only(top: 20),
       child: Center(
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.2,
+          // height: MediaQuery.of(context).size.height * 0.2,
           width: MediaQuery.of(context).size.width * 0.7,
-          child: ColorPicker(
-            onPressed: (value, index) {
-              print(value);
-              print(index);
-            },
-            columnCount: 4,
-            colors: colors,
-            checkedItemIndex: 5,
-            mainAxisSpacing: 25,
-            crossAxisSpacing: 25,
-            checkedItemIconSize: 30,
+          child: Consumer<ThemeProvider>(
+            builder: (context, provider, child) => ColorPicker(
+              onPressed: (value, index) {
+                provider.changeThemeColor(value);
+              },
+              columnCount: 4,
+              colors: provider.colors,
+              checkedItemIndex: provider.getIndex(),
+              mainAxisSpacing: 25,
+              crossAxisSpacing: 25,
+              checkedItemIconSize: 30,
+            ),
           ),
         ),
       ),
