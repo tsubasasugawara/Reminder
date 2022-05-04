@@ -39,6 +39,11 @@ class ColorPicker extends StatelessWidget {
             crossAxisCount: columnCount,
             mainAxisSpacing: mainAxisSpacing,
             crossAxisSpacing: crossAxisSpacing,
+            childAspectRatio: 0.9,
+          ),
+          shrinkWrap: true,
+          controller: ScrollController(
+            keepScrollOffset: false,
           ),
           itemBuilder: (BuildContext context, int index) {
             return ElevatedButton(

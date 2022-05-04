@@ -11,9 +11,11 @@ class SettingView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 20),
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
       child: Center(
         child: SizedBox(
-          // height: MediaQuery.of(context).size.height * 0.2,
+          // height: MediaQuery.of(context).size.height * 0.4,
           width: MediaQuery.of(context).size.width * 0.7,
           child: Consumer<ThemeProvider>(
             builder: (context, provider, child) => ColorPicker(
