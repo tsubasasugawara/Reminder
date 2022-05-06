@@ -15,7 +15,9 @@ class MainView extends StatelessWidget {
       builder: (context, provider, child) => Scaffold(
         appBar: AppBar(
           title: Text(
-            AppLocalizations.of(context)!.appTitle,
+            provider.index == 0
+                ? AppLocalizations.of(context)!.appTitle
+                : AppLocalizations.of(context)!.setting,
             style: Theme.of(context).textTheme.headline6,
           ),
         ),

@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       child: Consumer<ThemeProvider>(
         builder: (context, provider, child) {
           return FutureBuilder(
-            future: provider.setPrimaryColor(),
+            future: provider.setColors(),
             builder: (BuildContext context, AsyncSnapshot<void> snapshot) =>
                 MaterialApp(
               theme: provider.getTheme(),
