@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reminder/components/brightness.dart';
 import 'package:reminder/components/color_picker/color_picker_provider.dart';
 
 // ignore: must_be_immutable
@@ -59,6 +60,7 @@ class ColorPicker extends StatelessWidget {
                   ? Icon(
                       Icons.check,
                       size: checkedItemIconSize,
+                      color: judgeBlackWhite(Color(colors[index])),
                     )
                   : null,
             );

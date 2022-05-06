@@ -28,11 +28,16 @@ class HomeList extends StatelessWidget {
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 15),
                   child: Container(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
                         Radius.circular(15),
                       ),
-                      color: Color.fromARGB(255, 55, 55, 55),
+                      border: Border.all(
+                        color: Theme.of(context).hintColor,
+                        width: 1.5,
+                      ),
+                      color: Theme.of(context).backgroundColor,
+                      // color: Color.fromARGB(255, 55, 55, 55),
                     ),
                     padding: const EdgeInsets.all(10),
                     child: Container(

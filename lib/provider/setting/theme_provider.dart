@@ -40,9 +40,16 @@ class ThemeProvider extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int colorCode = prefs.getInt(primaryColorKey) ?? 0xff00ff00;
     primaryColor = Color(colorCode);
+
+    uiMode = prefs.getString(uiModeKey) ?? "D";
+    if (uiMode == "D") {
+      _darkTheme();
+    } else {
+      _whiteTheme();
+    }
   }
 
-  void darkTheme() {
+  void _darkTheme() {
     backgroundColor = const Color.fromARGB(255, 40, 40, 40);
     barColor = const Color.fromARGB(255, 50, 50, 50);
     textColor = const Color.fromARGB(255, 225, 225, 225);
@@ -50,10 +57,9 @@ class ThemeProvider extends ChangeNotifier {
     error = Colors.red;
     dialogBackground = const Color.fromARGB(255, 40, 40, 40);
     elevatedButtonBackground = const Color.fromARGB(255, 40, 40, 40);
-    notifyListeners();
   }
 
-  void whiteTheme() {
+  void _whiteTheme() {
     backgroundColor = Colors.white;
     barColor = Colors.white;
     textColor = const Color.fromARGB(255, 30, 30, 30);
@@ -61,15 +67,17 @@ class ThemeProvider extends ChangeNotifier {
     error = Colors.red;
     dialogBackground = Colors.white;
     elevatedButtonBackground = Colors.white;
-    notifyListeners();
   }
 
-  void changeUiMode(String mode) {
-    if (mode == "D") {
+  Future<void> changeUiMode(int mode) async {
+    if (mode == 0xff000000) {
       uiMode = "D";
     } else {
       uiMode = "L";
     }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(uiModeKey, uiMode);
+
     notifyListeners();
   }
 
@@ -118,6 +126,10 @@ class ThemeProvider extends ChangeNotifier {
           ),
         ),
       ),
+      timePickerTheme: TimePickerThemeData(
+        backgroundColor: backgroundColor,
+        dialTextColor: primaryColor,
+      ),
     );
   }
 
@@ -135,5 +147,13 @@ class ThemeProvider extends ChangeNotifier {
       if (primaryColor.value == colors[i]) return i;
     }
     return 2;
+  }
+
+  int getUiModeIndex() {
+    if (uiMode == "D") {
+      return 1;
+    } else {
+      return 0;
+    }
   }
 }

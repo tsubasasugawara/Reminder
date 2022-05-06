@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reminder/components/brightness.dart';
 
 class ShowSnackBar {
   ShowSnackBar(BuildContext context, String text, Color backgroundColor) {
@@ -8,9 +9,9 @@ class ShowSnackBar {
         backgroundColor: backgroundColor,
         content: Text(
           text,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w600,
-            color: Colors.black,
+            color: judgeBlackWhite(backgroundColor),
           ),
         ),
         shape: const RoundedRectangleBorder(

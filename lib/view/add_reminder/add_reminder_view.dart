@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reminder/components/brightness.dart';
 import 'package:reminder/model/db/db.dart';
 import 'package:reminder/provider/add_reminder/add_reminder_provider.dart';
 import 'package:reminder/provider/add_reminder/alarm_switch_button.dart';
@@ -125,10 +126,10 @@ class AddReminderView extends StatelessWidget {
         onPressed: () {
           FocusManager.instance.primaryFocus?.unfocus();
         },
-        child: const Icon(
+        child: Icon(
           Icons.keyboard_hide_outlined,
           size: 40,
-          color: Colors.black,
+          color: judgeBlackWhite(Theme.of(context).primaryColor),
         ),
       ),
     );
