@@ -13,10 +13,6 @@ class FormControlButton extends StatelessWidget {
       onPressed: () {
         action();
       },
-      style: ButtonStyle(
-        backgroundColor:
-            MaterialStateProperty.all(Theme.of(context).backgroundColor),
-      ),
       child: Text(
         buttonText,
         style: TextStyle(color: textColor),

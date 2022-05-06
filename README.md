@@ -6,9 +6,3 @@
     <img width="200" height="auto" src="./images/home.png">
     <img width="200" height="auto" src="./images/add.png">
 </dev>
-
-## インストール
-``` bash
-    flutter build apk --release --split-per-abi
-    flutter install
-```

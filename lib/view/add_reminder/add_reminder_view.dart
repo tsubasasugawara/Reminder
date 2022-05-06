@@ -176,10 +176,6 @@ class AddReminderView extends StatelessWidget {
                 time: dateTimeProvider.getMilliSecondsFromEpoch(),
               );
             },
-            style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all(Theme.of(context).backgroundColor),
-            ),
             icon: Icon(
               Icons.calendar_month,
               color: Theme.of(context).primaryColor,

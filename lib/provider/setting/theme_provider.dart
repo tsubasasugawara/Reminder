@@ -17,25 +17,60 @@ class ThemeProvider extends ChangeNotifier {
     0xff9400d3,
   ];
 
+  late String uiMode; // D:dark, L:light
   late Color primaryColor;
 
-  Color backgroundColor = const Color.fromARGB(255, 10, 10, 10);
+  // Color backgroundColor = Colors.white;
+  Color backgroundColor = const Color.fromARGB(255, 40, 40, 40);
+  Color barColor = const Color.fromARGB(255, 50, 50, 50);
   Color textColor = const Color.fromARGB(255, 225, 225, 225);
   Color hintTextColor = Colors.grey;
   Color error = Colors.red;
-  Color dialogBackground = const Color.fromARGB(255, 20, 20, 20);
+  Color dialogBackground = const Color.fromARGB(255, 40, 40, 40);
   Color elevatedButtonBackground = const Color.fromARGB(255, 50, 50, 50);
 
   String primaryColorKey = "primaryColor";
+  String uiModeKey = "uiModeKey";
 
   ThemeProvider() {
     primaryColor = backgroundColor;
   }
 
-  Future<void> setPrimaryColor() async {
+  Future<void> setColors() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int colorCode = prefs.getInt(primaryColorKey) ?? 0xff00ff00;
     primaryColor = Color(colorCode);
+  }
+
+  void darkTheme() {
+    backgroundColor = const Color.fromARGB(255, 40, 40, 40);
+    barColor = const Color.fromARGB(255, 50, 50, 50);
+    textColor = const Color.fromARGB(255, 225, 225, 225);
+    hintTextColor = Colors.grey;
+    error = Colors.red;
+    dialogBackground = const Color.fromARGB(255, 40, 40, 40);
+    elevatedButtonBackground = const Color.fromARGB(255, 40, 40, 40);
+    notifyListeners();
+  }
+
+  void whiteTheme() {
+    backgroundColor = Colors.white;
+    barColor = Colors.white;
+    textColor = const Color.fromARGB(255, 30, 30, 30);
+    hintTextColor = const Color.fromARGB(255, 60, 60, 60);
+    error = Colors.red;
+    dialogBackground = Colors.white;
+    elevatedButtonBackground = Colors.white;
+    notifyListeners();
+  }
+
+  void changeUiMode(String mode) {
+    if (mode == "D") {
+      uiMode = "D";
+    } else {
+      uiMode = "L";
+    }
+    notifyListeners();
   }
 
   ThemeData? getTheme() {
@@ -46,7 +81,7 @@ class ThemeProvider extends ChangeNotifier {
       errorColor: error,
       hintColor: hintTextColor,
       backgroundColor: backgroundColor,
-      bottomAppBarColor: backgroundColor,
+      bottomAppBarColor: barColor,
       dialogBackgroundColor: dialogBackground,
       appBarTheme: AppBarTheme(
         backgroundColor: backgroundColor,
@@ -64,7 +99,7 @@ class ThemeProvider extends ChangeNotifier {
         bodyText2: const TextStyle(color: Colors.black),
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: backgroundColor,
+        backgroundColor: barColor,
         selectedItemColor: primaryColor,
         unselectedItemColor: textColor,
       ),
@@ -79,7 +114,7 @@ class ThemeProvider extends ChangeNotifier {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(
-            elevatedButtonBackground,
+            barColor,
           ),
         ),
       ),

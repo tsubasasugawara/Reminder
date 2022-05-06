@@ -123,8 +123,11 @@ class DateTimePicker {
                                           minute,
                                         ),
                                       ),
-                                      style:
-                                          const TextStyle(color: Colors.white),
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1!
+                                              .color),
                                     ),
                                   ),
                                 ),
