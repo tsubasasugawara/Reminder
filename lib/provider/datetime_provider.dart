@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:reminder/components/brightness.dart';
 import 'package:reminder/components/datetimepicker/date_time_picker.dart';
 import 'package:reminder/model/add_reminder/datetime_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
@@ -25,13 +26,6 @@ class DateTimeProvider extends ChangeNotifier {
     ).showDateTimePicker(
       context,
       Theme.of(context).dialogBackgroundColor,
-      Theme.of(context).copyWith(
-        colorScheme: ColorScheme.dark(
-          primary: Theme.of(context).primaryColor,
-          onSurface: Colors.white,
-          onPrimary: Colors.white,
-        ),
-      ),
     );
     if (res != null) model.changeDateTimeVariables(res);
     notifyListeners();

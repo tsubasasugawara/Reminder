@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reminder/components/brightness.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/home_provider.dart';
 import 'package:reminder/provider/main_provider.dart';
@@ -38,7 +39,7 @@ class MainView extends StatelessWidget {
             child: Icon(
               Icons.add,
               size: 30,
-              color: Theme.of(context).backgroundColor,
+              color: judgeBlackWhite(Theme.of(context).primaryColor),
             ),
             backgroundColor: Theme.of(context).primaryColor,
           ),

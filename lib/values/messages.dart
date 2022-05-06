@@ -21,6 +21,7 @@ class Messages {
     required this.home,
     required this.setting,
     required this.colorSetting,
+    required this.uiModeSetting,
   });
 
   // AppInfo
@@ -65,6 +66,7 @@ class Messages {
   final String setting;
 
   final String colorSetting;
+  final String uiModeSetting;
 
   factory Messages.of(Locale locale) {
     switch (locale.languageCode) {
@@ -97,26 +99,29 @@ class Messages {
         home: "ホーム",
         setting: "設定",
         colorSetting: "カラー",
+        uiModeSetting: "テーマ",
       );
 
   factory Messages.en() => Messages(
-      appTitle: 'Reminder',
-      notifiedMsg: 'Notified',
-      titleHintText: 'Title(Required)',
-      memoHintText: 'Memo',
-      titleError: 'Please enter a title.',
-      dateTimeError: 'Please specify a future date and time.',
-      saved: 'Registered.',
-      edited: 'Edited.',
-      saveButton: 'Save',
-      cancelButton: 'Cancel',
-      dateTimeFormat: 'MM/dd/yyyy hh:mm aa',
-      setAlarmOff: 'Off',
-      setAlarmOn: 'On',
-      deletedAlarm: 'Deleted.',
-      timeFormat: 'hh:mm aa',
-      ok: "OK",
-      home: "HOME",
-      setting: "SETTINGS",
-      colorSetting: "COLOR");
+        appTitle: 'Reminder',
+        notifiedMsg: 'Notified',
+        titleHintText: 'Title(Required)',
+        memoHintText: 'Memo',
+        titleError: 'Please enter a title.',
+        dateTimeError: 'Please specify a future date and time.',
+        saved: 'Registered.',
+        edited: 'Edited.',
+        saveButton: 'Save',
+        cancelButton: 'Cancel',
+        dateTimeFormat: 'MM/dd/yyyy hh:mm aa',
+        setAlarmOff: 'Off',
+        setAlarmOn: 'On',
+        deletedAlarm: 'Deleted.',
+        timeFormat: 'hh:mm aa',
+        ok: "OK",
+        home: "HOME",
+        setting: "SETTINGS",
+        colorSetting: "COLOR",
+        uiModeSetting: "THEME",
+      );
 }

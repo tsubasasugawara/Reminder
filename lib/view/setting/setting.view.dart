@@ -12,14 +12,56 @@ class SettingView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  margin: EdgeInsets.only(left: 20),
+                  margin: const EdgeInsets.only(left: 20),
+                  child: Text(
+                    AppLocalizations.of(context)!.uiModeSetting,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1
+                        ?.apply(fontSizeDelta: 3),
+                  ),
+                ),
+                Center(
+                  child: Container(
+                    padding: const EdgeInsets.all(15),
+                    margin: const EdgeInsets.only(bottom: 20),
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: Consumer<ThemeProvider>(
+                      builder: (context, provider, child) => ColorPicker(
+                        onPressed: (value, index) {
+                          provider.changeUiMode(value);
+                        },
+                        columnCount: 4,
+                        colors: const [
+                          0xffffffff,
+                          0xff000000,
+                        ],
+                        checkedItemIndex: provider.getUiModeIndex(),
+                        mainAxisSpacing: 25,
+                        crossAxisSpacing: 25,
+                        checkedItemIconSize: 30,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Divider(
+              color: Theme.of(context).hintColor,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(left: 20),
                   child: Text(
                     AppLocalizations.of(context)!.colorSetting,
                     style: Theme.of(context)
@@ -30,8 +72,8 @@ class SettingView extends StatelessWidget {
                 ),
                 Center(
                   child: Container(
-                    padding: EdgeInsets.all(15),
-                    margin: EdgeInsets.only(bottom: 20),
+                    padding: const EdgeInsets.all(15),
+                    margin: const EdgeInsets.only(bottom: 20),
                     width: MediaQuery.of(context).size.width * 0.8,
                     child: Consumer<ThemeProvider>(
                       builder: (context, provider, child) => ColorPicker(
@@ -48,10 +90,10 @@ class SettingView extends StatelessWidget {
                     ),
                   ),
                 ),
-                Divider(
-                  color: Theme.of(context).hintColor,
-                ),
               ],
+            ),
+            Divider(
+              color: Theme.of(context).hintColor,
             ),
           ],
         ),
