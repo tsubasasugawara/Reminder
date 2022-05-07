@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reminder/components/brightness.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeProvider extends ChangeNotifier {
@@ -128,7 +129,10 @@ class ThemeProvider extends ChangeNotifier {
       ),
       timePickerTheme: TimePickerThemeData(
         backgroundColor: backgroundColor,
-        dialTextColor: primaryColor,
+        dialTextColor: judgeBlackWhite(backgroundColor),
+        helpTextStyle: TextStyle(
+          color: hintTextColor,
+        ),
       ),
     );
   }

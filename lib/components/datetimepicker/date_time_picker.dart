@@ -40,7 +40,6 @@ class DateTimePicker {
   Future<DateTime?> showDateTimePicker(
     BuildContext context,
     Color backgroundColor,
-    // ThemeData themeData,
   ) async {
     final double textScaleFactor =
         math.min(MediaQuery.of(context).textScaleFactor, 1.3);

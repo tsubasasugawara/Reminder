@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reminder/components/brightness.dart';
 import 'package:reminder/model/db/db.dart';
 import 'package:reminder/provider/home/home_provider.dart';
 
@@ -15,7 +16,7 @@ class HomeList extends StatelessWidget {
           onRefresh: () async {
             await provider.update();
           },
-          color: Theme.of(context).backgroundColor,
+          color: judgeBlackWhite(Theme.of(context).primaryColor),
           backgroundColor: Theme.of(context).primaryColor,
           child: ListView.builder(
             padding: const EdgeInsets.all(8),
