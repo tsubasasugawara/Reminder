@@ -82,7 +82,7 @@ class AlarmReceiver: BroadcastReceiver() {
         val builder = Notification.Builder(context, CHANNEL_ID)
             .setContentTitle(title)
             .setContentText(content)
-            .setSmallIcon(R.mipmap.launcher_icon)
+            .setSmallIcon(R.mipmap.ic_launcher)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .setVisibility(Notification.VISIBILITY_PUBLIC)
