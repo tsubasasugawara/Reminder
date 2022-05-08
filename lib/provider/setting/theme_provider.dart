@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:reminder/components/brightness.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,7 +19,7 @@ class ThemeProvider extends ChangeNotifier {
     0xff9400d3,
   ];
 
-  late String uiMode; // D:dark, L:light
+  late String uiMode; // D:dark, L:light, A:auto
   late Color primaryColor;
 
   // Color backgroundColor = Colors.white;
@@ -42,8 +43,15 @@ class ThemeProvider extends ChangeNotifier {
     int colorCode = prefs.getInt(primaryColorKey) ?? 0xff00ff00;
     primaryColor = Color(colorCode);
 
-    uiMode = prefs.getString(uiModeKey) ?? "D";
-    if (uiMode == "D") {
+    uiMode = prefs.getString(uiModeKey) ?? "A";
+
+    String tmpUiMode = uiMode == "A"
+        ? SchedulerBinding.instance!.window.platformBrightness ==
+                Brightness.dark
+            ? "D"
+            : "L"
+        : uiMode;
+    if (tmpUiMode == "D") {
       _darkTheme();
     } else {
       _whiteTheme();
@@ -70,11 +78,13 @@ class ThemeProvider extends ChangeNotifier {
     elevatedButtonBackground = Colors.white;
   }
 
-  Future<void> changeUiMode(int mode) async {
-    if (mode == 0xff000000) {
+  Future<void> changeUiMode(String mode) async {
+    if (mode == "D") {
       uiMode = "D";
-    } else {
+    } else if (mode == "L") {
       uiMode = "L";
+    } else {
+      uiMode = "A";
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(uiModeKey, uiMode);
@@ -151,13 +161,5 @@ class ThemeProvider extends ChangeNotifier {
       if (primaryColor.value == colors[i]) return i;
     }
     return 2;
-  }
-
-  int getUiModeIndex() {
-    if (uiMode == "D") {
-      return 1;
-    } else {
-      return 0;
-    }
   }
 }
