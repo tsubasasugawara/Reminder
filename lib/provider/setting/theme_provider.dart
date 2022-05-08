@@ -5,24 +5,23 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeProvider extends ChangeNotifier {
   List<int> colors = [
-    0xffc0c0c0,
-    0xff00bfff,
-    0xff4CAF50,
-    0xffff0000,
-    0xffffe4b5,
-    0xff00ffff,
-    0xffffff00,
-    0xffff00ff,
-    0xffa52a2a,
-    0xff4169e1,
-    0xffffa500,
-    0xff9400d3,
+    0xffe5a323, //パンプキン
+    0xff009b9f, //ターコイズ
+    0xffd3381c, //赤
+    0xff82ae46, //鶸萌黄
+    0xffe198b4, //桃花色
+    0xff2ca9e1, //天色
+    0xffffff00, //黄色
+    0xffaa4c8f, //梅紫
+    0xffe95464, //韓紅
+    0xff4169e1, //royalblue
+    0xff00a968, //エメラルドグリーン
+    0xff9400d3, //darkviolet
   ];
 
   late String uiMode; // D:dark, L:light, A:auto
   late Color primaryColor;
 
-  // Color backgroundColor = Colors.white;
   Color backgroundColor = const Color.fromARGB(255, 40, 40, 40);
   Color barColor = const Color.fromARGB(255, 50, 50, 50);
   Color textColor = const Color.fromARGB(255, 225, 225, 225);
