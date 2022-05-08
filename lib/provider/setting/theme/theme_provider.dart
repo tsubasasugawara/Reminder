@@ -39,7 +39,7 @@ class ThemeProvider extends ChangeNotifier {
 
   Future<void> setColors() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int colorCode = prefs.getInt(primaryColorKey) ?? 0xff00ff00;
+    int colorCode = prefs.getInt(primaryColorKey) ?? 0xffe95464;
     primaryColor = Color(colorCode);
 
     uiMode = prefs.getString(uiModeKey) ?? "A";
@@ -159,6 +159,6 @@ class ThemeProvider extends ChangeNotifier {
     for (int i = 0; i < colors.length; i++) {
       if (primaryColor.value == colors[i]) return i;
     }
-    return 2;
+    return -1;
   }
 }

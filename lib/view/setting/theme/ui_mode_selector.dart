@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder/components/brightness.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
-import 'package:reminder/provider/setting/theme_provider.dart';
+import 'package:reminder/provider/setting/theme/theme_provider.dart';
 
 class UiModeSelector extends StatelessWidget {
   const UiModeSelector({Key? key}) : super(key: key);

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder/components/color_picker/color_picker.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
-import 'package:reminder/provider/setting/theme_provider.dart';
+import 'package:reminder/provider/setting/theme/theme_provider.dart';
+import 'package:reminder/view/setting/theme/rgb_edior.dart';
 
 class PrimaryColorSelector extends StatelessWidget {
   const PrimaryColorSelector({Key? key}) : super(key: key);
@@ -38,6 +39,12 @@ class PrimaryColorSelector extends StatelessWidget {
                 checkedItemIconSize: 30,
               ),
             ),
+          ),
+        ),
+        Center(
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 20),
+            child: const RGBEditor(),
           ),
         ),
       ],

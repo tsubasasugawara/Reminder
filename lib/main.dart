@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:reminder/multilingualization/app_localizations_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:reminder/provider/main_provider.dart';
-import 'package:reminder/provider/setting/theme_provider.dart';
+import 'package:reminder/provider/setting/theme/theme_provider.dart';
 import 'package:reminder/view/main_view.dart';
 
 import 'provider/home/home_provider.dart';
