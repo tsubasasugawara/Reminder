@@ -22,6 +22,8 @@ class ThemeProvider extends ChangeNotifier {
   late String uiMode; // D:dark, L:light, A:auto
   late Color primaryColor;
 
+  int selectedIndex = 0;
+
   Color backgroundColor = const Color.fromARGB(255, 40, 40, 40);
   Color barColor = const Color.fromARGB(255, 50, 50, 50);
   Color textColor = const Color.fromARGB(255, 225, 225, 225);
@@ -41,6 +43,8 @@ class ThemeProvider extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int colorCode = prefs.getInt(primaryColorKey) ?? 0xffe95464;
     primaryColor = Color(colorCode);
+
+    selectedIndex = getIndex();
 
     uiMode = prefs.getString(uiModeKey) ?? "A";
 
@@ -148,6 +152,8 @@ class ThemeProvider extends ChangeNotifier {
 
   void changeThemeColor(int colorCode) async {
     primaryColor = Color(colorCode);
+
+    selectedIndex = getIndex();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt(primaryColorKey, colorCode);

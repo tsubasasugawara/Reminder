@@ -55,14 +55,16 @@ class DateTimePicker {
                       colorScheme: ColorScheme.dark(
                         primary: Theme.of(context).primaryColor,
                         onSurface: judgeBlackWhite(backgroundColor),
-                        onPrimary: judgeBlackWhite(backgroundColor),
+                        onPrimary:
+                            judgeBlackWhite(Theme.of(context).primaryColor),
                       ),
                     )
                   : Theme.of(context).copyWith(
                       colorScheme: ColorScheme.light(
                         primary: Theme.of(context).primaryColor,
                         onSurface: judgeBlackWhite(backgroundColor),
-                        onPrimary: judgeBlackWhite(backgroundColor),
+                        onPrimary:
+                            judgeBlackWhite(Theme.of(context).primaryColor),
                       ),
                     ),
               child: Dialog(

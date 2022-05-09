@@ -22,6 +22,7 @@ class Messages {
     required this.setting,
     required this.colorSetting,
     required this.uiModeSetting,
+    required this.refresh,
   });
 
   // AppInfo
@@ -68,6 +69,8 @@ class Messages {
   final String colorSetting;
   final String uiModeSetting;
 
+  final String refresh;
+
   factory Messages.of(Locale locale) {
     switch (locale.languageCode) {
       case 'ja':
@@ -100,6 +103,7 @@ class Messages {
         setting: "設定",
         colorSetting: "カラー",
         uiModeSetting: "テーマ",
+        refresh: "更新",
       );
 
   factory Messages.en() => Messages(
@@ -123,5 +127,6 @@ class Messages {
         setting: "SETTINGS",
         colorSetting: "COLOR",
         uiModeSetting: "THEME",
+        refresh: "refresh",
       );
 }
