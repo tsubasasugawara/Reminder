@@ -121,7 +121,29 @@ class NotificationsTable {
     }
   }
 
-  Future<int?> delete(int id) async {
+  Future<int?> delete({
+    String? where,
+    List<String?>? whereArgs,
+  }) async {
+    try {
+      var db = await _opendb();
+      var numOfChnged = await db?.delete(
+        tableName,
+        where: where,
+        whereArgs: whereArgs,
+      );
+      await db?.close();
+      return numOfChnged;
+    } catch (e) {
+      assert(() {
+        print(e);
+        return true;
+      }());
+      return null;
+    }
+  }
+
+  Future<int?> deleteById(int id) async {
     try {
       var db = await _opendb();
       var numOfChanged = await db?.rawDelete(

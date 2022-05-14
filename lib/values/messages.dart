@@ -23,6 +23,7 @@ class Messages {
     required this.colorSetting,
     required this.uiModeSetting,
     required this.refresh,
+    required this.deletionSetting,
   });
 
   // AppInfo
@@ -68,6 +69,7 @@ class Messages {
 
   final String colorSetting;
   final String uiModeSetting;
+  final String deletionSetting;
 
   final String refresh;
 
@@ -104,29 +106,30 @@ class Messages {
         colorSetting: "カラー",
         uiModeSetting: "テーマ",
         refresh: "更新",
+        deletionSetting: "削除設定",
       );
 
   factory Messages.en() => Messages(
-        appTitle: 'Reminder',
-        notifiedMsg: 'Notified',
-        titleHintText: 'Title(Required)',
-        memoHintText: 'Memo',
-        titleError: 'Please enter a title.',
-        dateTimeError: 'Please specify a future date and time.',
-        saved: 'Registered.',
-        edited: 'Edited.',
-        saveButton: 'Save',
-        cancelButton: 'Cancel',
-        dateTimeFormat: 'MM/dd/yyyy hh:mm aa',
-        setAlarmOff: 'Off',
-        setAlarmOn: 'On',
-        deletedAlarm: 'Deleted.',
-        timeFormat: 'hh:mm aa',
-        ok: "OK",
-        home: "HOME",
-        setting: "SETTINGS",
-        colorSetting: "COLOR",
-        uiModeSetting: "THEME",
-        refresh: "refresh",
-      );
+      appTitle: 'Reminder',
+      notifiedMsg: 'Notified',
+      titleHintText: 'Title(Required)',
+      memoHintText: 'Memo',
+      titleError: 'Please enter a title.',
+      dateTimeError: 'Please specify a future date and time.',
+      saved: 'Registered.',
+      edited: 'Edited.',
+      saveButton: 'Save',
+      cancelButton: 'Cancel',
+      dateTimeFormat: 'MM/dd/yyyy hh:mm aa',
+      setAlarmOff: 'Off',
+      setAlarmOn: 'On',
+      deletedAlarm: 'Deleted.',
+      timeFormat: 'hh:mm aa',
+      ok: "OK",
+      home: "HOME",
+      setting: "SETTINGS",
+      colorSetting: "COLOR",
+      uiModeSetting: "THEME",
+      refresh: "refresh",
+      deletionSetting: "Deletion setting");
 }
