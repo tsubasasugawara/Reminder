@@ -138,4 +138,32 @@ class NotificationsTable {
       return null;
     }
   }
+
+  Future<int?> multipleDelete(List<int> ids) async {
+    if (ids.isEmpty) return null;
+    try {
+      var db = await _opendb();
+
+      String statement = ' DELETE FROM $tableName';
+
+      statement = statement + ' WHERE id IN(?';
+      for (int i = 1; i < ids.length; i++) {
+        statement = statement + ',?';
+      }
+      statement = statement + ')';
+
+      var numOfChanged = await db?.rawDelete(
+        statement,
+        ids,
+      );
+      await db?.close();
+      return numOfChanged;
+    } catch (e) {
+      assert(() {
+        print(e);
+        return true;
+      }());
+      return null;
+    }
+  }
 }

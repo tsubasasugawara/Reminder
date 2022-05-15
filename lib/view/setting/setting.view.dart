@@ -10,7 +10,10 @@ class SettingView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        margin: const EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(
+          top: 20,
+          bottom: 50,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -18,13 +18,21 @@ class HomeListModel {
     }
   }
 
-  Future<List<Map>?> selectById(int id) async {
+  Future<List<Map>?> selectById(List<int> ids) async {
+    if (ids.isEmpty) return null;
     try {
       var nt = NotificationsTable();
+
+      String where = "id IN (?";
+      for (int i = 1; i < ids.length; i++) {
+        where = where + ",?";
+      }
+      where = where + ")";
+
       var dataList = await nt.select(
         columns: ['title', 'content', 'time'],
-        where: "id = ?",
-        whereArgs: [id],
+        where: where,
+        whereArgs: ids,
       );
       return dataList;
     } catch (e) {

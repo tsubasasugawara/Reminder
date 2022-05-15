@@ -10,6 +10,9 @@ import 'package:reminder/view/add_reminder/add_reminder_view.dart';
 class HomeProvider extends ChangeNotifier {
   HomeListModel model = HomeListModel();
 
+  List selectedItems = [];
+  bool selectedMode = false;
+
   HomeProvider() {
     update();
   }
@@ -19,6 +22,7 @@ class HomeProvider extends ChangeNotifier {
     if (data == null) return;
 
     model.dataList = data;
+    changeSelectedItemsLen();
     notifyListeners();
   }
 
@@ -73,50 +77,6 @@ class HomeProvider extends ChangeNotifier {
     return res;
   }
 
-  Future<bool> deleteFromDbAndAlarm(int index, Function() action) async {
-    var id = model.dataList[index]['id'];
-    var data = await model.selectById(id);
-
-    if (data == null) return false;
-
-    var res = await _deleteData(id);
-    action();
-    await _deleteAlarm(id, data);
-
-    return res;
-  }
-
-  Future<bool> _deleteData(int id) async {
-    var res = await NotificationsTable().delete(id);
-    if (res != null && res >= 1) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<void> _deleteAlarm(int id, List<Map> data) async {
-    await KotlinMethodCalling.deleteAlarm(
-        id, data[0]['title'], data[0]['content'], data[0]['time']);
-  }
-
-  Future<void> deleteButton(BuildContext context, int index) async {
-    var res = await deleteFromDbAndAlarm(
-      index,
-      () {
-        getData();
-      },
-    );
-    if (res) {
-      ShowSnackBar(
-        context,
-        AppLocalizations.of(context)!.deletedAlarm,
-        Theme.of(context).primaryColor,
-      );
-    }
-    return;
-  }
-
   Future<void> moveToAddView(BuildContext context, {int? index}) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
@@ -137,24 +97,104 @@ class HomeProvider extends ChangeNotifier {
     getData();
   }
 
-  // Future<void> showEditor(
-  //   BuildContext context, {
-  //   int? id,
-  //   String? title,
-  //   String? content,
-  //   int? time,
-  //   int? setAlarm,
-  // }) async {
-  //   await showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) => Center(
-  //       child: Container(
-  //         color: Colors.white,
-  //         width: MediaQuery.of(context).size.width * 0.8,
-  //         height: MediaQuery.of(context).size.height * 0.7,
-  //       ),
-  //     ),
-  //   );
-  //   return;
-  // }
+/*  選択削除
+ ----------------------------------------------------------------------------- */
+  Future<bool> deleteFromDbAndAlarm(
+    List<int> indexList,
+    Function() action,
+  ) async {
+    List<int> ids = [];
+    for (var ele in indexList) {
+      ids.add(model.dataList[ele]['id']);
+    }
+    var data = await model.selectById(ids);
+
+    if (data == null) return false;
+    if (data.length != ids.length) return false;
+
+    var res = await _deleteData(ids);
+    await _deleteAlarm(ids, data);
+    action();
+
+    return res;
+  }
+
+  Future<bool> _deleteData(List<int> ids) async {
+    var res = await NotificationsTable().multipleDelete(ids);
+    if (res != null && res >= 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<void> _deleteAlarm(List<int> ids, List<Map> data) async {
+    for (int i = 0; i < ids.length; i++) {
+      await KotlinMethodCalling.deleteAlarm(
+          ids[i], data[i]['title'], data[i]['content'], data[i]['time']);
+    }
+  }
+
+  List<int> getSelectedIndex() {
+    List<int> indexs = [];
+    for (int i = 0; i < selectedItems.length; i++) {
+      if (selectedItems[i]) indexs.add(i);
+    }
+    return indexs;
+  }
+
+  Future<void> deleteButton(BuildContext context) async {
+    var res = await deleteFromDbAndAlarm(
+      getSelectedIndex(),
+      () {
+        getData();
+      },
+    );
+    if (res) {
+      ShowSnackBar(
+        context,
+        AppLocalizations.of(context)!.deletedAlarm,
+        Theme.of(context).primaryColor,
+      );
+    }
+    return;
+  }
+
+  void changeSelectedItemsLen() {
+    selectedItems = List.filled(getDataListLength(), false);
+  }
+
+  void changeSelected(int index) {
+    selectedItems[index] = !selectedItems[index];
+    if (getSelectedItemsNum() == 0) {
+      changeMode();
+    } else {
+      notifyListeners();
+    }
+  }
+
+  void allSelect(bool select) {
+    for (int i = 0; i < selectedItems.length; i++) {
+      selectedItems[i] = select;
+    }
+    if (getSelectedItemsNum() == 0) {
+      changeMode();
+    } else {
+      notifyListeners();
+    }
+  }
+
+  int getSelectedItemsNum() {
+    int cnt = 0;
+    for (int i = 0; i < selectedItems.length; i++) {
+      if (selectedItems[i]) cnt++;
+    }
+    return cnt;
+  }
+
+  void changeMode() {
+    selectedMode = !selectedMode;
+    changeSelectedItemsLen();
+    notifyListeners();
+  }
 }

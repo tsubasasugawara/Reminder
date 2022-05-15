@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:reminder/components/brightness.dart';
 import 'package:reminder/model/db/db.dart';
 import 'package:reminder/provider/home/home_provider.dart';
-import 'package:reminder/view/home/deletion_confirmation_dialog.dart';
 
 // ignore: must_be_immutable
 class HomeList extends StatelessWidget {
@@ -16,6 +15,9 @@ class HomeList extends StatelessWidget {
         child: RefreshIndicator(
           onRefresh: () async {
             await provider.update();
+            if (provider.selectedMode) {
+              provider.allSelect(false);
+            }
           },
           color: judgeBlackWhite(Theme.of(context).primaryColor),
           backgroundColor: Theme.of(context).primaryColor,
@@ -25,7 +27,15 @@ class HomeList extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               return GestureDetector(
                 onTap: () async {
-                  await provider.moveToAddView(context, index: index);
+                  if (provider.selectedMode) {
+                    provider.changeSelected(index);
+                  } else {
+                    await provider.moveToAddView(context, index: index);
+                  }
+                },
+                onLongPress: () {
+                  if (!provider.selectedMode) provider.changeMode();
+                  provider.changeSelected(index);
                 },
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 15),
@@ -35,11 +45,12 @@ class HomeList extends StatelessWidget {
                         Radius.circular(15),
                       ),
                       border: Border.all(
-                        color: Theme.of(context).hintColor,
+                        color: provider.selectedItems[index]
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).hintColor,
                         width: 1.5,
                       ),
                       color: Theme.of(context).backgroundColor,
-                      // color: Color.fromARGB(255, 55, 55, 55),
                     ),
                     padding: const EdgeInsets.all(10),
                     child: Container(
@@ -91,23 +102,23 @@ class HomeList extends StatelessWidget {
                                     color: Theme.of(context).hintColor,
                                   ),
                           ),
-                          IconButton(
-                            onPressed: () async {
-                              var res = await showDialog(
-                                context: context,
-                                builder: (context) =>
-                                    const DeletionConfirmationDialog(),
-                              ).then(
-                                (value) => value ?? false,
-                              );
-                              if (res) provider.deleteButton(context, index);
-                            },
-                            icon: Icon(
-                              Icons.delete,
-                              color: Theme.of(context).hintColor,
-                              size: 30,
-                            ),
-                          ),
+                          // IconButton(
+                          //   onPressed: () async {
+                          //     var res = await showDialog(
+                          //       context: context,
+                          //       builder: (context) =>
+                          //           const DeletionConfirmationDialog(),
+                          //     ).then(
+                          //       (value) => value ?? false,
+                          //     );
+                          //     if (res) provider.deleteButton(context, index);
+                          //   },
+                          //   icon: Icon(
+                          //     Icons.delete,
+                          //     color: Theme.of(context).hintColor,
+                          //     size: 30,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),

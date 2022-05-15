@@ -15,35 +15,73 @@ class MainView extends StatelessWidget {
     return Consumer<MainProvider>(
       builder: (context, provider, child) => Scaffold(
         appBar: AppBar(
-          title: Text(
-            provider.index == 0
-                ? AppLocalizations.of(context)!.appTitle
-                : AppLocalizations.of(context)!.setting,
-            style: Theme.of(context).textTheme.headline6,
-          ),
+          title: Provider.of<HomeProvider>(context).selectedMode
+              ? null
+              : Text(
+                  provider.index == 0
+                      ? AppLocalizations.of(context)!.appTitle
+                      : AppLocalizations.of(context)!.setting,
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+          actions: Provider.of<HomeProvider>(context).selectedMode
+              ? [
+                  Consumer<HomeProvider>(
+                    builder: (context, homeProvider, child) => Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            homeProvider.allSelect(false);
+                          },
+                          icon: const Icon(Icons.cancel_outlined),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            homeProvider.allSelect(true);
+                          },
+                          icon: const Icon(Icons.select_all),
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            await homeProvider.deleteButton(context);
+                            homeProvider.allSelect(false);
+                          },
+                          icon: const Icon(Icons.delete),
+                        ),
+                      ],
+                    ),
+                  ),
+                ]
+              : null,
         ),
         body: provider.setWidget(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Consumer<HomeProvider>(
           builder: (context, homeProvider, child) => Visibility(
             visible: MediaQuery.of(context).viewInsets.bottom <= 0,
-            child: FloatingActionButton(
-              onPressed: () async {
-                await Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return AddReminderView();
-                    },
-                  ),
-                );
-                homeProvider.update();
-              },
-              child: Icon(
-                Icons.add,
-                size: 30,
-                color: judgeBlackWhite(Theme.of(context).primaryColor),
+            child: Consumer<HomeProvider>(
+              builder: (context, homeProvider, child) => FloatingActionButton(
+                onPressed: () async {
+                  if (homeProvider.selectedMode) {
+                    await homeProvider.deleteButton(context);
+                    homeProvider.allSelect(false);
+                  } else {
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return AddReminderView();
+                        },
+                      ),
+                    );
+                    homeProvider.update();
+                  }
+                },
+                child: Icon(
+                  homeProvider.selectedMode ? Icons.delete : Icons.add,
+                  size: 30,
+                  color: judgeBlackWhite(Theme.of(context).primaryColor),
+                ),
+                backgroundColor: Theme.of(context).primaryColor,
               ),
-              backgroundColor: Theme.of(context).primaryColor,
             ),
           ),
         ),
