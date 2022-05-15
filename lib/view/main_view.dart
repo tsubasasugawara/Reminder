@@ -5,6 +5,7 @@ import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/home_provider.dart';
 import 'package:reminder/provider/main_provider.dart';
 import 'package:reminder/view/add_reminder/add_reminder_view.dart';
+import 'package:reminder/view/home/deletion_confirmation_dialog.dart';
 
 // ignore: must_be_immutable
 class MainView extends StatelessWidget {
@@ -15,15 +16,21 @@ class MainView extends StatelessWidget {
     return Consumer<MainProvider>(
       builder: (context, provider, child) => Scaffold(
         appBar: AppBar(
-          title: Provider.of<HomeProvider>(context).selectedMode
-              ? null
+          title: provider.isMainPage(context)
+              ? Text(
+                  "  " +
+                      Provider.of<HomeProvider>(context)
+                          .getSelectedItemsNum()
+                          .toString(),
+                  style: Theme.of(context).textTheme.headline6,
+                )
               : Text(
                   provider.index == 0
                       ? AppLocalizations.of(context)!.appTitle
                       : AppLocalizations.of(context)!.setting,
                   style: Theme.of(context).textTheme.headline6,
                 ),
-          actions: Provider.of<HomeProvider>(context).selectedMode
+          actions: provider.isMainPage(context)
               ? [
                   Consumer<HomeProvider>(
                     builder: (context, homeProvider, child) => Row(
@@ -42,8 +49,7 @@ class MainView extends StatelessWidget {
                         ),
                         IconButton(
                           onPressed: () async {
-                            await homeProvider.deleteButton(context);
-                            homeProvider.allSelect(false);
+                            provider.deleteButton(context, homeProvider);
                           },
                           icon: const Icon(Icons.delete),
                         ),
@@ -61,9 +67,9 @@ class MainView extends StatelessWidget {
             child: Consumer<HomeProvider>(
               builder: (context, homeProvider, child) => FloatingActionButton(
                 onPressed: () async {
-                  if (homeProvider.selectedMode) {
-                    await homeProvider.deleteButton(context);
-                    homeProvider.allSelect(false);
+                  if (provider.isMainPage(context,
+                      val: homeProvider.selectedMode)) {
+                    provider.deleteButton(context, homeProvider);
                   } else {
                     await Navigator.of(context).push(
                       MaterialPageRoute(
@@ -73,10 +79,14 @@ class MainView extends StatelessWidget {
                       ),
                     );
                     homeProvider.update();
+                    homeProvider.allSelect(false);
                   }
                 },
                 child: Icon(
-                  homeProvider.selectedMode ? Icons.delete : Icons.add,
+                  homeProvider.selectedMode &&
+                          provider.index == provider.mainPageIndex
+                      ? Icons.delete
+                      : Icons.add,
                   size: 30,
                   color: judgeBlackWhite(Theme.of(context).primaryColor),
                 ),
