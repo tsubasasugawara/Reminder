@@ -25,23 +25,26 @@ class MainView extends StatelessWidget {
         body: provider.setWidget(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Consumer<HomeProvider>(
-          builder: (context, homeProvider, child) => FloatingActionButton(
-            onPressed: () async {
-              await Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) {
-                    return AddReminderView();
-                  },
-                ),
-              );
-              homeProvider.update();
-            },
-            child: Icon(
-              Icons.add,
-              size: 30,
-              color: judgeBlackWhite(Theme.of(context).primaryColor),
+          builder: (context, homeProvider, child) => Visibility(
+            visible: MediaQuery.of(context).viewInsets.bottom <= 0,
+            child: FloatingActionButton(
+              onPressed: () async {
+                await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return AddReminderView();
+                    },
+                  ),
+                );
+                homeProvider.update();
+              },
+              child: Icon(
+                Icons.add,
+                size: 30,
+                color: judgeBlackWhite(Theme.of(context).primaryColor),
+              ),
+              backgroundColor: Theme.of(context).primaryColor,
             ),
-            backgroundColor: Theme.of(context).primaryColor,
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(

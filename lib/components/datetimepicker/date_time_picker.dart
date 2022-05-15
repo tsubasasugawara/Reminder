@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:reminder/components/brightness.dart';
 import 'package:reminder/components/datetimepicker/time_provider.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
-import 'package:reminder/provider/setting/theme_provider.dart';
+import 'package:reminder/provider/setting/theme/theme_provider.dart';
 
 class DateTimePicker {
   static const Size _calendarPortraitDialogSize = Size(330.0, 518.0);
@@ -55,14 +55,16 @@ class DateTimePicker {
                       colorScheme: ColorScheme.dark(
                         primary: Theme.of(context).primaryColor,
                         onSurface: judgeBlackWhite(backgroundColor),
-                        onPrimary: judgeBlackWhite(backgroundColor),
+                        onPrimary:
+                            judgeBlackWhite(Theme.of(context).primaryColor),
                       ),
                     )
                   : Theme.of(context).copyWith(
                       colorScheme: ColorScheme.light(
                         primary: Theme.of(context).primaryColor,
                         onSurface: judgeBlackWhite(backgroundColor),
-                        onPrimary: judgeBlackWhite(backgroundColor),
+                        onPrimary:
+                            judgeBlackWhite(Theme.of(context).primaryColor),
                       ),
                     ),
               child: Dialog(

@@ -25,8 +25,8 @@ class HomeProvider extends ChangeNotifier {
   Future<void> update() async {
     var nt = NotificationsTable();
     await nt.update(
-      {"set_alarm": 0},
-      "time <= ?",
+      {NotificationsTable.setAlarmKey: 0},
+      "${NotificationsTable.timeKey} <= ? and ${NotificationsTable.frequencyKey} == 0",
       [DateTime.now().millisecondsSinceEpoch],
       null,
     );
@@ -87,7 +87,7 @@ class HomeProvider extends ChangeNotifier {
   }
 
   Future<bool> _deleteData(int id) async {
-    var res = await NotificationsTable().delete(id);
+    var res = await NotificationsTable().deleteById(id);
     if (res != null && res >= 1) {
       return true;
     } else {
