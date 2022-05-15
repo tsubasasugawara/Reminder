@@ -178,7 +178,7 @@ class HomeProvider extends ChangeNotifier {
       selectedItems[i] = select;
     }
     if (getSelectedItemsNum() == 0) {
-      changeMode();
+      changeMode(mode: select);
     } else {
       notifyListeners();
     }
@@ -192,8 +192,12 @@ class HomeProvider extends ChangeNotifier {
     return cnt;
   }
 
-  void changeMode() {
-    selectedMode = !selectedMode;
+  void changeMode({bool? mode}) {
+    if (mode == null) {
+      selectedMode = !selectedMode;
+    } else {
+      selectedMode = mode;
+    }
     changeSelectedItemsLen();
     notifyListeners();
   }

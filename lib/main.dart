@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder/multilingualization/app_localizations_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-// import 'package:reminder/provider/home/selection_item_provider.dart';
+import 'package:reminder/provider/home/selection_item_provider.dart';
 import 'package:reminder/provider/main_provider.dart';
 import 'package:reminder/provider/setting/theme/theme_provider.dart';
 import 'package:reminder/view/main_view.dart';
@@ -29,10 +29,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => HomeProvider(),
         ),
-        // ChangeNotifierProvider(
-        //   create: (_) => SelectionItemProvider(
-        //       Provider.of<HomeProvider>(context).getDataListLength()),
-        // ),
+        ChangeNotifierProvider(
+          create: (_) => SelectionItemProvider(
+            Provider.of<HomeProvider>(context).getDataListLength(),
+          ),
+        ),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, provider, child) {
