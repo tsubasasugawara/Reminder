@@ -23,6 +23,8 @@ class Messages {
     required this.colorSetting,
     required this.uiModeSetting,
     required this.refresh,
+    required this.confirmation,
+    required this.confirmationMsg,
   });
 
   // AppInfo
@@ -71,6 +73,9 @@ class Messages {
 
   final String refresh;
 
+  final String confirmation;
+  final String confirmationMsg;
+
   factory Messages.of(Locale locale) {
     switch (locale.languageCode) {
       case 'ja':
@@ -104,6 +109,8 @@ class Messages {
         colorSetting: "カラー",
         uiModeSetting: "テーマ",
         refresh: "更新",
+        confirmation: "確認",
+        confirmationMsg: "本当に削除してもよろしいですか?",
       );
 
   factory Messages.en() => Messages(
@@ -128,5 +135,7 @@ class Messages {
         colorSetting: "COLOR",
         uiModeSetting: "THEME",
         refresh: "refresh",
+        confirmation: "Confirmation",
+        confirmationMsg: "Are you sure you want me to delete it?",
       );
 }

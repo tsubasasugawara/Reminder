@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:reminder/components/brightness.dart';
 import 'package:reminder/model/db/db.dart';
 import 'package:reminder/provider/home/home_provider.dart';
+import 'package:reminder/view/home/deletion_confirmation_dialog.dart';
 
 // ignore: must_be_immutable
 class HomeList extends StatelessWidget {
@@ -92,7 +93,14 @@ class HomeList extends StatelessWidget {
                           ),
                           IconButton(
                             onPressed: () async {
-                              provider.deleteButton(context, index);
+                              var res = await showDialog(
+                                context: context,
+                                builder: (context) =>
+                                    const DeletionConfirmationDialog(),
+                              ).then(
+                                (value) => value ?? false,
+                              );
+                              if (res) provider.deleteButton(context, index);
                             },
                             icon: Icon(
                               Icons.delete,

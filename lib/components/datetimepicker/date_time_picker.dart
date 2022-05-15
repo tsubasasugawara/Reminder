@@ -115,6 +115,8 @@ class DateTimePicker {
                                       onPressed: () async {
                                         var picked = await showTimePicker(
                                           context: context,
+                                          confirmText:
+                                              AppLocalizations.of(context)!.ok,
                                           initialTime: TimeOfDay(
                                               hour: hour, minute: minute),
                                           builder: (context, child) {
@@ -165,9 +167,6 @@ class DateTimePicker {
                                     child: Text(
                                       AppLocalizations.of(context)!
                                           .cancelButton,
-                                      style: TextStyle(
-                                        color: Theme.of(context).hintColor,
-                                      ),
                                     ),
                                   ),
                                   TextButton(

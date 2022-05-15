@@ -143,7 +143,7 @@ class AddReminderView extends StatelessWidget {
         children: [
           FormControlButton(
             AppLocalizations.of(context)!.cancelButton,
-            Theme.of(context).errorColor,
+            Theme.of(context).primaryColor,
             () {
               Navigator.of(context).pop();
             },

@@ -147,6 +147,11 @@ class ThemeProvider extends ChangeNotifier {
           color: hintTextColor,
         ),
       ),
+      dialogTheme: DialogTheme(
+        contentTextStyle: TextStyle(
+          color: judgeBlackWhite(backgroundColor),
+        ),
+      ),
     );
   }
 
