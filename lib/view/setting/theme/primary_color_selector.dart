@@ -24,7 +24,6 @@ class PrimaryColorSelector extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(15),
             margin: const EdgeInsets.only(bottom: 20),
-            // width: MediaQuery.of(context).size.width * 0.8,
             child: Consumer<ThemeProvider>(
               builder: (context, provider, child) => ColorPicker(
                 onPressed: (value, index) {
