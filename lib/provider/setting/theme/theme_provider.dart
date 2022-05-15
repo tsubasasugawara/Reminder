@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:reminder/components/brightness.dart';
-import 'package:reminder/model/shared_preferences/keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeProvider extends ChangeNotifier {
@@ -33,19 +32,21 @@ class ThemeProvider extends ChangeNotifier {
   Color dialogBackground = const Color.fromARGB(255, 40, 40, 40);
   Color elevatedButtonBackground = const Color.fromARGB(255, 50, 50, 50);
 
+  String primaryColorKey = "primaryColor";
+  String uiModeKey = "uiModeKey";
+
   ThemeProvider() {
     primaryColor = backgroundColor;
   }
 
   Future<void> setColors() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int colorCode =
-        prefs.getInt(SharedPreferencesKeys.primaryColorKey) ?? 0xffe95464;
+    int colorCode = prefs.getInt(primaryColorKey) ?? 0xffe95464;
     primaryColor = Color(colorCode);
 
     selectedIndex = getIndex();
 
-    uiMode = prefs.getString(SharedPreferencesKeys.uiModeKey) ?? "A";
+    uiMode = prefs.getString(uiModeKey) ?? "A";
 
     String tmpUiMode = uiMode == "A"
         ? SchedulerBinding.instance!.window.platformBrightness ==
@@ -89,7 +90,7 @@ class ThemeProvider extends ChangeNotifier {
       uiMode = "A";
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(SharedPreferencesKeys.uiModeKey, uiMode);
+    prefs.setString(uiModeKey, uiMode);
 
     notifyListeners();
   }
@@ -155,7 +156,7 @@ class ThemeProvider extends ChangeNotifier {
     selectedIndex = getIndex();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt(SharedPreferencesKeys.primaryColorKey, colorCode);
+    prefs.setInt(primaryColorKey, colorCode);
 
     notifyListeners();
   }

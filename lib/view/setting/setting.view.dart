@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:reminder/view/setting/deletion_reminder/deletion_reminder.dart';
 import 'package:reminder/view/setting/theme/primary_color_selector.dart';
 import 'package:reminder/view/setting/theme/ui_mode_selector.dart';
 
@@ -20,10 +19,6 @@ class SettingView extends StatelessWidget {
               color: Theme.of(context).hintColor,
             ),
             const PrimaryColorSelector(),
-            Divider(
-              color: Theme.of(context).hintColor,
-            ),
-            const DeletingReminder(),
             Divider(
               color: Theme.of(context).hintColor,
             ),
