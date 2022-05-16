@@ -78,8 +78,8 @@ class AddReminderModel {
 
     if (id != null) {
       var values = {
-        NotificationsTable.titleKey: title,
-        NotificationsTable.contentKey: content,
+        NotificationsTable.titleKey: title.replaceAll(RegExp(r'^ +'), ''),
+        NotificationsTable.contentKey: content.replaceAll(RegExp(r'^ +'), ''),
         NotificationsTable.frequencyKey: 0,
         NotificationsTable.timeKey: time,
         NotificationsTable.setAlarmKey: setAlarm

@@ -76,7 +76,8 @@ class AddReminderProvider {
   }
 
   bool _titleValidate() {
-    return titleController.text != "" ? true : false;
+    String value = titleController.text.replaceAll(RegExp(r'^ +'), '');
+    return value != "" ? true : false;
   }
 
   bool _timeValidate() {
