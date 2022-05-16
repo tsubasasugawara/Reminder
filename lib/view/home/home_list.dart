@@ -38,7 +38,7 @@ class HomeList extends StatelessWidget {
                       color: provider.selectedItems[index]
                           ? Theme.of(context).primaryColor
                           : Theme.of(context).hintColor,
-                      width: 1.5,
+                      width: provider.selectedItems[index] ? 2.5 : 1.5,
                     ),
                     color: Theme.of(context).backgroundColor,
                   ),
