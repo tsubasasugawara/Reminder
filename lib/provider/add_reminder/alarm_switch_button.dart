@@ -8,38 +8,20 @@ class AlarmSwitchButtonProvider extends ChangeNotifier {
 
   Widget changeIcon(BuildContext context, Function() action) {
     if (setAlarm == 0) {
-      return TextButton.icon(
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(
-            Theme.of(context).backgroundColor,
-          ),
-          foregroundColor: MaterialStateProperty.all(
-            Theme.of(context).hintColor,
-          ),
-        ),
-        onPressed: () {
-          _changeSetAlarm();
-          action();
-        },
-        icon: const Icon(Icons.alarm_off),
-        label: Text(AppLocalizations.of(context)!.setAlarmOff),
+      return textButtonIcon(
+        context,
+        Theme.of(context).hintColor,
+        action,
+        Icons.alarm_off,
+        AppLocalizations.of(context)!.setAlarmOff,
       );
     } else {
-      return TextButton.icon(
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(
-            Theme.of(context).backgroundColor,
-          ),
-          foregroundColor: MaterialStateProperty.all(
-            Theme.of(context).primaryColor,
-          ),
-        ),
-        onPressed: () {
-          _changeSetAlarm();
-          action();
-        },
-        icon: const Icon(Icons.alarm_on),
-        label: Text(AppLocalizations.of(context)!.setAlarmOn),
+      return textButtonIcon(
+        context,
+        Theme.of(context).primaryColor,
+        action,
+        Icons.alarm_on,
+        AppLocalizations.of(context)!.setAlarmOn,
       );
     }
   }
@@ -47,5 +29,30 @@ class AlarmSwitchButtonProvider extends ChangeNotifier {
   void _changeSetAlarm() {
     setAlarm = 1 - setAlarm;
     notifyListeners();
+  }
+
+  Widget textButtonIcon(
+    BuildContext context,
+    Color foregroundColor,
+    Function() action,
+    IconData icon,
+    String label,
+  ) {
+    return TextButton.icon(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(
+          Theme.of(context).backgroundColor,
+        ),
+        foregroundColor: MaterialStateProperty.all(
+          foregroundColor,
+        ),
+      ),
+      onPressed: () {
+        _changeSetAlarm();
+        action();
+      },
+      icon: Icon(icon),
+      label: Text(label),
+    );
   }
 }

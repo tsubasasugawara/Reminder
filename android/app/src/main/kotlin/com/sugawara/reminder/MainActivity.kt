@@ -12,7 +12,6 @@ import androidx.annotation.NonNull
 import java.time.LocalDateTime
 import com.sugawara.reminder.alarm.AlarmRegister
 import com.sugawara.reminder.sharedpreference.SharedPreference
-import android.util.Log
 
 class MainActivity: FlutterActivity() {
 

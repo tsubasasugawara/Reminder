@@ -24,7 +24,7 @@ class HomeList extends StatelessWidget {
                 }
               },
               onLongPress: () {
-                if (!provider.selectedMode) provider.changeMode();
+                if (!provider.selectedMode) provider.changeMode(true);
                 provider.changeSelected(index);
               },
               child: Container(

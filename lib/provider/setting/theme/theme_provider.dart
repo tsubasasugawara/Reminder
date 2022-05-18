@@ -41,7 +41,7 @@ class ThemeProvider extends ChangeNotifier {
 
   Future<void> setColors() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int colorCode = prefs.getInt(primaryColorKey) ?? 0xffe95464;
+    int colorCode = prefs.getInt(primaryColorKey) ?? 0xffe198b4;
     primaryColor = Color(colorCode);
 
     selectedIndex = getIndex();

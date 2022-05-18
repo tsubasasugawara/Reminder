@@ -5,7 +5,6 @@ import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/home_provider.dart';
 import 'package:reminder/provider/main_provider.dart';
 import 'package:reminder/view/add_reminder/add_reminder_view.dart';
-import 'package:reminder/view/home/deletion_confirmation_dialog.dart';
 
 // ignore: must_be_immutable
 class MainView extends StatelessWidget {
@@ -20,7 +19,7 @@ class MainView extends StatelessWidget {
               ? Text(
                   "  " +
                       Provider.of<HomeProvider>(context)
-                          .getSelectedItemsNum()
+                          .selectedItemsCnt
                           .toString(),
                   style: Theme.of(context).textTheme.headline6,
                 )

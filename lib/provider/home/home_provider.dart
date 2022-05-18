@@ -12,6 +12,7 @@ class HomeProvider extends ChangeNotifier {
 
   List selectedItems = [];
   bool selectedMode = false;
+  int selectedItemsCnt = 0;
 
   HomeProvider() {
     update();
@@ -99,25 +100,6 @@ class HomeProvider extends ChangeNotifier {
 
 /*  選択削除
  ----------------------------------------------------------------------------- */
-  Future<bool> deleteFromDbAndAlarm(
-    List<int> indexList,
-    Function() action,
-  ) async {
-    List<int> ids = [];
-    for (var ele in indexList) {
-      ids.add(model.dataList[ele]['id']);
-    }
-    var data = await model.selectById(ids);
-
-    if (data == null) return false;
-    if (data.length != ids.length) return false;
-
-    var res = await _deleteData(ids);
-    await _deleteAlarm(ids, data);
-    action();
-
-    return res;
-  }
 
   Future<bool> _deleteData(List<int> ids) async {
     var res = await NotificationsTable().multipleDelete(ids);
@@ -128,11 +110,13 @@ class HomeProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> _deleteAlarm(List<int> ids, List<Map> data) async {
-    for (int i = 0; i < ids.length; i++) {
-      await KotlinMethodCalling.deleteAlarm(
-          ids[i], data[i]['title'], data[i]['content'], data[i]['time']);
-    }
+  Future<void> _deleteAlarm(
+    int id,
+    String title,
+    String content,
+    int time,
+  ) async {
+    await KotlinMethodCalling.deleteAlarm(id, title, content, time);
   }
 
   List<int> getSelectedIndex() {
@@ -144,12 +128,15 @@ class HomeProvider extends ChangeNotifier {
   }
 
   Future<void> deleteButton(BuildContext context) async {
-    var res = await deleteFromDbAndAlarm(
-      getSelectedIndex(),
-      () {
-        getData();
-      },
-    );
+    List<int> ids = [];
+    for (var ele in getSelectedIndex()) {
+      var data = model.dataList[ele];
+      ids.add(data['id']);
+      await _deleteAlarm(
+          data['id'], data['title'], data['content'], data['time']);
+    }
+    var res = await _deleteData(ids);
+
     if (res) {
       ShowSnackBar(
         context,
@@ -157,7 +144,8 @@ class HomeProvider extends ChangeNotifier {
         Theme.of(context).primaryColor,
       );
     }
-    return;
+
+    update();
   }
 
   void changeSelectedItemsLen() {
@@ -166,38 +154,36 @@ class HomeProvider extends ChangeNotifier {
 
   void changeSelected(int index) {
     selectedItems[index] = !selectedItems[index];
-    if (getSelectedItemsNum() == 0) {
-      changeMode();
+    if (selectedItems[index]) {
+      selectedItemsCnt++;
     } else {
-      notifyListeners();
+      selectedItemsCnt--;
     }
+    updateOrChangeMode();
   }
 
   void allSelect(bool select) {
     for (int i = 0; i < selectedItems.length; i++) {
       selectedItems[i] = select;
     }
-    if (getSelectedItemsNum() == 0) {
-      changeMode(mode: select);
+    if (select) {
+      selectedItemsCnt = selectedItems.length;
+    } else {
+      selectedItemsCnt = 0;
+    }
+    updateOrChangeMode();
+  }
+
+  void updateOrChangeMode() {
+    if (selectedItemsCnt <= 0) {
+      changeMode(false);
     } else {
       notifyListeners();
     }
   }
 
-  int getSelectedItemsNum() {
-    int cnt = 0;
-    for (int i = 0; i < selectedItems.length; i++) {
-      if (selectedItems[i]) cnt++;
-    }
-    return cnt;
-  }
-
-  void changeMode({bool? mode}) {
-    if (mode == null) {
-      selectedMode = !selectedMode;
-    } else {
-      selectedMode = mode;
-    }
+  void changeMode(bool mode) {
+    selectedMode = mode;
     changeSelectedItemsLen();
     notifyListeners();
   }

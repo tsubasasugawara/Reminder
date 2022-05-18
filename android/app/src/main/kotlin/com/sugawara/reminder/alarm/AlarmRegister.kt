@@ -5,6 +5,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import com.sugawara.reminder.alarm.AlarmReceiver
 
 class AlarmRegister(_context: Context) {
@@ -29,14 +30,14 @@ class AlarmRegister(_context: Context) {
             PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        // if(created) {
-        //     alarmManager.cancel(pendingIntent)
-        // }
-
-        val alarmInfo = AlarmManager.AlarmClockInfo(
-            millis,
-            null
-        )
+        val alarmInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AlarmManager.AlarmClockInfo(
+                millis,
+                null
+            )
+        } else {
+            TODO("VERSION.SDK_INT < LOLLIPOP")
+        }
 
         alarmManager.setAlarmClock(
             alarmInfo,
