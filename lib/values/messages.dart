@@ -106,7 +106,7 @@ class Messages {
         timeFormat: 'hh:mm aa',
         ok: "OK",
         home: "HOME",
-        setting: "SETTINGS",
+        setting: "Settings",
         colorSetting: "COLOR",
         uiModeSetting: "THEME",
         refresh: "Refresh",

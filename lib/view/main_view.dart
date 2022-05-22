@@ -104,7 +104,7 @@ class MainView extends StatelessWidget {
               icon: const Icon(
                 Icons.settings,
               ),
-              label: AppLocalizations.of(context)!.setting,
+              label: AppLocalizations.of(context)!.setting.toUpperCase(),
             ),
           ],
         ),
