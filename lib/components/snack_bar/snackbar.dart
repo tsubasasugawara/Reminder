@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reminder/components/brightness.dart';
+import 'package:reminder/components/brightness/brightness.dart';
 
 class ShowSnackBar {
   ShowSnackBar(BuildContext context, String text, Color backgroundColor) {

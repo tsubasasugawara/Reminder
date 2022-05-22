@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reminder/components/brightness.dart';
+import 'package:reminder/components/brightness/brightness.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
 class DeletionConfirmationDialog extends StatelessWidget {

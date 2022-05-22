@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reminder/components/brightness.dart';
+import 'package:reminder/components/brightness/brightness.dart';
 import 'package:reminder/model/db/db.dart';
 import 'package:reminder/provider/add_reminder/add_reminder_provider.dart';
 import 'package:reminder/provider/add_reminder/alarm_switch_button.dart';
-import 'package:reminder/provider/datetime_provider.dart';
+import 'package:reminder/provider/add_reminder/datetime/datetime_provider.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/view/add_reminder/button/form_control_button.dart';
 
