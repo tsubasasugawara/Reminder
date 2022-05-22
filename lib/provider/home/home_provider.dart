@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:reminder/components/snack_bar/snackbar.dart';
 import 'package:reminder/model/db/db.dart';
 import 'package:reminder/model/home/home_list_model.dart';
-import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
+import 'package:reminder/provider/home/selection_item_provider.dart';
 import 'package:reminder/view/add_reminder/add_reminder_view.dart';
 
-class HomeProvider extends ChangeNotifier {
+class HomeProvider extends ChangeNotifier with SelectionItemProvider {
   HomeListModel model = HomeListModel();
-
-  List selectedItems = [];
-  bool selectedMode = false;
-  int selectedItemsCnt = 0;
 
   HomeProvider() {
     update();
@@ -23,7 +18,7 @@ class HomeProvider extends ChangeNotifier {
     if (data == null) return;
 
     model.dataList = data;
-    changeSelectedItemsLen();
+    changeSelectedItemsLen(length: model.dataList.length);
     notifyListeners();
   }
 
@@ -98,82 +93,7 @@ class HomeProvider extends ChangeNotifier {
     getData();
   }
 
-/*  選択削除
- ----------------------------------------------------------------------------- */
-
-  Future<bool> _deleteData(List<int> ids) async {
-    var res = await NotificationsTable().multipleDelete(ids);
-    if (res != null && res >= 1) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<void> _deleteAlarm(
-    int id,
-    String title,
-    String content,
-    int time,
-  ) async {
-    await KotlinMethodCalling.deleteAlarm(id, title, content, time);
-  }
-
-  List<int> getSelectedIndex() {
-    List<int> indexs = [];
-    for (int i = 0; i < selectedItems.length; i++) {
-      if (selectedItems[i]) indexs.add(i);
-    }
-    return indexs;
-  }
-
-  Future<void> deleteButton(BuildContext context) async {
-    List<int> ids = [];
-    for (var ele in getSelectedIndex()) {
-      var data = model.dataList[ele];
-      ids.add(data['id']);
-      await _deleteAlarm(
-          data['id'], data['title'], data['content'], data['time']);
-    }
-    var res = await _deleteData(ids);
-
-    if (res) {
-      ShowSnackBar(
-        context,
-        AppLocalizations.of(context)!.deletedAlarm,
-        Theme.of(context).primaryColor,
-      );
-    }
-
-    update();
-  }
-
-  void changeSelectedItemsLen() {
-    selectedItems = List.filled(getDataListLength(), false);
-  }
-
-  void changeSelected(int index) {
-    selectedItems[index] = !selectedItems[index];
-    if (selectedItems[index]) {
-      selectedItemsCnt++;
-    } else {
-      selectedItemsCnt--;
-    }
-    updateOrChangeMode();
-  }
-
-  void allSelect(bool select) {
-    for (int i = 0; i < selectedItems.length; i++) {
-      selectedItems[i] = select;
-    }
-    if (select) {
-      selectedItemsCnt = selectedItems.length;
-    } else {
-      selectedItemsCnt = 0;
-    }
-    updateOrChangeMode();
-  }
-
+  @override
   void updateOrChangeMode() {
     if (selectedItemsCnt <= 0) {
       changeMode(false);
@@ -182,6 +102,7 @@ class HomeProvider extends ChangeNotifier {
     }
   }
 
+  @override
   void changeMode(bool mode) {
     selectedMode = mode;
     changeSelectedItemsLen();

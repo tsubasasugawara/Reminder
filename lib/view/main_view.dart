@@ -36,12 +36,6 @@ class MainView extends StatelessWidget {
                       children: [
                         IconButton(
                           onPressed: () {
-                            homeProvider.allSelect(false);
-                          },
-                          icon: const Icon(Icons.cancel_outlined),
-                        ),
-                        IconButton(
-                          onPressed: () {
                             homeProvider.allSelect(true);
                           },
                           icon: const Icon(Icons.select_all),

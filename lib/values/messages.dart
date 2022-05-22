@@ -27,52 +27,27 @@ class Messages {
     required this.confirmationMsg,
   });
 
-  // AppInfo
-  // -----------------------------------------------------------------------------------
   final String appTitle;
-
-  // HomeView
-  // -----------------------------------------------------------------------------------
   final String notifiedMsg;
-
-  // AddReminderView
-  // -----------------------------------------------------------------------------------
-
-  // hint text in forms
   final String titleHintText;
   final String memoHintText;
-
-  // error messages
   final String titleError;
   final String dateTimeError;
-
-  // save or edit message
   final String saved;
   final String edited;
-
-  // form control button's texts
   final String saveButton;
   final String cancelButton;
-
   final String dateTimeFormat;
-
   final String deletedAlarm;
-
   final String setAlarmOff;
   final String setAlarmOn;
-
   final String timeFormat;
-
   final String ok;
-
   final String home;
   final String setting;
-
   final String colorSetting;
   final String uiModeSetting;
-
   final String refresh;
-
   final String confirmation;
   final String confirmationMsg;
 
@@ -122,11 +97,11 @@ class Messages {
         dateTimeError: 'Please specify a future date and time.',
         saved: 'Registered.',
         edited: 'Edited.',
-        saveButton: 'Save',
-        cancelButton: 'Cancel',
+        saveButton: 'SAVE',
+        cancelButton: 'CANCEL',
         dateTimeFormat: 'MM/dd/yyyy hh:mm aa',
-        setAlarmOff: 'Off',
-        setAlarmOn: 'On',
+        setAlarmOff: 'OFF',
+        setAlarmOn: 'ON',
         deletedAlarm: 'Deleted.',
         timeFormat: 'hh:mm aa',
         ok: "OK",
@@ -134,7 +109,7 @@ class Messages {
         setting: "SETTINGS",
         colorSetting: "COLOR",
         uiModeSetting: "THEME",
-        refresh: "refresh",
+        refresh: "Refresh",
         confirmation: "Confirmation",
         confirmationMsg: "Are you sure you want me to delete it?",
       );

@@ -4,14 +4,10 @@ import 'package:reminder/model/db/db.dart';
 import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
-class SelectionItemProvider extends ChangeNotifier {
+class SelectionItemProvider {
   List<bool> selectedItems = [];
   bool selectedMode = false;
   int selectedItemsCnt = 0;
-
-  SelectionItemProvider(int len) {
-    changeSelectedItemsLen(length: len);
-  }
 
   Future<bool> _deleteData(List<int> ids) async {
     var res = await NotificationsTable().multipleDelete(ids);
@@ -41,7 +37,7 @@ class SelectionItemProvider extends ChangeNotifier {
 
   Future<void> deleteButton(
     BuildContext context,
-    List<Map<String, dynamic>> dataList, {
+    List<Map<dynamic, dynamic>> dataList, {
     Function()? action,
   }) async {
     List<int> ids = [];
@@ -75,20 +71,18 @@ class SelectionItemProvider extends ChangeNotifier {
   }
 
   void allSelect(bool select) {
+    if (select && selectedItemsCnt < selectedItems.length) {
+      selectedItemsCnt = selectedItems.length;
+    } else {
+      selectedItemsCnt = 0;
+    }
     for (int i = 0; i < selectedItems.length; i++) {
       selectedItems[i] = select;
-      updateSelectedItemsCnt(select);
     }
     updateOrChangeMode();
   }
 
-  void updateOrChangeMode() {
-    if (selectedItemsCnt <= 0) {
-      changeMode(false);
-    } else {
-      notifyListeners();
-    }
-  }
+  void updateOrChangeMode() {}
 
   void updateSelectedItemsCnt(bool val) {
     if (val) {
@@ -98,9 +92,5 @@ class SelectionItemProvider extends ChangeNotifier {
     }
   }
 
-  void changeMode(bool mode) {
-    selectedMode = mode;
-    changeSelectedItemsLen();
-    notifyListeners();
-  }
+  void changeMode(bool mode) {}
 }

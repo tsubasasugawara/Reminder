@@ -29,11 +29,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => HomeProvider(),
         ),
-        ChangeNotifierProvider(
-          create: (_) => SelectionItemProvider(
-            Provider.of<HomeProvider>(context).getDataListLength(),
-          ),
-        ),
+        //   ChangeNotifierProvider(
+        //     create: (_) => SelectionItemProvider(
+        //       Provider.of<HomeProvider>(context).getDataListLength(),
+        //     ),
+        //   ),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, provider, child) {

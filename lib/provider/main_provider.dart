@@ -50,7 +50,7 @@ class MainProvider extends ChangeNotifier {
       (value) => value ?? false,
     );
     if (res) {
-      await homeProvider.deleteButton(context);
+      await homeProvider.deleteButton(context, homeProvider.model.dataList);
       homeProvider.allSelect(false);
     }
   }
