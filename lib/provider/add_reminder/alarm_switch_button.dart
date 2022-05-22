@@ -41,7 +41,7 @@ class AlarmSwitchButtonProvider extends ChangeNotifier {
     return TextButton.icon(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(
-          Theme.of(context).backgroundColor,
+          Theme.of(context).bottomAppBarColor,
         ),
         foregroundColor: MaterialStateProperty.all(
           foregroundColor,

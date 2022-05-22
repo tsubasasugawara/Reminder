@@ -36,25 +36,7 @@ class AddReminderView extends StatelessWidget {
   }
 
   PreferredSizeWidget _appBar(BuildContext context) {
-    return AppBar(
-      actions: [
-        ChangeNotifierProvider(
-          create: (context) => AlarmSwitchButtonProvider(
-            provider.getData(NotificationsTable.setAlarmKey),
-          ),
-          child: Consumer<AlarmSwitchButtonProvider>(
-            builder: (context, alarmSwitchProvider, child) {
-              return alarmSwitchProvider.changeIcon(
-                context,
-                () {
-                  provider.setData(setAlarm: alarmSwitchProvider.setAlarm);
-                },
-              );
-            },
-          ),
-        ),
-      ],
-    );
+    return AppBar();
   }
 
   Widget _textForm(BuildContext context) {
@@ -139,22 +121,39 @@ class AddReminderView extends StatelessWidget {
     return BottomAppBar(
       child: Row(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          FormControlButton(
-            AppLocalizations.of(context)!.cancelButton,
-            Theme.of(context).primaryColor,
-            () {
-              Navigator.of(context).pop();
-            },
+          Expanded(
+            flex: 2,
+            child: ChangeNotifierProvider(
+              create: (context) => AlarmSwitchButtonProvider(
+                provider.getData(NotificationsTable.setAlarmKey),
+              ),
+              child: Consumer<AlarmSwitchButtonProvider>(
+                builder: (context, alarmSwitchProvider, child) {
+                  return alarmSwitchProvider.changeIcon(
+                    context,
+                    () {
+                      provider.setData(setAlarm: alarmSwitchProvider.setAlarm);
+                    },
+                  );
+                },
+              ),
+            ),
           ),
-          _dateTimeSelecter(context),
-          FormControlButton(
-            AppLocalizations.of(context)!.saveButton,
-            Theme.of(context).primaryColor,
-            () {
-              provider.saveBtn(context);
-            },
+          Expanded(
+            flex: 3,
+            child: _dateTimeSelecter(context),
+          ),
+          Expanded(
+            flex: 2,
+            child: FormControlButton(
+              AppLocalizations.of(context)!.saveButton,
+              Theme.of(context).primaryColor,
+              () {
+                provider.saveBtn(context);
+              },
+            ),
           ),
         ],
       ),
