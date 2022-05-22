@@ -15,6 +15,16 @@ class MainView extends StatelessWidget {
     return Consumer<MainProvider>(
       builder: (context, provider, child) => Scaffold(
         appBar: AppBar(
+          leading: provider.isMainPage(context)
+              ? Consumer<HomeProvider>(
+                  builder: (context, homeProvider, child) => IconButton(
+                    icon: Icon(Icons.close_sharp),
+                    onPressed: () {
+                      homeProvider.allSelect(true);
+                    },
+                  ),
+                )
+              : null,
           title: provider.isMainPage(context)
               ? Text(
                   "  " +

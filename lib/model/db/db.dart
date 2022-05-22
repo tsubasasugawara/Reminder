@@ -2,31 +2,47 @@
 import 'package:sqflite/sqflite.dart';
 
 class NotificationsTable {
+  int version = 2;
+
   static String tableName = "notifications";
   static const idKey = "id";
   static const titleKey = "title";
   static const contentKey = "content";
   static const frequencyKey = "frequency";
   static const timeKey = "time";
-  static const setAlarmKey = "set_alarm";
+  static const setAlarmKey = "set_alarm"; // 0:off, 1:on
+  static const deletedKey = "deleted"; // 0:not deleted, 1:in the trash can
 
   Future<Database?> _opendb() async {
     try {
       var databasesPath = await getDatabasesPath();
       String path = "$databasesPath/notifications.db";
 
-      var db = await openDatabase(path, version: 1,
-          onCreate: (Database db, int version) async {
-        await db.execute('''
-        CREATE TABLE IF NOT EXISTS $tableName (
-          id INTEGER PRIMARY KEY AUTOINCREMENT not null,
-          title TEXT not null,
-          content TEXT,
-          frequency INTEGER,
-          time INTEGER not null,
-          set_alarm INTEGER not null
-        )''');
-      });
+      var db = await openDatabase(
+        path,
+        version: version,
+        onCreate: (Database db, int version) async {
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS $tableName (
+              id INTEGER PRIMARY KEY AUTOINCREMENT not null,
+              title TEXT not null,
+              content TEXT,
+              frequency INTEGER,
+              time INTEGER not null,
+              set_alarm INTEGER not null,
+              deleted INTEGER not null DEFAULT 0)
+          ''');
+        },
+        onUpgrade: (Database db, int oldVersion, int newVersion) async {
+          if (oldVersion >= newVersion) return;
+
+          if (oldVersion == 1) {
+            await db.execute('''
+              ALTER TABLE $tableName ADD COLUMN deleted INTEGER not null DEFAULT 0;
+              ''');
+          }
+        },
+      );
       return db;
     } catch (e) {
       assert(() {

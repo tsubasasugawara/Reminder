@@ -52,7 +52,7 @@ class MainProvider extends ChangeNotifier {
     if (res) {
       await homeProvider.deleteButton(context, homeProvider.model.dataList);
       homeProvider.allSelect(false);
+      homeProvider.update();
     }
-    homeProvider.update();
   }
 }
