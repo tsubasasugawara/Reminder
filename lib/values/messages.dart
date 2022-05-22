@@ -111,6 +111,6 @@ class Messages {
         uiModeSetting: "THEME",
         refresh: "Refresh",
         confirmation: "Confirmation",
-        confirmationMsg: "Are you sure you want me to delete it?",
+        confirmationMsg: "Are you sure you want to delete?",
       );
 }
