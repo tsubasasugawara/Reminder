@@ -47,5 +47,6 @@ app.*.map.json
 
 connect.bat
 install.bat
+pair.bat
 TODO
 .vscode/

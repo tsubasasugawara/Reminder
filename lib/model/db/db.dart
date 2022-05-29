@@ -1,6 +1,25 @@
 // ignore_for_file: avoid_print
 import 'package:sqflite/sqflite.dart';
 
+class NotificationData {
+  int? id;
+  String? title;
+  String? content;
+  int? frequency;
+  int? time;
+  int? setAlarmKey; // 0:off, 1:on
+  int? deleted; // 0:not deleted, 1:in the trash can
+  NotificationData(
+    this.id,
+    this.title,
+    this.content,
+    this.frequency,
+    this.time,
+    this.setAlarmKey,
+    this.deleted,
+  );
+}
+
 class NotificationsTable {
   int version = 2;
 
@@ -10,9 +29,11 @@ class NotificationsTable {
   static const contentKey = "content";
   static const frequencyKey = "frequency";
   static const timeKey = "time";
-  static const setAlarmKey = "set_alarm"; // 0:off, 1:on
-  static const deletedKey = "deleted"; // 0:not deleted, 1:in the trash can
+  static const setAlarmKey = "set_alarm";
+  static const deletedKey = "deleted";
 
+  /// データベースに接続
+  /// * @return `Database?` : データベース
   Future<Database?> _opendb() async {
     try {
       var databasesPath = await getDatabasesPath();
@@ -53,6 +74,8 @@ class NotificationsTable {
     }
   }
 
+  /// select文(引数はsqfliteの引数と同じ)
+  /// * @return `List<Map>?>` : 取得したデータ
   Future<List<Map>?> select({
     bool? distinct,
     List<String>? columns,
@@ -87,6 +110,8 @@ class NotificationsTable {
     }
   }
 
+  /// insert文(引数はsqfliteの引数と同じ)
+  /// * @return `int?` : 一番最後の行のid
   Future<int?> insert(
     String title,
     String content,
@@ -111,6 +136,8 @@ class NotificationsTable {
     }
   }
 
+  /// update文(引数はsqfliteの引数と同じ)
+  /// * @return `int?` : 更新した数
   Future<int?> update(
     Map<String, Object?> values,
     String? where,
@@ -137,6 +164,8 @@ class NotificationsTable {
     }
   }
 
+  /// delete(引数はsqfliteの引数と同じ)
+  /// * @return `int?` : 削除した数
   Future<int?> delete(int id) async {
     try {
       var db = await _opendb();
@@ -155,6 +184,9 @@ class NotificationsTable {
     }
   }
 
+  /// idによる複数削除
+  /// * `ids` : 削除したいデータのidリスト
+  /// * @return `int?` : 削除した数
   Future<int?> multipleDelete(List<int> ids) async {
     if (ids.isEmpty) return null;
     try {

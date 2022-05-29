@@ -19,6 +19,8 @@ class DateTimePicker {
   int hour = 0;
   int minute = 0;
 
+  /// コンストラクタ
+  /// * `dt` : 日時の初期値
   DateTimePicker(DateTime dt) {
     year = dt.year;
     month = dt.month;
@@ -27,7 +29,9 @@ class DateTimePicker {
     minute = dt.minute;
   }
 
-  DateTime setDateTime() {
+  /// 日時を取得
+  /// * @return `DateTime` : 時刻
+  DateTime _getDateTime() {
     var dt = DateTime(year, month, day, hour, minute);
     var dtn = DateTime.now();
     if (dt.millisecondsSinceEpoch - dtn.millisecondsSinceEpoch < 0) {
@@ -37,6 +41,10 @@ class DateTimePicker {
     }
   }
 
+  /// DateTimePickerを表示する
+  /// * `context` : BuildContext
+  /// * `backgroundColor` : バックグランドカラー
+  /// * @return `DateTime?` : 選択した日時
   Future<DateTime?> showDateTimePicker(
     BuildContext context,
     Color backgroundColor,
@@ -91,7 +99,7 @@ class DateTimePicker {
                               Expanded(
                                 child: CalendarDatePicker(
                                   firstDate: DateTime.now(),
-                                  initialDate: setDateTime(),
+                                  initialDate: _getDateTime(),
                                   lastDate: DateTime(
                                     DateTime.now().year + 10,
                                     DateTime.now().month,
@@ -196,6 +204,9 @@ class DateTimePicker {
     ).then((value) => value);
   }
 
+  /// ダイアログのサイズ
+  /// * `context` : BuildContext
+  /// * @return `Size` : サイズ
   Size _dialogSize(BuildContext context) {
     final Orientation orientation = MediaQuery.of(context).orientation;
     switch (orientation) {

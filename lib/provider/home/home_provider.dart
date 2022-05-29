@@ -13,6 +13,7 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
     update();
   }
 
+  /// データ一覧を取得し、modelに保存
   Future<void> getData() async {
     var data = await model.select();
     if (data == null) return;
@@ -22,6 +23,7 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
     notifyListeners();
   }
 
+  /// すでに発火しているアラームのset_alarmをオフ(0)にする
   Future<void> update() async {
     var nt = NotificationsTable();
     await nt.update(
@@ -33,46 +35,63 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
     getData();
   }
 
+  /// modelから文字列を取得する
+  /// * `index`:データのインデックス
+  /// * `key`:データのキー
+  /// * @return `String`:keyに格納されている文字列
   String getString(int index, String key) {
     return model.dataList[index][key];
   }
 
+  /// modelから整数値を取得する
+  /// * `index`:データのインデックス
+  /// * `key`:データのキー
+  /// * @return `String`:keyに格納されている整数値
   int getInt(int index, String key) {
     return model.dataList[index][key];
   }
 
+  /// データの行数を取得
+  /// * @return `int`:データの行数
   int getDataListLength() {
     return model.dataList.length;
   }
 
+  /// アラームがオン:時間の文字列,オフ:"オフ"を返す
+  /// * `index`:オン・オフを確認する対称のデータのインデックス
+  /// * `context`:BuildContext
+  /// * @retrun `String`:オン:時間の文字列, オフ:オフ
   String alarmOnOff(int index, BuildContext context) {
     int setAlarm = model.dataList[index]["set_alarm"];
     int milliseconds = model.dataList[index]['time'];
-
     if (setAlarm == 1) {
-      return dateTimeFormat(milliseconds, context);
+      return _dateTimeFormat(milliseconds, context);
     } else {
       return AppLocalizations.of(context)!.setAlarmOff;
     }
   }
 
-  String dateTimeFormat(int milliseconds, BuildContext context) {
+  /// 時間を整形し、文字列として返す
+  /// * `milliseconds`:ミリ秒表現の時間
+  /// * `context`:BuildContext
+  /// * @return `String`:整形後の時間の文字列
+  String _dateTimeFormat(int milliseconds, BuildContext context) {
     var dt = DateTime.fromMillisecondsSinceEpoch(milliseconds);
     var now = DateTime.now();
 
     var diff = dt.difference(now);
 
-    String res = "";
-
     if (diff.inMilliseconds <= 0) {
-      res = AppLocalizations.of(context)!.notifiedMsg;
+      return AppLocalizations.of(context)!.notifiedMsg;
     } else {
-      res = DateFormat(AppLocalizations.of(context)!.dateTimeFormat).format(dt);
+      return DateFormat(AppLocalizations.of(context)!.dateTimeFormat)
+          .format(dt);
     }
-
-    return res;
   }
 
+  /// リマインダー編集画面への遷移
+  /// * `context`:BuildContext
+  /// * `index`:選択されたリマインダーのインデックス
   Future<void> moveToAddView(BuildContext context, {int? index}) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
@@ -104,7 +123,7 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
 
   @override
   void changeMode(bool mode) {
-    selectedMode = mode;
+    selectionMode = mode;
     changeSelectedItemsLen();
     notifyListeners();
   }

@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:reminder/components/brightness/brightness.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// App theme.
 class ThemeProvider extends ChangeNotifier {
   List<int> colors = [
     0xffe5a323, //パンプキン
@@ -14,15 +15,15 @@ class ThemeProvider extends ChangeNotifier {
     0xffffff00, //黄色
     0xffaa4c8f, //梅紫
     0xffe95464, //韓紅
-    0xff4169e1, //royalblue
+    0xff4169e1, //ロイヤルブルー
     0xff00a968, //エメラルドグリーン
-    0xff9400d3, //darkviolet
+    0xff9400d3, //ダークバイオレット
   ];
 
-  late String uiMode; // D:dark, L:light, A:auto
+  late String uiMode; // D:ダーク, L:ライト, A:自動
   late Color primaryColor;
 
-  int selectedIndex = 0;
+  int selectedIndex = 0; // 現在のプライマリーカラーの番号
 
   Color backgroundColor = const Color.fromARGB(255, 40, 40, 40);
   Color barColor = const Color.fromARGB(255, 50, 50, 50);
@@ -39,15 +40,14 @@ class ThemeProvider extends ChangeNotifier {
     primaryColor = backgroundColor;
   }
 
+  /// プライマリーカラーとテーマをセットする
   Future<void> setColors() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int colorCode = prefs.getInt(primaryColorKey) ?? 0xffe198b4;
     primaryColor = Color(colorCode);
-
-    selectedIndex = getIndex();
+    selectedIndex = _getIndex();
 
     uiMode = prefs.getString(uiModeKey) ?? "A";
-
     String tmpUiMode = uiMode == "A"
         ? SchedulerBinding.instance!.window.platformBrightness ==
                 Brightness.dark
@@ -57,10 +57,22 @@ class ThemeProvider extends ChangeNotifier {
     if (tmpUiMode == "D") {
       _darkTheme();
     } else {
-      _whiteTheme();
+      _lightTheme();
     }
   }
 
+  /// プライマリーカラーを変更する
+  /// * `colorCode`:16進数のカラーコード
+  void changePrimaryColor(int colorCode) async {
+    primaryColor = Color(colorCode);
+    selectedIndex = _getIndex();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt(primaryColorKey, colorCode);
+
+    notifyListeners();
+  }
+
+  /// ダークテーマに変更
   void _darkTheme() {
     backgroundColor = const Color.fromARGB(255, 40, 40, 40);
     barColor = const Color.fromARGB(255, 50, 50, 50);
@@ -71,7 +83,8 @@ class ThemeProvider extends ChangeNotifier {
     elevatedButtonBackground = const Color.fromARGB(255, 40, 40, 40);
   }
 
-  void _whiteTheme() {
+  /// ライトテーマに変更
+  void _lightTheme() {
     backgroundColor = Colors.white;
     barColor = Colors.white;
     textColor = const Color.fromARGB(255, 30, 30, 30);
@@ -81,6 +94,9 @@ class ThemeProvider extends ChangeNotifier {
     elevatedButtonBackground = Colors.white;
   }
 
+  /// テーマを保存
+  /// * `mode`:選択されたモード
+  ///   "D"ダークモード. "L"ライトモード. "A"自動.
   Future<void> changeUiMode(String mode) async {
     if (mode == "D") {
       uiMode = "D";
@@ -95,6 +111,7 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// ThemeDataを作成し、返す
   ThemeData? getTheme() {
     return ThemeData(
       primarySwatch: Colors.grey,
@@ -155,18 +172,8 @@ class ThemeProvider extends ChangeNotifier {
     );
   }
 
-  void changeThemeColor(int colorCode) async {
-    primaryColor = Color(colorCode);
-
-    selectedIndex = getIndex();
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt(primaryColorKey, colorCode);
-
-    notifyListeners();
-  }
-
-  int getIndex() {
+  /// 現在のプライマリーカラーの番号を返す
+  int _getIndex() {
     for (int i = 0; i < colors.length; i++) {
       if (primaryColor.value == colors[i]) return i;
     }

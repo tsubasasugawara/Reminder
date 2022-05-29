@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder/components/brightness/brightness.dart';
+import 'package:reminder/components/snack_bar/snackbar.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/home_provider.dart';
 import 'package:reminder/provider/main_provider.dart';
@@ -15,17 +16,17 @@ class MainView extends StatelessWidget {
     return Consumer<MainProvider>(
       builder: (context, provider, child) => Scaffold(
         appBar: AppBar(
-          leading: provider.isMainPage(context)
+          leading: provider.isHome(context)
               ? Consumer<HomeProvider>(
                   builder: (context, homeProvider, child) => IconButton(
                     icon: Icon(Icons.close_sharp),
                     onPressed: () {
-                      homeProvider.allSelect(true);
+                      homeProvider.allSelectOrNot(true);
                     },
                   ),
                 )
               : null,
-          title: provider.isMainPage(context)
+          title: provider.isHome(context)
               ? Text(
                   "  " +
                       Provider.of<HomeProvider>(context)
@@ -39,20 +40,28 @@ class MainView extends StatelessWidget {
                       : AppLocalizations.of(context)!.setting,
                   style: Theme.of(context).textTheme.headline6,
                 ),
-          actions: provider.isMainPage(context)
+          actions: provider.isHome(context)
               ? [
                   Consumer<HomeProvider>(
                     builder: (context, homeProvider, child) => Row(
                       children: [
                         IconButton(
                           onPressed: () {
-                            homeProvider.allSelect(true);
+                            homeProvider.allSelectOrNot(true);
                           },
                           icon: const Icon(Icons.select_all),
                         ),
                         IconButton(
                           onPressed: () async {
-                            provider.deleteButton(context, homeProvider);
+                            var res = await provider.deleteButton(
+                                context, homeProvider);
+                            if (res) {
+                              ShowSnackBar(
+                                context,
+                                AppLocalizations.of(context)!.deletedAlarm,
+                                Theme.of(context).primaryColor,
+                              );
+                            }
                           },
                           icon: const Icon(Icons.delete),
                         ),
@@ -67,34 +76,24 @@ class MainView extends StatelessWidget {
         floatingActionButton: Consumer<HomeProvider>(
           builder: (context, homeProvider, child) => Visibility(
             visible: MediaQuery.of(context).viewInsets.bottom <= 0,
-            child: Consumer<HomeProvider>(
-              builder: (context, homeProvider, child) => FloatingActionButton(
-                onPressed: () async {
-                  if (provider.isMainPage(context,
-                      val: homeProvider.selectedMode)) {
-                    provider.deleteButton(context, homeProvider);
-                  } else {
-                    await Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return AddReminderView();
-                        },
-                      ),
-                    );
-                    homeProvider.update();
-                    homeProvider.allSelect(false);
-                  }
-                },
-                child: Icon(
-                  homeProvider.selectedMode &&
-                          provider.index == provider.mainPageIndex
-                      ? Icons.delete
-                      : Icons.add,
-                  size: 30,
-                  color: judgeBlackWhite(Theme.of(context).primaryColor),
-                ),
-                backgroundColor: Theme.of(context).primaryColor,
+            child: FloatingActionButton(
+              onPressed: () async {
+                await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return AddReminderView();
+                    },
+                  ),
+                );
+                homeProvider.update();
+                homeProvider.allSelectOrNot(false);
+              },
+              child: Icon(
+                Icons.add,
+                size: 30,
+                color: judgeBlackWhite(Theme.of(context).primaryColor),
               ),
+              backgroundColor: Theme.of(context).primaryColor,
             ),
           ),
         ),

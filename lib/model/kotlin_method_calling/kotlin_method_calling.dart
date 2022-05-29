@@ -4,7 +4,12 @@ class KotlinMethodCalling {
   static String channelName = "com.sugawara.reminder/alarm";
   static String primaryColorKey = "primaryColor";
 
-  static Future<void> alarm(
+  /// アラームをスケジューリング
+  /// * `id` : ID
+  /// * `title` : タイトル
+  /// * `content` : メモ
+  /// * `time` : 発火時間
+  static Future<void> registAlarm(
     int id,
     String title,
     String content,
@@ -21,6 +26,11 @@ class KotlinMethodCalling {
     );
   }
 
+  /// アラームを解除する
+  /// * `id` : ID
+  /// * `title` : タイトル
+  /// * `content` : メモ
+  /// * `time` : 発火時間
   static Future<void> deleteAlarm(
     int id,
     String title,

@@ -27,7 +27,7 @@ class PrimaryColorSelector extends StatelessWidget {
             child: Consumer<ThemeProvider>(
               builder: (context, provider, child) => ColorPicker(
                 onPressed: (value, index) {
-                  provider.changeThemeColor(value);
+                  provider.changePrimaryColor(value);
                 },
                 columnCount: 4,
                 colors: provider.colors,

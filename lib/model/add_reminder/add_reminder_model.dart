@@ -3,13 +3,18 @@
 import 'package:reminder/model/db/db.dart';
 
 class AddReminderModel {
+  /// 現在編集中のリマインダーのid
   late int? id;
+
+  /// 編集前のデータ
   var _dataBeforeEditing = <String, dynamic>{
     NotificationsTable.titleKey: null,
     NotificationsTable.contentKey: null,
     NotificationsTable.timeKey: DateTime.now().millisecondsSinceEpoch,
     NotificationsTable.setAlarmKey: 1,
   };
+
+  /// 編集中のデータ
   var _dataBeingEditing = <String, dynamic>{
     NotificationsTable.titleKey: "",
     NotificationsTable.contentKey: "",
@@ -21,7 +26,12 @@ class AddReminderModel {
   static int insert = 1;
 
   AddReminderModel(
-      int? _id, String? title, String? content, int? time, int? setAlarm) {
+    int? _id,
+    String? title,
+    String? content,
+    int? time,
+    int? setAlarm,
+  ) {
     id = _id;
 
     _dataBeforeEditing[NotificationsTable.titleKey] = title;
@@ -36,6 +46,11 @@ class AddReminderModel {
     _dataBeingEditing[NotificationsTable.setAlarmKey] = setAlarm ?? 1;
   }
 
+  /// データを編集
+  /// * `title` : タイトル
+  /// * `content` : メモ
+  /// * `time` : 発火時間
+  /// * `setAlarm` : アラームのオン・オフ
   void editData({
     String? title,
     String? content,
@@ -57,18 +72,25 @@ class AddReminderModel {
     return;
   }
 
+  /// 編集前のデータを取得
+  /// * @return `Map<String, dynamic>` : 編集前のデータ
   Map<String, dynamic> getBeforeEditingData() {
     return _dataBeforeEditing;
   }
 
+  /// 編集中のデータを取得
+  /// * @return `Map<String, dynamic>` : 編集中のデータ
   Map<String, dynamic> getBeingEditingData() {
     return _dataBeingEditing;
   }
 
+  /// 編集中のデータを上書き
   void copyToBeforeEditingData() {
     _dataBeforeEditing = _dataBeingEditing;
   }
 
+  /// すでにデータが存在する場合は更新、そうでなければ追加
+  /// * @return `[id, status]` : [追加または更新したデータのid, 追加(1)か更新(0)]
   Future<List<int?>> updateOrInsert() async {
     var nt = NotificationsTable();
     var title = _dataBeingEditing[NotificationsTable.titleKey];

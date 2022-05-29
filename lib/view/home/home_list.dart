@@ -17,14 +17,14 @@ class HomeList extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
               onTap: () async {
-                if (provider.selectedMode) {
+                if (provider.selectionMode) {
                   provider.changeSelected(index);
                 } else {
                   await provider.moveToAddView(context, index: index);
                 }
               },
               onLongPress: () {
-                if (!provider.selectedMode) provider.changeMode(true);
+                if (!provider.selectionMode) provider.changeMode(true);
                 provider.changeSelected(index);
               },
               child: Container(

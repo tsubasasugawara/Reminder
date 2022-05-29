@@ -15,16 +15,25 @@ class ColorPicker extends StatelessWidget {
   late double checkedItemIconSize;
   late double width;
 
+  /// コンストラクタ
+  /// * `onPressed` : 押したときの処理
+  /// * `colors` : ピッカーに表示する色
+  /// * `checkedItemIndex` : 選択されている色のindex
+  /// * `width` : カラーピッカーのwidth
+  /// * `columnCount` : 横に並べるアイテム数
+  /// * `mainAxisSpacing` : 間隔
+  /// * `crossAxisSpacing` : 間隔
+  /// * `checkedItemIconSize` : チェックマークの大きさ
   ColorPicker({
     required this.onPressed,
     required this.colors,
     required this.checkedItemIndex,
     required this.width,
-    Key? key,
     int? columnCount,
     double? mainAxisSpacing,
     double? crossAxisSpacing,
     double? checkedItemIconSize,
+    Key? key,
   }) : super(key: key) {
     this.columnCount = columnCount ?? 4;
     this.mainAxisSpacing = mainAxisSpacing ?? 0;
@@ -32,6 +41,14 @@ class ColorPicker extends StatelessWidget {
     this.checkedItemIconSize = checkedItemIconSize ?? 24.0;
   }
 
+  /// RGBエディタのフォーム
+  /// * `context` : BuildContext
+  /// * `controller` : TextEditingController
+  /// * `name` : フォームの名前
+  /// * `color` : nameのテキストカラー
+  /// * `action` : 変更時の処理
+  /// * `provider` : ColorPickerProvider
+  /// * @return `Widget` : フォーム
   Widget _textField(
     BuildContext context,
     TextEditingController controller,
@@ -87,8 +104,16 @@ class ColorPicker extends StatelessWidget {
     );
   }
 
+  /// カラー選択ボタンを作成
+  /// * `provider` : ColorPickerProvider
+  /// * `color` : ボタンの色
+  /// * `index` : 選択されている色のindex
+  /// * @return `Widget` : カラー選択ボタン
   Widget _createColorButton(
-      ColorPickerProvider provider, Color color, int index) {
+    ColorPickerProvider provider,
+    Color color,
+    int index,
+  ) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         shape: const CircleBorder(),
@@ -98,7 +123,7 @@ class ColorPicker extends StatelessWidget {
       ),
       onPressed: () {
         onPressed(color.value, index);
-        provider.changeCheckedItemIndex(color, index);
+        provider.changeCheckedItemIndex(index, color);
       },
       child: provider.getCheckedItemIndex() == index
           ? Icon(
@@ -112,6 +137,9 @@ class ColorPicker extends StatelessWidget {
     );
   }
 
+  /// カラー選択ボタンのリストを作成
+  /// * `provider` : ColorPickerProvider
+  /// * @return `List<Widget` : カラー選択ボタンのリスト
   List<Widget> createButtonsList(ColorPickerProvider provider) {
     return [
       for (int index = 0; index < colors.length; index++)
@@ -214,7 +242,7 @@ class ColorPicker extends StatelessWidget {
                         onPressed: () {
                           onPressed(provider.getColor().value, -1);
                           provider.changeCheckedItemIndex(
-                              provider.getColor(), -1);
+                              -1, provider.getColor());
                         },
                         icon: Icon(
                           Icons.refresh,
