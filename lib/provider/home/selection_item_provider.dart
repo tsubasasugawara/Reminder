@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:reminder/components/snack_bar/snackbar.dart';
 import 'package:reminder/model/db/db.dart';
 import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
-import 'package:reminder/multilingualization/app_localizations.dart';
 
 /// アイテムの複数選択のためのクラス
 class SelectionItemProvider {
@@ -53,7 +51,7 @@ class SelectionItemProvider {
 
   /// アラームを削除
   /// * `dataList`:データベースのデータ
-  Future<bool> deleteButton(
+  Future<bool> delete(
     BuildContext context,
     List<Map<dynamic, dynamic>> dataList,
   ) async {
@@ -71,6 +69,7 @@ class SelectionItemProvider {
   /// * `length`:変更後の長さ
   void changeSelectedItemsLen({int? length}) {
     selectedItems = List.filled(length ?? selectedItems.length, false);
+    selectedItemsCnt = 0;
   }
 
   /// アイテムの選択または解除

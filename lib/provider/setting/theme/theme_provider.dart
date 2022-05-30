@@ -32,6 +32,7 @@ class ThemeProvider extends ChangeNotifier {
   Color error = Colors.red;
   Color dialogBackground = const Color.fromARGB(255, 40, 40, 40);
   Color elevatedButtonBackground = const Color.fromARGB(255, 50, 50, 50);
+  Color canvasColor = const Color.fromARGB(255, 60, 60, 60);
 
   String primaryColorKey = "primaryColor";
   String uiModeKey = "uiModeKey";
@@ -81,6 +82,7 @@ class ThemeProvider extends ChangeNotifier {
     error = Colors.red;
     dialogBackground = const Color.fromARGB(255, 40, 40, 40);
     elevatedButtonBackground = const Color.fromARGB(255, 40, 40, 40);
+    canvasColor = const Color.fromARGB(255, 60, 60, 60);
   }
 
   /// ライトテーマに変更
@@ -92,6 +94,7 @@ class ThemeProvider extends ChangeNotifier {
     error = Colors.red;
     dialogBackground = Colors.white;
     elevatedButtonBackground = Colors.white;
+    canvasColor = const Color.fromARGB(255, 240, 240, 240);
   }
 
   /// テーマを保存
@@ -169,6 +172,7 @@ class ThemeProvider extends ChangeNotifier {
           color: judgeBlackWhite(backgroundColor),
         ),
       ),
+      canvasColor: canvasColor,
     );
   }
 

@@ -25,6 +25,7 @@ class Messages {
     required this.refresh,
     required this.confirmation,
     required this.confirmationMsg,
+    required this.trash,
   });
 
   final String appTitle;
@@ -50,6 +51,7 @@ class Messages {
   final String refresh;
   final String confirmation;
   final String confirmationMsg;
+  final String trash;
 
   factory Messages.of(Locale locale) {
     switch (locale.languageCode) {
@@ -86,6 +88,7 @@ class Messages {
         refresh: "更新",
         confirmation: "確認",
         confirmationMsg: "本当に削除してもよろしいですか?",
+        trash: "ごみ箱",
       );
 
   factory Messages.en() => Messages(
@@ -112,5 +115,6 @@ class Messages {
         refresh: "Refresh",
         confirmation: "Confirmation",
         confirmationMsg: "Are you sure you want to delete?",
+        trash: "Trash",
       );
 }

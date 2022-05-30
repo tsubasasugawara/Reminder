@@ -5,6 +5,7 @@ import 'package:reminder/model/home/home_list_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/selection_item_provider.dart';
 import 'package:reminder/view/add_reminder/add_reminder_view.dart';
+import 'package:reminder/view/home/deletion_confirmation_dialog.dart';
 
 class HomeProvider extends ChangeNotifier with SelectionItemProvider {
   HomeListModel model = HomeListModel();
@@ -110,6 +111,25 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
       ),
     );
     getData();
+  }
+
+  /// 削除確認ダイアログでOKの場合にアラームを削除
+  /// * `context`
+  Future<bool> deleteButton(
+    BuildContext context,
+  ) async {
+    var res = await showDialog(
+      context: context,
+      builder: (context) => const DeletionConfirmationDialog(),
+    ).then(
+      (value) => value ?? false,
+    );
+    if (res) {
+      res = await delete(context, model.dataList);
+      update();
+      allSelectOrNot(false);
+    }
+    return res;
   }
 
   @override

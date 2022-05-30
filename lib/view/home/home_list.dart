@@ -91,23 +91,6 @@ class HomeList extends StatelessWidget {
                                   color: Theme.of(context).hintColor,
                                 ),
                         ),
-                        // IconButton(
-                        //   onPressed: () async {
-                        //     var res = await showDialog(
-                        //       context: context,
-                        //       builder: (context) =>
-                        //           const DeletionConfirmationDialog(),
-                        //     ).then(
-                        //       (value) => value ?? false,
-                        //     );
-                        //     if (res) provider.deleteButton(context, index);
-                        //   },
-                        //   icon: Icon(
-                        //     Icons.delete,
-                        //     color: Theme.of(context).hintColor,
-                        //     size: 30,
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),

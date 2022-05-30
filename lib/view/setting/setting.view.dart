@@ -8,24 +8,27 @@ class SettingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        margin: const EdgeInsets.only(
-          top: 20,
-          bottom: 50,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const UiModeSelector(),
-            Divider(
-              color: Theme.of(context).hintColor,
-            ),
-            const PrimaryColorSelector(),
-            Divider(
-              color: Theme.of(context).hintColor,
-            ),
-          ],
+    return Scaffold(
+      appBar: AppBar(),
+      body: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.only(
+            top: 20,
+            bottom: 50,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const UiModeSelector(),
+              Divider(
+                color: Theme.of(context).hintColor,
+              ),
+              const PrimaryColorSelector(),
+              Divider(
+                color: Theme.of(context).hintColor,
+              ),
+            ],
+          ),
         ),
       ),
     );
