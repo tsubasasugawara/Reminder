@@ -173,7 +173,7 @@ class ColorPicker extends StatelessWidget {
               Center(
                 child: Container(
                   margin:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(
                     border: Border.all(
@@ -190,7 +190,7 @@ class ColorPicker extends StatelessWidget {
                         children: [
                           _createColorButton(provider, provider.getColor(), -1),
                           Container(
-                            margin: const EdgeInsets.only(left: 10),
+                            margin: const EdgeInsets.only(left: 5),
                             child: _textField(
                               context,
                               provider.rController,
@@ -203,7 +203,7 @@ class ColorPicker extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            margin: const EdgeInsets.only(left: 10),
+                            margin: const EdgeInsets.only(left: 5),
                             child: _textField(
                               context,
                               provider.gController,
@@ -216,7 +216,7 @@ class ColorPicker extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            margin: const EdgeInsets.only(left: 10),
+                            margin: const EdgeInsets.only(left: 5),
                             child: _textField(
                               context,
                               provider.bController,
