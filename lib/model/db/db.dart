@@ -139,11 +139,11 @@ class NotificationsTable {
   /// update文(引数はsqfliteの引数と同じ)
   /// * @return `int?` : 更新した数
   Future<int?> update(
-    Map<String, Object?> values,
+    Map<String, Object?> values, {
     String? where,
     List<Object?>? whereArgs,
     ConflictAlgorithm? conflictAlgorithm,
-  ) async {
+  }) async {
     try {
       var db = await _opendb();
       var numOfChanged = await db?.update(
@@ -166,12 +166,12 @@ class NotificationsTable {
 
   /// delete(引数はsqfliteの引数と同じ)
   /// * @return `int?` : 削除した数
-  Future<int?> delete(int id) async {
+  Future<int?> delete({String? sql, List<Object?>? arguments}) async {
     try {
       var db = await _opendb();
       var numOfChanged = await db?.rawDelete(
-        'DELETE FROM $tableName WHERE id = ?',
-        [id],
+        sql ?? "",
+        arguments,
       );
       await db?.close();
       return numOfChanged;
@@ -192,16 +192,8 @@ class NotificationsTable {
     try {
       var db = await _opendb();
 
-      String statement = ' DELETE FROM $tableName';
-
-      statement = statement + ' WHERE id IN(?';
-      for (int i = 1; i < ids.length; i++) {
-        statement = statement + ',?';
-      }
-      statement = statement + ')';
-
       var numOfChanged = await db?.rawDelete(
-        statement,
+        "DELETE FROM $tableName WHERE" + createMultipleIDWhereClauses(ids),
         ids,
       );
       await db?.close();
@@ -213,5 +205,18 @@ class NotificationsTable {
       }());
       return null;
     }
+  }
+
+  /// IDによって複数のカラムを指定するwhere句を作成
+  /// * `ids` : IDのリスト
+  /// * @return `プレースホルダを用いたwhere句
+  String createMultipleIDWhereClauses(List<int> ids) {
+    var statement = ' id IN(?';
+    for (int i = 1; i < ids.length; i++) {
+      statement = statement + ',?';
+    }
+    statement = statement + ')';
+
+    return statement;
   }
 }

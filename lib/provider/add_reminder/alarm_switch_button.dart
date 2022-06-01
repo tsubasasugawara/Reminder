@@ -10,13 +10,29 @@ class AlarmSwitchButtonProvider extends ChangeNotifier {
   /// オン・オフのアイコンを返す
   /// * `context`:BuildContext
   /// * `action`:アイコンを押したときの処理
+  /// * `isTrash` : ごみ箱(true)にいるかホーム(false)にいるか
   /// * @return `Widget`:オン・オフのアイコン
-  Widget changeIcon(BuildContext context, Function() action) {
-    if (setAlarm == 0) {
+  Widget changeIcon(
+    BuildContext context,
+    Function() action, {
+    bool isTrash = false,
+  }) {
+    if (isTrash) {
       return _textButtonIcon(
         context,
         Theme.of(context).hintColor,
-        action,
+        () {},
+        Icons.alarm_off,
+        AppLocalizations.of(context)!.setAlarmOff,
+      );
+    } else if (setAlarm == 0) {
+      return _textButtonIcon(
+        context,
+        Theme.of(context).hintColor,
+        () {
+          _changeSetAlarm();
+          action();
+        },
         Icons.alarm_off,
         AppLocalizations.of(context)!.setAlarmOff,
       );
@@ -24,7 +40,10 @@ class AlarmSwitchButtonProvider extends ChangeNotifier {
       return _textButtonIcon(
         context,
         Theme.of(context).primaryColor,
-        action,
+        () {
+          _changeSetAlarm();
+          action();
+        },
         Icons.alarm_on,
         AppLocalizations.of(context)!.setAlarmOn,
       );
@@ -61,7 +80,6 @@ class AlarmSwitchButtonProvider extends ChangeNotifier {
         ),
       ),
       onPressed: () {
-        _changeSetAlarm();
         action();
       },
       icon: Icon(icon),

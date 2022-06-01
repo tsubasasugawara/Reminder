@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/view/setting/theme/primary_color_selector.dart';
 import 'package:reminder/view/setting/theme/ui_mode_selector.dart';
 
@@ -9,7 +10,12 @@ class SettingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(
+          AppLocalizations.of(context)!.setting,
+          style: Theme.of(context).textTheme.headline6,
+        ),
+      ),
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.only(

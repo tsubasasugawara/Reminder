@@ -15,7 +15,7 @@ class Messages {
     required this.dateTimeFormat,
     required this.setAlarmOff,
     required this.setAlarmOn,
-    required this.deletedAlarm,
+    required this.deletedReminder,
     required this.timeFormat,
     required this.ok,
     required this.home,
@@ -24,8 +24,11 @@ class Messages {
     required this.uiModeSetting,
     required this.refresh,
     required this.confirmation,
-    required this.confirmationMsg,
+    required this.deletionConfirmationMsg,
     required this.trash,
+    required this.movingToTrashConfirmationMsg,
+    required this.moveReminderToTrash,
+    required this.restoreReminderToTrash,
   });
 
   final String appTitle;
@@ -39,7 +42,7 @@ class Messages {
   final String saveButton;
   final String cancelButton;
   final String dateTimeFormat;
-  final String deletedAlarm;
+  final String deletedReminder;
   final String setAlarmOff;
   final String setAlarmOn;
   final String timeFormat;
@@ -50,8 +53,11 @@ class Messages {
   final String uiModeSetting;
   final String refresh;
   final String confirmation;
-  final String confirmationMsg;
+  final String deletionConfirmationMsg;
   final String trash;
+  final String movingToTrashConfirmationMsg;
+  final String moveReminderToTrash;
+  final String restoreReminderToTrash;
 
   factory Messages.of(Locale locale) {
     switch (locale.languageCode) {
@@ -78,7 +84,9 @@ class Messages {
         dateTimeFormat: 'yyyy/MM/dd HH:mm',
         setAlarmOff: 'オフ',
         setAlarmOn: 'オン',
-        deletedAlarm: '削除しました',
+        deletedReminder: '削除しました',
+        moveReminderToTrash: "ごみ箱に移動しました",
+        restoreReminderToTrash: "復元しました",
         timeFormat: 'HH:mm',
         ok: "完了",
         home: "ホーム",
@@ -87,7 +95,8 @@ class Messages {
         uiModeSetting: "テーマ",
         refresh: "更新",
         confirmation: "確認",
-        confirmationMsg: "本当に削除してもよろしいですか?",
+        deletionConfirmationMsg: "本当に削除してもよろしいですか?",
+        movingToTrashConfirmationMsg: "ごみ箱へ移動しますか?",
         trash: "ごみ箱",
       );
 
@@ -105,7 +114,9 @@ class Messages {
         dateTimeFormat: 'MM/dd/yyyy hh:mm aa',
         setAlarmOff: 'OFF',
         setAlarmOn: 'ON',
-        deletedAlarm: 'Deleted.',
+        deletedReminder: 'Deleted.',
+        moveReminderToTrash: "Moved to trash.",
+        restoreReminderToTrash: "Restored.",
         timeFormat: 'hh:mm aa',
         ok: "OK",
         home: "HOME",
@@ -114,7 +125,9 @@ class Messages {
         uiModeSetting: "THEME",
         refresh: "Refresh",
         confirmation: "Confirmation",
-        confirmationMsg: "Are you sure you want to delete?",
+        deletionConfirmationMsg: "Are you sure you want to delete?",
+        movingToTrashConfirmationMsg:
+            "Do you want to move the item to the trash?",
         trash: "Trash",
       );
 }

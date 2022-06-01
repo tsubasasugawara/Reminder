@@ -19,8 +19,9 @@ class AddReminderView extends StatelessWidget {
     String? content,
     int? time,
     int? setAlarm,
+    bool isTrash = false, // ごみ箱のアイテム(true)、それ以外(false)
   }) : super(key: key) {
-    provider = AddReminderProvider(id, title, content, time, setAlarm);
+    provider = AddReminderProvider(id, title, content, time, setAlarm, isTrash);
   }
 
   @override
@@ -136,6 +137,7 @@ class AddReminderView extends StatelessWidget {
                     () {
                       provider.setData(setAlarm: alarmSwitchProvider.setAlarm);
                     },
+                    isTrash: provider.isTrash,
                   );
                 },
               ),

@@ -107,7 +107,10 @@ class AddReminderModel {
         NotificationsTable.setAlarmKey: setAlarm
       };
       var resId = await nt.update(
-          values, '${NotificationsTable.idKey} = ?', [id], null);
+        values,
+        where: '${NotificationsTable.idKey} = ?',
+        whereArgs: [id],
+      );
 
       if (resId != null && resId >= 1) {
         return [id, update];

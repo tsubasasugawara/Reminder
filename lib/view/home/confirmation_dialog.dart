@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:reminder/components/brightness/brightness.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
-class DeletionConfirmationDialog extends StatelessWidget {
-  const DeletionConfirmationDialog({Key? key}) : super(key: key);
+// ignore: must_be_immutable
+class ConfirmationDialog extends StatelessWidget {
+  /// ダイアログに表示するメッセージ
+  String message;
+
+  ConfirmationDialog(this.message, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.confirmation),
-      content: Text(AppLocalizations.of(context)!.confirmationMsg),
+      content: Text(message),
       actions: <Widget>[
         ElevatedButton(
           style: ElevatedButton.styleFrom(

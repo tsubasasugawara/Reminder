@@ -11,6 +11,9 @@ class AddReminderProvider {
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
 
+  /// ごみ箱のアイテムかどうか
+  bool isTrash;
+
   /// キーボードが表示されているかどうか
   bool isKeyboardShown = false;
 
@@ -26,6 +29,7 @@ class AddReminderProvider {
     String? content,
     int? time,
     int? setAlarm,
+    this.isTrash,
   ) {
     _model = AddReminderModel(id, title, content, time, setAlarm);
 

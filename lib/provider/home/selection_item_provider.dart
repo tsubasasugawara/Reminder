@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:reminder/model/db/db.dart';
 import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
 
@@ -13,12 +12,11 @@ class SelectionItemProvider {
   /// 選択したアイテムの数
   int selectedItemsCnt = 0;
 
-  /// データベースから削除
-  /// * `ids`は削除したいリマインダーのIDリスト
+  /// データベースでの操作が正しく行われたか確認
+  /// * `num` : 更新や削除した数
   /// * @return `bool` : 成功:true, 失敗:false
-  Future<bool> _deleteData(List<int> ids) async {
-    var res = await NotificationsTable().multipleDelete(ids);
-    if (res != null && res >= 1) {
+  bool _checkForOperation(int? num) {
+    if (num != null && num >= 1) {
       return true;
     } else {
       return false;
@@ -49,10 +47,42 @@ class SelectionItemProvider {
     return indexs;
   }
 
-  /// アラームを削除
+  /// リマインダーを削除
   /// * `dataList`:データベースのデータ
+  /// * @return `bool` : 処理が完了(true)したか
   Future<bool> delete(
-    BuildContext context,
+    List<Map<dynamic, dynamic>> dataList,
+  ) async {
+    List<int> ids = await _setOffAlarm(dataList);
+    int? res = await NotificationsTable().multipleDelete(ids);
+    return _checkForOperation(res);
+  }
+
+  /// リマインダーをごみ箱へ移動
+  /// * `dataList`:データベースのデータ
+  /// * `trash` : ごみ箱へ移動(true)するか復元(false)するか
+  /// * @return `bool` : 処理が完了(true)したか
+  Future<bool> trash(
+    List<Map<dynamic, dynamic>> dataList,
+    bool trash,
+  ) async {
+    List<int> ids = await _setOffAlarm(dataList);
+    var nt = NotificationsTable();
+    int? res = await nt.update(
+      {
+        NotificationsTable.setAlarmKey: 0,
+        NotificationsTable.deletedKey: trash ? 1 : 0
+      },
+      where: nt.createMultipleIDWhereClauses(ids),
+      whereArgs: ids,
+    );
+    return _checkForOperation(res);
+  }
+
+  /// アラームを解除
+  /// * `dataList` : データベースのデータ
+  /// * @return `List<int>>` : IDのリスト
+  Future<List<int>> _setOffAlarm(
     List<Map<dynamic, dynamic>> dataList,
   ) async {
     List<int> ids = [];
@@ -62,7 +92,7 @@ class SelectionItemProvider {
       await _deleteAlarm(
           data['id'], data['title'], data['content'], data['time']);
     }
-    return await _deleteData(ids);
+    return ids;
   }
 
   /// selectedItemsの長さを変更

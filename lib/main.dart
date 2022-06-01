@@ -3,9 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:reminder/multilingualization/app_localizations_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:reminder/provider/setting/theme/theme_provider.dart';
-import 'package:reminder/view/home/main_view.dart';
-
-import 'provider/home/home_provider.dart';
+import 'package:reminder/view/home/home_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,9 +18,6 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => ThemeProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => HomeProvider(),
         ),
       ],
       child: Consumer<ThemeProvider>(

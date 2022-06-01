@@ -5,12 +5,25 @@ import 'package:reminder/model/home/home_list_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/selection_item_provider.dart';
 import 'package:reminder/view/add_reminder/add_reminder_view.dart';
-import 'package:reminder/view/home/deletion_confirmation_dialog.dart';
+import 'package:reminder/view/home/confirmation_dialog.dart';
 
 class HomeProvider extends ChangeNotifier with SelectionItemProvider {
-  HomeListModel model = HomeListModel();
+  late HomeListModel model;
 
-  HomeProvider() {
+  /// 完全削除
+  static const int completeDeletion = 0;
+
+  /// ごみ箱へ
+  static const int moveToTrash = 1;
+
+  /// 復元
+  static const int restoreFromTrash = 2;
+
+  /// ごみ箱(true)かホーム(false)
+  late bool isTrash;
+
+  HomeProvider(this.isTrash) {
+    model = HomeListModel(isTrash ? "deleted = 1" : "deleted = 0");
     update();
   }
 
@@ -29,9 +42,9 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
     var nt = NotificationsTable();
     await nt.update(
       {NotificationsTable.setAlarmKey: 0},
-      "${NotificationsTable.timeKey} <= ? and ${NotificationsTable.frequencyKey} == 0",
-      [DateTime.now().millisecondsSinceEpoch],
-      null,
+      where:
+          "${NotificationsTable.timeKey} <= ? and ${NotificationsTable.frequencyKey} == 0 and ${NotificationsTable.deletedKey} == 0",
+      whereArgs: [DateTime.now().millisecondsSinceEpoch],
     );
     getData();
   }
@@ -93,7 +106,12 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
   /// リマインダー編集画面への遷移
   /// * `context`:BuildContext
   /// * `index`:選択されたリマインダーのインデックス
-  Future<void> moveToAddView(BuildContext context, {int? index}) async {
+  /// * `isTrash` : ごみ箱(true)、ホーム(false)
+  Future<void> moveToAddView(
+    BuildContext context, {
+    int? index,
+    bool isTrash = false,
+  }) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
@@ -104,6 +122,7 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
               content: model.dataList[index]["content"],
               time: model.dataList[index]["time"],
               setAlarm: model.dataList[index]["set_alarm"],
+              isTrash: isTrash,
             );
           }
           return AddReminderView();
@@ -115,20 +134,38 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
 
   /// 削除確認ダイアログでOKの場合にアラームを削除
   /// * `context`
+  /// * `movement` : 完全削除(0)かごみ箱(1)か復元(2)
   Future<bool> deleteButton(
     BuildContext context,
+    int movement,
   ) async {
-    var res = await showDialog(
-      context: context,
-      builder: (context) => const DeletionConfirmationDialog(),
-    ).then(
-      (value) => value ?? false,
-    );
-    if (res) {
-      res = await delete(context, model.dataList);
-      update();
-      allSelectOrNot(false);
+    bool res = true;
+    if (movement != HomeProvider.restoreFromTrash) {
+      res = await showDialog(
+        context: context,
+        builder: (context) => ConfirmationDialog(
+            movement == HomeProvider.completeDeletion
+                ? AppLocalizations.of(context)!.deletionConfirmationMsg
+                : AppLocalizations.of(context)!.movingToTrashConfirmationMsg),
+      ).then(
+        (value) => value ?? false,
+      );
     }
+    if (!res) return res;
+
+    switch (movement) {
+      case HomeProvider.completeDeletion: // 完全削除
+        res = await delete(model.dataList);
+        break;
+      case HomeProvider.moveToTrash: // ごみ箱へ
+        res = await trash(model.dataList, true);
+        break;
+      case HomeProvider.restoreFromTrash: // ごみ箱から復元
+        res = await trash(model.dataList, false);
+        break;
+    }
+    update();
+    allSelectOrNot(false);
     return res;
   }
 
