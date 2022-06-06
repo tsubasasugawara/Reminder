@@ -64,12 +64,12 @@ class ColorPicker extends StatelessWidget {
           name,
           style: Theme.of(context).textTheme.bodyText1?.apply(
                 color: color,
-                fontSizeDelta: 5,
+                fontSizeFactor: 1,
               ),
         ),
         SizedBox(
-          height: 80,
-          width: 80,
+          height: 60,
+          width: 60,
           child: TextFormField(
             controller: controller,
             keyboardType: TextInputType.number,
@@ -79,8 +79,9 @@ class ColorPicker extends StatelessWidget {
             onChanged: (value) {
               provider.checkEditorValue(controller, value, action);
             },
-            style:
-                Theme.of(context).textTheme.bodyText1?.apply(fontSizeDelta: 10),
+            style: Theme.of(context).textTheme.bodyText1?.apply(
+                  fontSizeFactor: 1,
+                ),
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderSide: BorderSide(
@@ -158,7 +159,7 @@ class ColorPicker extends StatelessWidget {
             children: [
               Container(
                 width: width,
-                margin: const EdgeInsets.only(bottom: 20),
+                margin: const EdgeInsets.only(bottom: 30),
                 child: GridView.count(
                   shrinkWrap: true,
                   children: createButtonsList(provider),
@@ -171,66 +172,58 @@ class ColorPicker extends StatelessWidget {
                 ),
               ),
               Center(
-                child: Container(
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Theme.of(context).hintColor,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _createColorButton(provider, provider.getColor(), -1),
+                        Container(
+                          margin: const EdgeInsets.only(left: 5),
+                          child: _textField(
+                            context,
+                            provider.rController,
+                            "Red",
+                            Colors.red,
+                            (red) {
+                              provider.editRGB(r: red);
+                            },
+                            provider,
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 5),
+                          child: _textField(
+                            context,
+                            provider.gController,
+                            "Green",
+                            Colors.green,
+                            (green) {
+                              provider.editRGB(g: green);
+                            },
+                            provider,
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 5),
+                          child: _textField(
+                            context,
+                            provider.bController,
+                            "Blue",
+                            Colors.blue,
+                            (blue) {
+                              provider.editRGB(b: blue);
+                            },
+                            provider,
+                          ),
+                        ),
+                      ],
                     ),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(20),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          _createColorButton(provider, provider.getColor(), -1),
-                          Container(
-                            margin: const EdgeInsets.only(left: 5),
-                            child: _textField(
-                              context,
-                              provider.rController,
-                              "Red",
-                              Colors.red,
-                              (red) {
-                                provider.editRGB(r: red);
-                              },
-                              provider,
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(left: 5),
-                            child: _textField(
-                              context,
-                              provider.gController,
-                              "Green",
-                              Colors.green,
-                              (green) {
-                                provider.editRGB(g: green);
-                              },
-                              provider,
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(left: 5),
-                            child: _textField(
-                              context,
-                              provider.bController,
-                              "Blue",
-                              Colors.blue,
-                              (blue) {
-                                provider.editRGB(b: blue);
-                              },
-                              provider,
-                            ),
-                          ),
-                        ],
+                    Container(
+                      margin: EdgeInsets.only(
+                        top: 10,
                       ),
-                      ElevatedButton.icon(
+                      child: ElevatedButton.icon(
                         style: ButtonStyle(
                           minimumSize: MaterialStateProperty.all(
                             const Size(110, 40),
@@ -259,8 +252,8 @@ class ColorPicker extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               )
             ],

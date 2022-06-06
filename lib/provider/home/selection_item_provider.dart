@@ -23,12 +23,26 @@ class SelectionItemProvider {
     }
   }
 
-  /// スケジュールされたアラームを削除
+  /// アラームを登録
+  /// * `id` : ID
+  /// * `title` : タイトル
+  /// * `content` : メモ
+  /// * `time` : 発火時間
+  Future<void> setOnAlarm(
+    int id,
+    String title,
+    String content,
+    int time,
+  ) async {
+    await KotlinMethodCalling.registAlarm(id, title, content, time);
+  }
+
+  /// スケジュールされたアラームを解除
   /// * `id`:アラームのID
   /// * `title`:アラームのタイトル
   /// * `content`:アラームのメモ
   /// * `time`:アラームが発火する時間
-  Future<void> _deleteAlarm(
+  Future<void> _setOffAlarm(
     int id,
     String title,
     String content,
@@ -53,12 +67,21 @@ class SelectionItemProvider {
   Future<bool> delete(
     List<Map<dynamic, dynamic>> dataList,
   ) async {
-    List<int> ids = await _setOffAlarm(dataList);
+    List<int> ids = [];
+    for (var ele in _getSelectedIndex()) {
+      ids.add(dataList[ele]['id']);
+      await _setOffAlarm(
+        dataList[ele]['id'],
+        dataList[ele]['title'],
+        dataList[ele]['content'],
+        dataList[ele]['time'],
+      );
+    }
     int? res = await NotificationsTable().multipleDelete(ids);
     return _checkForOperation(res);
   }
 
-  /// リマインダーをごみ箱へ移動
+  /// リマインダーをごみ箱へ移動または復元
   /// * `dataList`:データベースのデータ
   /// * `trash` : ごみ箱へ移動(true)するか復元(false)するか
   /// * @return `bool` : 処理が完了(true)したか
@@ -66,7 +89,16 @@ class SelectionItemProvider {
     List<Map<dynamic, dynamic>> dataList,
     bool trash,
   ) async {
-    List<int> ids = await _setOffAlarm(dataList);
+    List<int> ids = [];
+    for (var ele in _getSelectedIndex()) {
+      ids.add(dataList[ele]['id']);
+      _setOffAlarm(
+        dataList[ele]['id'],
+        dataList[ele]['title'],
+        dataList[ele]['content'],
+        dataList[ele]['time'],
+      );
+    }
     var nt = NotificationsTable();
     int? res = await nt.update(
       {
@@ -77,22 +109,6 @@ class SelectionItemProvider {
       whereArgs: ids,
     );
     return _checkForOperation(res);
-  }
-
-  /// アラームを解除
-  /// * `dataList` : データベースのデータ
-  /// * @return `List<int>>` : IDのリスト
-  Future<List<int>> _setOffAlarm(
-    List<Map<dynamic, dynamic>> dataList,
-  ) async {
-    List<int> ids = [];
-    for (var ele in _getSelectedIndex()) {
-      var data = dataList[ele];
-      ids.add(data['id']);
-      await _deleteAlarm(
-          data['id'], data['title'], data['content'], data['time']);
-    }
-    return ids;
   }
 
   /// selectedItemsの長さを変更
