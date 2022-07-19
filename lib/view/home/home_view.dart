@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:reminder/components/brightness/brightness.dart';
 import 'package:reminder/components/snack_bar/snackbar.dart';
 import 'package:reminder/model/db/db.dart';
+import 'package:reminder/model/db/notifications.dart';
+import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/home_provider.dart';
 import 'package:reminder/view/add_reminder/add_reminder_view.dart';
@@ -28,7 +30,13 @@ class MainView extends StatelessWidget {
                       provider.changeMode(false);
                     },
                   )
-                : null,
+                : IconButton(
+                    icon: const Icon(Icons.close_sharp),
+                    onPressed: () async {
+                      var nt = Notifications();
+                      print(await nt.select({"1": "*"}).runtimeType);
+                    },
+                  ),
             title: provider.selectionMode
                 ? Text(
                     "  " +
@@ -37,10 +45,30 @@ class MainView extends StatelessWidget {
                             .toString(),
                     style: Theme.of(context).textTheme.headline6,
                   )
-                : Text(
-                    AppLocalizations.of(context)!.appTitle,
-                    style: Theme.of(context).textTheme.headline6,
+                : Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: "Search Flutter Topic",
+                            hintStyle: TextStyle(
+                              color: Theme.of(context).hintColor,
+                            ),
+                            border: InputBorder.none,
+                          ),
+                          onChanged: (String keyword) {},
+                        ),
+                      ),
+                      Icon(
+                        Icons.search,
+                        color: Theme.of(context).hintColor,
+                      )
+                    ],
                   ),
+            // Text(
+            //     AppLocalizations.of(context)!.appTitle,
+            //     style: Theme.of(context).textTheme.headline6,
+            //   ),
             actions: provider.selectionMode
                 ? [
                     Row(

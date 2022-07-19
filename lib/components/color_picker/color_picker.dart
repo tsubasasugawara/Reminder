@@ -220,7 +220,7 @@ class ColorPicker extends StatelessWidget {
                       ],
                     ),
                     Container(
-                      margin: EdgeInsets.only(
+                      margin: const EdgeInsets.only(
                         top: 10,
                       ),
                       child: ElevatedButton.icon(

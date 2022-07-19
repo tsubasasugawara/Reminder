@@ -1,25 +1,6 @@
 // ignore_for_file: avoid_print
 import 'package:sqflite/sqflite.dart';
 
-class NotificationData {
-  int? id;
-  String? title;
-  String? content;
-  int? frequency;
-  int? time;
-  int? setAlarmKey; // 0:off, 1:on
-  int? deleted; // 0:not deleted, 1:in the trash can
-  NotificationData(
-    this.id,
-    this.title,
-    this.content,
-    this.frequency,
-    this.time,
-    this.setAlarmKey,
-    this.deleted,
-  );
-}
-
 class NotificationsTable {
   int version = 2;
 
