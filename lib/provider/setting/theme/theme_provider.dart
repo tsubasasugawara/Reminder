@@ -50,8 +50,7 @@ class ThemeProvider extends ChangeNotifier {
 
     uiMode = prefs.getString(uiModeKey) ?? "A";
     String tmpUiMode = uiMode == "A"
-        ? SchedulerBinding.instance!.window.platformBrightness ==
-                Brightness.dark
+        ? SchedulerBinding.instance.window.platformBrightness == Brightness.dark
             ? "D"
             : "L"
         : uiMode;
