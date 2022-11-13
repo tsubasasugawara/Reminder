@@ -25,12 +25,18 @@ class Notifications {
         if (
             columnName == DBHelper.idKey ||
             columnName == DBHelper.frequencyKey ||
-            columnName == DBHelper.timeKey ||
             columnName == DBHelper.setAlarmKey ||
             columnName == DBHelper.deletedKey
         ) {
             return cur.getInt(index)
         } else if (
+            columnName == DBHelper.timeKey ||
+            columnName == DBHelper.createdAtKey ||
+            columnName == DBHelper.updatedAtKey
+        ) {
+            return cur.getLong(index)
+        }
+         else if (
             columnName == DBHelper.titleKey ||
             columnName == DBHelper.contentKey
         ) {
@@ -92,21 +98,25 @@ class Notifications {
             if (cur.count > 0) {
                 cur.moveToFirst()
                 while (!cur.isAfterLast) {
-                    var idIndex = cur.getColumnIndex(DBHelper.idKey)
-                    var titleIndex = cur.getColumnIndex(DBHelper.titleKey)
-                    var contentIndex = cur.getColumnIndex(DBHelper.contentKey)
-                    var frequencyIndex = cur.getColumnIndex(DBHelper.frequencyKey)
-                    var timeIndex = cur.getColumnIndex(DBHelper.timeKey)
-                    var setAlarmIndex = cur.getColumnIndex(DBHelper.setAlarmKey)
-                    var deletedIndex = cur.getColumnIndex(DBHelper.deletedKey)
+                    var idIndex         = cur.getColumnIndex(DBHelper.idKey)
+                    var titleIndex      = cur.getColumnIndex(DBHelper.titleKey)
+                    var contentIndex    = cur.getColumnIndex(DBHelper.contentKey)
+                    var frequencyIndex  = cur.getColumnIndex(DBHelper.frequencyKey)
+                    var timeIndex       = cur.getColumnIndex(DBHelper.timeKey)
+                    var setAlarmIndex   = cur.getColumnIndex(DBHelper.setAlarmKey)
+                    var deletedIndex    = cur.getColumnIndex(DBHelper.deletedKey)
+                    var createdAtIndex  = cur.getColumnIndex(DBHelper.createdAtKey)
+                    var updatedAtIndex  = cur.getColumnIndex(DBHelper.updatedAtKey)
 
-                    var id: Int? = null
-                    var title: String? = null
-                    var content: String? = null
-                    var frequency: Int? = null
-                    var time: Long? = null
-                    var setAlarm: Int? = null
-                    var deleted: Int? = null
+                    var id:             Int?    = null
+                    var title:          String? = null
+                    var content:        String? = null
+                    var frequency:      Int?    = null
+                    var time:           Long?   = null
+                    var setAlarm:       Int?    = null
+                    var deleted:        Int?    = null
+                    var createdAt:      Long?   = null
+                    var updatedAt:      Long?   = null
 
                     if (idIndex >= 0) {
                         id = cur.getInt(idIndex)
@@ -129,16 +139,24 @@ class Notifications {
                     if (deletedIndex >= 0) {
                         deleted = cur.getInt(deletedIndex)
                     }
+                    if (createdAtIndex >= 0) {
+                        createdAt = cur.getLong(createdAtIndex)
+                    }
+                    if (updatedAtIndex >= 0) {
+                        updatedAt = cur.getLong(updatedAtIndex)
+                    }
 
                     res.add(
                         mapOf(
-                            "id" to id,
-                            "title" to title,
-                            "content" to content,
-                            "frequency" to frequency,
-                            "time" to time,
-                            "setAlarm" to setAlarm,
-                            "deleted" to deleted
+                            "id"            to id,
+                            "title"         to title,
+                            "content"       to content,
+                            "frequency"     to frequency,
+                            "time"          to time,
+                            "setAlarm"      to setAlarm,
+                            "deleted"       to deleted,
+                            "createdAtKey"  to createdAt,
+                            "updatedAtKey"  to updatedAt,
                         )
                     )
                     cur.moveToNext()
