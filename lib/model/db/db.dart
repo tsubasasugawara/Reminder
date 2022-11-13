@@ -1,29 +1,9 @@
-// ignore_for_file: avoid_print
-import 'package:sqflite/sqflite.dart';
+import 'package:flutter/services.dart';
+import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
 
-class NotificationData {
-  int? id;
-  String? title;
-  String? content;
-  int? frequency;
-  int? time;
-  int? setAlarmKey; // 0:off, 1:on
-  int? deleted; // 0:not deleted, 1:in the trash can
-  NotificationData(
-    this.id,
-    this.title,
-    this.content,
-    this.frequency,
-    this.time,
-    this.setAlarmKey,
-    this.deleted,
-  );
-}
-
-class NotificationsTable {
-  int version = 2;
-
-  static String tableName = "notifications";
+class Notifications {
+  static const dbName = "notifications";
+  static const tableName = "notifications";
   static const idKey = "id";
   static const titleKey = "title";
   static const contentKey = "content";
@@ -32,179 +12,20 @@ class NotificationsTable {
   static const setAlarmKey = "set_alarm";
   static const deletedKey = "deleted";
 
-  /// データベースに接続
-  /// * @return `Database?` : データベース
-  Future<Database?> _opendb() async {
-    try {
-      var databasesPath = await getDatabasesPath();
-      String path = "$databasesPath/notifications.db";
+  /// whereArgsに使う値をListからMapへ変換
+  /// * `list` : Objectの配列
+  /// @return Map<String, String>?
+  Map<String, String>? _createMapFromObjectList(
+    List<Object?>? list,
+  ) {
+    if (list == null) return null;
 
-      var db = await openDatabase(
-        path,
-        version: version,
-        onCreate: (Database db, int version) async {
-          await db.execute('''
-            CREATE TABLE IF NOT EXISTS $tableName (
-              id INTEGER PRIMARY KEY AUTOINCREMENT not null,
-              title TEXT not null,
-              content TEXT,
-              frequency INTEGER,
-              time INTEGER not null,
-              set_alarm INTEGER not null,
-              deleted INTEGER not null DEFAULT 0)
-          ''');
-        },
-        onUpgrade: (Database db, int oldVersion, int newVersion) async {
-          if (oldVersion >= newVersion) return;
-
-          if (oldVersion == 1) {
-            await db.execute('''
-              ALTER TABLE $tableName ADD COLUMN deleted INTEGER not null DEFAULT 0;
-              ''');
-          }
-        },
-      );
-      return db;
-    } catch (e) {
-      assert(() {
-        print(e);
-        return true;
-      }());
-      return null;
+    var map = <String, String>{};
+    for (int i = 0; i < list.length; i++) {
+      map[i.toString()] = list[i].toString();
     }
-  }
 
-  /// select文(引数はsqfliteの引数と同じ)
-  /// * @return `List<Map>?>` : 取得したデータ
-  Future<List<Map>?> select({
-    bool? distinct,
-    List<String>? columns,
-    String? where,
-    List<Object?>? whereArgs,
-    String? groupBy,
-    String? having,
-    String? orderBy,
-    int? limit,
-    int? offset,
-  }) async {
-    try {
-      var db = await _opendb();
-      var dataList = await db?.query(tableName,
-          distinct: distinct,
-          columns: columns,
-          where: where,
-          whereArgs: whereArgs,
-          groupBy: groupBy,
-          having: having,
-          orderBy: orderBy,
-          limit: limit,
-          offset: offset);
-      await db?.close();
-      return dataList;
-    } catch (e) {
-      assert(() {
-        print(e);
-        return true;
-      }());
-      return null;
-    }
-  }
-
-  /// insert文(引数はsqfliteの引数と同じ)
-  /// * @return `int?` : 一番最後の行のid
-  Future<int?> insert(
-    String title,
-    String content,
-    int frequency,
-    int time,
-    int setAlarm,
-  ) async {
-    try {
-      var db = await _opendb();
-      int? id = await db?.rawInsert(
-        'INSERT INTO $tableName (title, content, frequency, time, set_alarm) VALUES (?, ?, ?, ?, ?)',
-        [title, content, frequency, time, setAlarm],
-      );
-      await db?.close();
-      return id;
-    } catch (e) {
-      assert(() {
-        print(e);
-        return true;
-      }());
-      return null;
-    }
-  }
-
-  /// update文(引数はsqfliteの引数と同じ)
-  /// * @return `int?` : 更新した数
-  Future<int?> update(
-    Map<String, Object?> values, {
-    String? where,
-    List<Object?>? whereArgs,
-    ConflictAlgorithm? conflictAlgorithm,
-  }) async {
-    try {
-      var db = await _opendb();
-      var numOfChanged = await db?.update(
-        tableName,
-        values,
-        where: where,
-        whereArgs: whereArgs,
-        conflictAlgorithm: conflictAlgorithm,
-      );
-      await db?.close();
-      return numOfChanged;
-    } catch (e) {
-      assert(() {
-        print(e);
-        return true;
-      }());
-      return null;
-    }
-  }
-
-  /// delete(引数はsqfliteの引数と同じ)
-  /// * @return `int?` : 削除した数
-  Future<int?> delete({String? sql, List<Object?>? arguments}) async {
-    try {
-      var db = await _opendb();
-      var numOfChanged = await db?.rawDelete(
-        sql ?? "",
-        arguments,
-      );
-      await db?.close();
-      return numOfChanged;
-    } catch (e) {
-      assert(() {
-        print(e);
-        return true;
-      }());
-      return null;
-    }
-  }
-
-  /// idによる複数削除
-  /// * `ids` : 削除したいデータのidリスト
-  /// * @return `int?` : 削除した数
-  Future<int?> multipleDelete(List<int> ids) async {
-    if (ids.isEmpty) return null;
-    try {
-      var db = await _opendb();
-
-      var numOfChanged = await db?.rawDelete(
-        "DELETE FROM $tableName WHERE" + createMultipleIDWhereClauses(ids),
-        ids,
-      );
-      await db?.close();
-      return numOfChanged;
-    } catch (e) {
-      assert(() {
-        print(e);
-        return true;
-      }());
-      return null;
-    }
+    return map;
   }
 
   /// IDによって複数のカラムを指定するwhere句を作成
@@ -218,5 +39,132 @@ class NotificationsTable {
     statement = statement + ')';
 
     return statement;
+  }
+
+  /// SELECT文
+  ///
+  /// * `columns` : 取得したいカラムのリスト
+  /// * `where` : WHERE句
+  /// * `whereArgs` : WHERE句のプレースホルダに入れる値
+  /// * `groupBy` : GROUP BY句
+  /// * `having` : HAVING句
+  /// * `orderBy` : ORDER BY句
+  /// * `limit` : LIMIT句
+  ///
+  /// * @return `res` : 取得したデータベースのデータ
+  Future<List<Object?>?> select(
+    List<Object?> columns, {
+    String? where,
+    List<Object?>? whereArgs,
+    String? groupBy,
+    String? having,
+    String? orderBy,
+    int? limit,
+  }) async {
+    var res = await MethodChannel(KotlinMethodCalling.channelName)
+        .invokeMethod("select", {
+      'columns': _createMapFromObjectList(columns),
+      'where': where,
+      'whereArgs': _createMapFromObjectList(whereArgs),
+      'groupBy': groupBy,
+      'having': having,
+      'orderBy': orderBy,
+      'limit': limit,
+    });
+    return res;
+  }
+
+  /// INSERT文
+  ///
+  /// * `title` : タイトル
+  /// * `content` : メモ
+  /// * `frequency` : 頻度
+  /// * `time` : 発火時間
+  /// * `setAlarm` : アラームのオン(1)オフ(0)
+  /// * `deleted` : ごみ箱(1), ホーム(0)
+  ///
+  /// * @return `res` : 挿入した行数
+  Future<int?> insert(
+    String title,
+    String content,
+    int frequency,
+    int time,
+    int setAlarm,
+    int deleted,
+  ) async {
+    var res = await MethodChannel(KotlinMethodCalling.channelName)
+        .invokeMethod("insert", {
+      'title': title,
+      'content': content,
+      'frequency': frequency,
+      'time': time,
+      'setAlarm': setAlarm,
+      'deleted': deleted,
+    });
+    return res;
+  }
+
+  /// UPDATE文
+  ///
+  /// * `title` : タイトル
+  /// * `content` : メモ
+  /// * `frequency` : 頻度
+  /// * `time` : 発火時間
+  /// * `setAlarm` : アラームのオン(1)オフ(0)
+  /// * `deleted` : ごみ箱(1), ホーム(0)
+  /// * `where` : WHERE句
+  /// * `wherArgs` : WHERE句のプレースホルダに入れる値
+  ///
+  /// * @return `res` : 更新した行数
+  Future<int?> update({
+    String? title,
+    String? content,
+    int? frequency,
+    int? time,
+    int? setAlarm,
+    int? deleted,
+    String? where,
+    List<Object?>? whereArgs,
+  }) async {
+    var res = await MethodChannel(KotlinMethodCalling.channelName)
+        .invokeMethod("update", {
+      'title': title,
+      'content': content,
+      'frequency': frequency,
+      'time': time,
+      'setAlarm': setAlarm,
+      'deleted': deleted,
+      'where': where,
+      'whereArgs': _createMapFromObjectList(whereArgs),
+    });
+    return res;
+  }
+
+  /// DELETE文
+  /// * `where` : WHERE句
+  /// * `wherArgs` : WHERE句のプレースホルダに入れる値
+  ///
+  /// * @return `res` : 削除した行数
+  Future<int?> delete(
+    String? where,
+    List<Object?>? whereArgs,
+  ) async {
+    var res = await MethodChannel(KotlinMethodCalling.channelName)
+        .invokeMethod("delete", {
+      'where': where,
+      'whereArgs': _createMapFromObjectList(whereArgs),
+    });
+    return res;
+  }
+
+  /// idによる複数削除
+  /// * `ids` : 削除したいデータのidリスト
+  /// * @return `int?` : 削除した数
+  Future<int?> multipleDelete(List<int> ids) async {
+    if (ids.isEmpty) return null;
+
+    var where = createMultipleIDWhereClauses(ids);
+
+    return await delete(where, ids);
   }
 }

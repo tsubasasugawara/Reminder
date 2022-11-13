@@ -14,12 +14,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (_) => ThemeProvider(),
-        ),
-      ],
+    return ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
       child: Consumer<ThemeProvider>(
         builder: (context, provider, child) {
           return FutureBuilder(

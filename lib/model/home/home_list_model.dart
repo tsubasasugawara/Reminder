@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:reminder/model/db/db.dart';
 
 class HomeListModel {
@@ -12,13 +13,24 @@ class HomeListModel {
   /// * @return `List<Map>?>` : id, title, content, time, set_alarmを取得
   Future<List<Map>?> select() async {
     try {
-      var nt = NotificationsTable();
+      var nt = Notifications();
       var dataList = await nt.select(
-        columns: ['id', 'title', 'content', 'time', 'set_alarm'],
+        ['id', 'title', 'content', 'time', 'set_alarm'],
         orderBy: 'id DESC',
         where: where,
       );
-      return dataList;
+
+      if (dataList == null) {
+        return null;
+      }
+
+      var res = <Map<String, dynamic>>[];
+      const JsonDecoder decoder = JsonDecoder();
+      for (var item in dataList) {
+        Map<String, dynamic> map = decoder.convert(jsonEncode(item));
+        res.add(map);
+      }
+      return res;
     } catch (e) {
       return null;
     }

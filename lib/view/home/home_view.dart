@@ -209,8 +209,12 @@ class MainView extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            child: provider.getInt(index,
-                                        NotificationsTable.setAlarmKey) ==
+                            child: provider.getInt(
+                                        // TODO: Notifications.setAlarmKeyとObjectのkeyで文字が異なってしまっている
+                                        //     index, Notifications.setAlarmKey) ==
+                                        // 1
+                                        index,
+                                        "setAlarm") ==
                                     1
                                 ? Icon(
                                     Icons.alarm_on,

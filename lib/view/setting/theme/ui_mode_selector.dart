@@ -22,9 +22,8 @@ class UiModeSelector extends StatelessWidget {
         ),
         Center(
           child: Container(
-            padding: const EdgeInsets.all(15),
-            margin: const EdgeInsets.only(bottom: 20),
-            width: MediaQuery.of(context).size.width * 0.8,
+            margin: const EdgeInsets.only(top: 20, bottom: 20),
+            width: MediaQuery.of(context).size.width,
             child: Consumer<ThemeProvider>(
               builder: (context, themeProvider, child) => Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
