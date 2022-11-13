@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:reminder/components/brightness/brightness.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/setting/theme/theme_provider.dart';
+import 'package:reminder/components/spacer/spacer.dart' as spacer;
 
 class UiModeSelector extends StatelessWidget {
   const UiModeSelector({Key? key}) : super(key: key);
@@ -20,9 +21,9 @@ class UiModeSelector extends StatelessWidget {
                 Theme.of(context).textTheme.bodyText1?.apply(fontSizeDelta: 3),
           ),
         ),
+        spacer.Spacer(20, 0, 0, 0),
         Center(
-          child: Container(
-            margin: const EdgeInsets.only(top: 20, bottom: 20),
+          child: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Consumer<ThemeProvider>(
               builder: (context, themeProvider, child) => Row(

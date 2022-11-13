@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder/components/brightness/brightness.dart';
 import 'package:reminder/components/snack_bar/snackbar.dart';
-import 'package:reminder/model/db/db.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/home_provider.dart';
 import 'package:reminder/view/add_reminder/add_reminder_view.dart';
@@ -210,6 +209,7 @@ class MainView extends StatelessWidget {
                           ),
                           Container(
                             child: provider.getInt(
+                                        // ignore: todo
                                         // TODO: Notifications.setAlarmKeyとObjectのkeyで文字が異なってしまっている
                                         //     index, Notifications.setAlarmKey) ==
                                         // 1
