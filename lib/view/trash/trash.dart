@@ -8,6 +8,79 @@ import 'package:reminder/provider/home/home_provider.dart';
 class Trash extends StatelessWidget {
   const Trash({Key? key}) : super(key: key);
 
+  Widget? _leading(HomeProvider provider, BuildContext context) {
+    return provider.selectionMode
+        ? IconButton(
+            icon: const Icon(Icons.close_sharp),
+            onPressed: () {
+              provider.changeMode(false);
+            },
+          )
+        : null;
+  }
+
+  Widget _title(HomeProvider provider, BuildContext context) {
+    return provider.selectionMode
+        ? Text(
+            "  " +
+                Provider.of<HomeProvider>(context).selectedItemsCnt.toString(),
+            style: Theme.of(context).textTheme.headline6,
+          )
+        : Text(
+            AppLocalizations.of(context)!.trash,
+            style: Theme.of(context).textTheme.headline6,
+          );
+  }
+
+  List<Widget>? _actions(HomeProvider provider, BuildContext context) {
+    return provider.selectionMode
+        ? [
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    provider.allSelectOrNot(true);
+                  },
+                  icon: const Icon(Icons.select_all),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    var res = await provider.deleteButton(
+                      context,
+                      HomeProvider.restoreFromTrash,
+                    );
+                    if (res) {
+                      ShowSnackBar(
+                        context,
+                        AppLocalizations.of(context)!.restoreReminderToTrash,
+                        Theme.of(context).primaryColor,
+                      );
+                    }
+                  },
+                  icon: const Icon(Icons.restore_from_trash),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    var res = await provider.deleteButton(
+                        context, HomeProvider.completeDeletion);
+                    if (res) {
+                      ShowSnackBar(
+                        context,
+                        AppLocalizations.of(context)!.deletedReminder,
+                        Theme.of(context).primaryColor,
+                      );
+                    }
+                  },
+                  icon: const Icon(Icons.delete_forever),
+                ),
+              ],
+            ),
+          ]
+        // ignore: todo
+        // TODO: 絞り込み機能
+        : null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -15,71 +88,9 @@ class Trash extends StatelessWidget {
       child: Consumer<HomeProvider>(
         builder: (context, provider, child) => Scaffold(
           appBar: AppBar(
-            leading: provider.selectionMode
-                ? IconButton(
-                    icon: const Icon(Icons.close_sharp),
-                    onPressed: () {
-                      provider.changeMode(false);
-                    },
-                  )
-                : null,
-            title: provider.selectionMode
-                ? Text(
-                    "  " +
-                        Provider.of<HomeProvider>(context)
-                            .selectedItemsCnt
-                            .toString(),
-                    style: Theme.of(context).textTheme.headline6,
-                  )
-                : Text(
-                    AppLocalizations.of(context)!.trash,
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-            actions: provider.selectionMode
-                ? [
-                    Row(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            provider.allSelectOrNot(true);
-                          },
-                          icon: const Icon(Icons.select_all),
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            var res = await provider.deleteButton(
-                              context,
-                              HomeProvider.restoreFromTrash,
-                            );
-                            if (res) {
-                              ShowSnackBar(
-                                context,
-                                AppLocalizations.of(context)!
-                                    .restoreReminderToTrash,
-                                Theme.of(context).primaryColor,
-                              );
-                            }
-                          },
-                          icon: const Icon(Icons.restore_from_trash),
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            var res = await provider.deleteButton(
-                                context, HomeProvider.completeDeletion);
-                            if (res) {
-                              ShowSnackBar(
-                                context,
-                                AppLocalizations.of(context)!.deletedReminder,
-                                Theme.of(context).primaryColor,
-                              );
-                            }
-                          },
-                          icon: const Icon(Icons.delete_forever),
-                        ),
-                      ],
-                    ),
-                  ]
-                : null,
+            leading: _leading(provider, context),
+            title: _title(provider, context),
+            actions: _actions(provider, context),
           ),
           body: Center(
             child: ListView.builder(
