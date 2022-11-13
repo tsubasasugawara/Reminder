@@ -1,4 +1,4 @@
-package com.sugawara.reminder.sqlite
+    package com.sugawara.reminder.sqlite
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase

@@ -92,15 +92,53 @@ class Notifications {
             if (cur.count > 0) {
                 cur.moveToFirst()
                 while (!cur.isAfterLast) {
+                    var idIndex = cur.getColumnIndex(DBHelper.idKey)
+                    var titleIndex = cur.getColumnIndex(DBHelper.titleKey)
+                    var contentIndex = cur.getColumnIndex(DBHelper.contentKey)
+                    var frequencyIndex = cur.getColumnIndex(DBHelper.frequencyKey)
+                    var timeIndex = cur.getColumnIndex(DBHelper.timeKey)
+                    var setAlarmIndex = cur.getColumnIndex(DBHelper.setAlarmKey)
+                    var deletedIndex = cur.getColumnIndex(DBHelper.deletedKey)
+
+                    var id: Int? = null
+                    var title: String? = null
+                    var content: String? = null
+                    var frequency: Int? = null
+                    var time: Long? = null
+                    var setAlarm: Int? = null
+                    var deleted: Int? = null
+
+                    if (idIndex >= 0) {
+                        id = cur.getInt(idIndex)
+                    }
+                    if (titleIndex >= 0) {
+                        title = cur.getString(titleIndex)
+                    }
+                    if (contentIndex >= 0) {
+                        content = cur.getString(contentIndex)
+                    }
+                    if (frequencyIndex >= 0) {
+                        frequency = cur.getInt(frequencyIndex)
+                    }
+                    if (timeIndex >= 0) {
+                        time = cur.getLong(timeIndex)
+                    }
+                    if (setAlarmIndex >= 0) {
+                        setAlarm = cur.getInt(setAlarmIndex)
+                    }
+                    if (deletedIndex >= 0) {
+                        deleted = cur.getInt(deletedIndex)
+                    }
+
                     res.add(
                         mapOf(
-                            "id" to getData(cur, DBHelper.idKey) as Int?,
-                            "title" to getData(cur, DBHelper.titleKey) as String?,
-                            "content" to getData(cur, DBHelper.contentKey) as String?,
-                            "frequency" to getData(cur, DBHelper.frequencyKey) as Int?,
-                            "time" to getData(cur, DBHelper.timeKey) as Int?,
-                            "setAlarm" to getData(cur, DBHelper.setAlarmKey) as Int?,
-                            "deleted" to getData(cur, DBHelper.deletedKey) as Int?
+                            "id" to id,
+                            "title" to title,
+                            "content" to content,
+                            "frequency" to frequency,
+                            "time" to time,
+                            "setAlarm" to setAlarm,
+                            "deleted" to deleted
                         )
                     )
                     cur.moveToNext()

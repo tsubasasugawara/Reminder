@@ -35,8 +35,8 @@ class AddReminderProvider {
 
     var before = _model.getBeforeEditingData();
 
-    titleController.text = before[NotificationsTable.titleKey] ?? "";
-    contentController.text = before[NotificationsTable.contentKey] ?? "";
+    titleController.text = before[Notifications.titleKey] ?? "";
+    contentController.text = before[Notifications.contentKey] ?? "";
   }
 
   /// 編集中のデータを一時的に保存する
@@ -89,18 +89,17 @@ class AddReminderProvider {
 
     await KotlinMethodCalling.deleteAlarm(
       id,
-      before[NotificationsTable.titleKey] ?? being[NotificationsTable.titleKey],
-      before[NotificationsTable.contentKey] ??
-          being[NotificationsTable.contentKey],
-      before[NotificationsTable.timeKey] ?? being[NotificationsTable.timeKey],
+      before[Notifications.titleKey] ?? being[Notifications.titleKey],
+      before[Notifications.contentKey] ?? being[Notifications.contentKey],
+      before[Notifications.timeKey] ?? being[Notifications.timeKey],
     );
-    if (being[NotificationsTable.setAlarmKey] == 0) return;
+    if (being[Notifications.setAlarmKey] == 0) return;
 
     await KotlinMethodCalling.registAlarm(
       id,
-      being[NotificationsTable.titleKey],
-      being[NotificationsTable.contentKey],
-      being[NotificationsTable.timeKey],
+      being[Notifications.titleKey],
+      being[Notifications.contentKey],
+      being[Notifications.timeKey],
     );
   }
 
@@ -114,7 +113,7 @@ class AddReminderProvider {
   /// 発火時間の確認
   /// * @return `bool` : 正常(true),異常(false)
   bool _timeValidate() {
-    var diff = _model.getBeingEditingData()[NotificationsTable.timeKey] -
+    var diff = _model.getBeingEditingData()[Notifications.timeKey] -
         DateTime.now().millisecondsSinceEpoch;
 
     if (diff <= 0) {
@@ -142,7 +141,7 @@ class AddReminderProvider {
     }
 
     if (_checkSettingAlarm(
-            _model.getBeingEditingData()[NotificationsTable.setAlarmKey]) &&
+            _model.getBeingEditingData()[Notifications.setAlarmKey]) &&
         _timeValidate() == false) {
       ShowSnackBar(
         context,

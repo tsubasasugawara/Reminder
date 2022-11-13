@@ -128,7 +128,7 @@ class AddReminderView extends StatelessWidget {
             flex: 3,
             child: ChangeNotifierProvider(
               create: (context) => AlarmSwitchButtonProvider(
-                provider.getData(NotificationsTable.setAlarmKey),
+                provider.getData(Notifications.setAlarmKey),
               ),
               child: Consumer<AlarmSwitchButtonProvider>(
                 builder: (context, alarmSwitchProvider, child) {
@@ -165,7 +165,7 @@ class AddReminderView extends StatelessWidget {
   Widget _dateTimeSelecter(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => DateTimeProvider(
-        provider.getData(NotificationsTable.timeKey),
+        provider.getData(Notifications.timeKey),
       ),
       child: Consumer<DateTimeProvider>(
         builder: (context, dateTimeProvider, child) {

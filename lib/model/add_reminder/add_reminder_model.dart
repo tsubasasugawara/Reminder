@@ -8,18 +8,18 @@ class AddReminderModel {
 
   /// 編集前のデータ
   var _dataBeforeEditing = <String, dynamic>{
-    NotificationsTable.titleKey: null,
-    NotificationsTable.contentKey: null,
-    NotificationsTable.timeKey: DateTime.now().millisecondsSinceEpoch,
-    NotificationsTable.setAlarmKey: 1,
+    Notifications.titleKey: null,
+    Notifications.contentKey: null,
+    Notifications.timeKey: DateTime.now().millisecondsSinceEpoch,
+    Notifications.setAlarmKey: 1,
   };
 
   /// 編集中のデータ
   var _dataBeingEditing = <String, dynamic>{
-    NotificationsTable.titleKey: "",
-    NotificationsTable.contentKey: "",
-    NotificationsTable.timeKey: DateTime.now().millisecondsSinceEpoch,
-    NotificationsTable.setAlarmKey: 1,
+    Notifications.titleKey: "",
+    Notifications.contentKey: "",
+    Notifications.timeKey: DateTime.now().millisecondsSinceEpoch,
+    Notifications.setAlarmKey: 1,
   };
 
   static int update = 0;
@@ -34,16 +34,16 @@ class AddReminderModel {
   ) {
     id = _id;
 
-    _dataBeforeEditing[NotificationsTable.titleKey] = title;
-    _dataBeforeEditing[NotificationsTable.contentKey] = content;
-    _dataBeforeEditing[NotificationsTable.timeKey] = time;
-    _dataBeforeEditing[NotificationsTable.setAlarmKey] = setAlarm ?? 1;
+    _dataBeforeEditing[Notifications.titleKey] = title;
+    _dataBeforeEditing[Notifications.contentKey] = content;
+    _dataBeforeEditing[Notifications.timeKey] = time;
+    _dataBeforeEditing[Notifications.setAlarmKey] = setAlarm ?? 1;
 
-    _dataBeingEditing[NotificationsTable.titleKey] = title ?? "";
-    _dataBeingEditing[NotificationsTable.contentKey] = content ?? "";
-    _dataBeingEditing[NotificationsTable.timeKey] =
-        time ?? _dataBeingEditing[NotificationsTable.timeKey];
-    _dataBeingEditing[NotificationsTable.setAlarmKey] = setAlarm ?? 1;
+    _dataBeingEditing[Notifications.titleKey] = title ?? "";
+    _dataBeingEditing[Notifications.contentKey] = content ?? "";
+    _dataBeingEditing[Notifications.timeKey] =
+        time ?? _dataBeingEditing[Notifications.timeKey];
+    _dataBeingEditing[Notifications.setAlarmKey] = setAlarm ?? 1;
   }
 
   /// データを編集
@@ -58,16 +58,16 @@ class AddReminderModel {
     int? setAlarm,
   }) {
     if (title != null) {
-      _dataBeingEditing[NotificationsTable.titleKey] = title;
+      _dataBeingEditing[Notifications.titleKey] = title;
     }
     if (content != null) {
-      _dataBeingEditing[NotificationsTable.contentKey] = content;
+      _dataBeingEditing[Notifications.contentKey] = content;
     }
     if (time != null) {
-      _dataBeingEditing[NotificationsTable.timeKey] = time;
+      _dataBeingEditing[Notifications.timeKey] = time;
     }
     if (setAlarm != null) {
-      _dataBeingEditing[NotificationsTable.setAlarmKey] = setAlarm;
+      _dataBeingEditing[Notifications.setAlarmKey] = setAlarm;
     }
     return;
   }
@@ -92,23 +92,20 @@ class AddReminderModel {
   /// すでにデータが存在する場合は更新、そうでなければ追加
   /// * @return `[id, status]` : [追加または更新したデータのid, 追加(1)か更新(0)]
   Future<List<int?>> updateOrInsert() async {
-    var nt = NotificationsTable();
-    var title = _dataBeingEditing[NotificationsTable.titleKey];
-    var content = _dataBeingEditing[NotificationsTable.contentKey];
-    var time = _dataBeingEditing[NotificationsTable.timeKey];
-    var setAlarm = _dataBeingEditing[NotificationsTable.setAlarmKey];
+    var nt = Notifications();
+    var title = _dataBeingEditing[Notifications.titleKey];
+    var content = _dataBeingEditing[Notifications.contentKey];
+    var time = _dataBeingEditing[Notifications.timeKey];
+    var setAlarm = _dataBeingEditing[Notifications.setAlarmKey];
 
     if (id != null) {
-      var values = {
-        NotificationsTable.titleKey: title.replaceAll(RegExp(r'^ +'), ''),
-        NotificationsTable.contentKey: content.replaceAll(RegExp(r'^ +'), ''),
-        NotificationsTable.frequencyKey: 0,
-        NotificationsTable.timeKey: time,
-        NotificationsTable.setAlarmKey: setAlarm
-      };
       var resId = await nt.update(
-        values,
-        where: '${NotificationsTable.idKey} = ?',
+        title: title.replaceAll(RegExp(r'^ +'), ''),
+        content: content.replaceAll(RegExp(r'^ +'), ''),
+        frequency: 0,
+        time: time,
+        setAlarm: setAlarm,
+        where: '${Notifications.idKey} = ?',
         whereArgs: [id],
       );
 
@@ -119,7 +116,7 @@ class AddReminderModel {
       }
     }
 
-    var resId = await nt.insert(title, content, 0, time, setAlarm);
+    var resId = await nt.insert(title, content, 0, time, setAlarm, 0);
     return [resId, insert];
   }
 }

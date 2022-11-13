@@ -37,13 +37,13 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
     notifyListeners();
   }
 
-  /// すでに発火しているアラームのset_alarmをオフ(0)にする
+  /// すでに発火しているアラームのsetAlarmをオフ(0)にする
   Future<void> update() async {
-    var nt = NotificationsTable();
+    var nt = Notifications();
     await nt.update(
-      {NotificationsTable.setAlarmKey: 0},
+      setAlarm: 0,
       where:
-          "${NotificationsTable.timeKey} <= ? and ${NotificationsTable.frequencyKey} == 0 and ${NotificationsTable.deletedKey} == 0",
+          "${Notifications.timeKey} <= ? and ${Notifications.frequencyKey} == 0 and ${Notifications.deletedKey} == 0",
       whereArgs: [DateTime.now().millisecondsSinceEpoch],
     );
     getData();
@@ -76,7 +76,7 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
   /// * `context`:BuildContext
   /// * @retrun `String`:オン:時間の文字列, オフ:オフ
   String alarmOnOff(int index, BuildContext context) {
-    int setAlarm = model.dataList[index]["set_alarm"];
+    int setAlarm = model.dataList[index]["setAlarm"];
     int milliseconds = model.dataList[index]['time'];
     if (setAlarm == 1) {
       return _dateTimeFormat(milliseconds, context);
@@ -121,7 +121,7 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
               title: model.dataList[index]["title"],
               content: model.dataList[index]["content"],
               time: model.dataList[index]["time"],
-              setAlarm: model.dataList[index]["set_alarm"],
+              setAlarm: model.dataList[index]["setAlarm"],
               isTrash: isTrash,
             );
           }

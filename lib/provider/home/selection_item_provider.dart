@@ -77,7 +77,7 @@ class SelectionItemProvider {
         dataList[ele]['time'],
       );
     }
-    int? res = await NotificationsTable().multipleDelete(ids);
+    int? res = await Notifications().multipleDelete(ids);
     return _checkForOperation(res);
   }
 
@@ -99,12 +99,10 @@ class SelectionItemProvider {
         dataList[ele]['time'],
       );
     }
-    var nt = NotificationsTable();
+    var nt = Notifications();
     int? res = await nt.update(
-      {
-        NotificationsTable.setAlarmKey: 0,
-        NotificationsTable.deletedKey: trash ? 1 : 0
-      },
+      setAlarm: 0,
+      deleted: trash ? 1 : 0,
       where: nt.createMultipleIDWhereClauses(ids),
       whereArgs: ids,
     );

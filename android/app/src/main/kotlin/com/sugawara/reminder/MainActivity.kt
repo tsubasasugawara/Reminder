@@ -42,12 +42,12 @@ class MainActivity: FlutterActivity() {
                 "select" -> {
                     try {
                         val columns = methodCall.argument<Map<String, String>>("columns")!!
-                        val where: String? = methodCall.argument<String>("where") ?: null
-                        val whereArgs: Map<String, String>? = methodCall.argument<Map<String, String>>("whereArgs") ?: null
-                        val groupBy: String? = methodCall.argument<String>("groupBy") ?: null
-                        val having: String? = methodCall.argument<String>("having") ?: null
-                        val orderBy: String? = methodCall.argument<String>("orderBy") ?: null
-                        val limit: String? = methodCall.argument<String>("limit") ?: null
+                        val where: String? = methodCall.argument<String>("where")
+                        val whereArgs: Map<String, String>? = methodCall.argument<Map<String, String>>("whereArgs")
+                        val groupBy: String? = methodCall.argument<String>("groupBy")
+                        val having: String? = methodCall.argument<String>("having")
+                        val orderBy: String? = methodCall.argument<String>("orderBy")
+                        val limit: String? = methodCall.argument<String>("limit")
 
                         var notifications = Notifications()
                         val res = notifications.select(
@@ -72,7 +72,7 @@ class MainActivity: FlutterActivity() {
                         values.put("title", methodCall.argument<String>("title").toString())
                         values.put("content", methodCall.argument<String>("content").toString())
                         values.put("frequency", methodCall.argument<Int>("frequency") ?: 0)
-                        values.put("time", methodCall.argument<Int>("time") ?: 0)
+                        values.put("time", methodCall.argument<Long>("time") ?: 0)
                         values.put("set_alarm", methodCall.argument<Int>("setAlarm") ?: 0)
                         values.put("deleted", methodCall.argument<Int>("deleted") ?: 0)
 
@@ -103,7 +103,7 @@ class MainActivity: FlutterActivity() {
                         methodCall.argument<Int>("frequency")?.let{
                             values.put("frequency", it)
                         }
-                        methodCall.argument<Int>("time")?.let{
+                        methodCall.argument<Long>("time")?.let{
                             values.put("time", it)
                         }
                         methodCall.argument<Int>("set_alarm")?.let{
