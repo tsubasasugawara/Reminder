@@ -29,7 +29,7 @@ class Messages {
     required this.movingToTrashConfirmationMsg,
     required this.moveReminderToTrash,
     required this.restoreReminderToTrash,
-    required this.filter,
+    required this.sort,
   });
 
   final String appTitle;
@@ -59,7 +59,7 @@ class Messages {
   final String movingToTrashConfirmationMsg;
   final String moveReminderToTrash;
   final String restoreReminderToTrash;
-  final String filter;
+  final String sort;
 
   factory Messages.of(Locale locale) {
     switch (locale.languageCode) {
@@ -100,7 +100,7 @@ class Messages {
         deletionConfirmationMsg: "本当に削除してもよろしいですか?",
         movingToTrashConfirmationMsg: "ごみ箱へ移動しますか?",
         trash: "ごみ箱",
-        filter: "絞り込み",
+        sort: "ソート",
       );
 
   factory Messages.en() => Messages(
@@ -132,6 +132,6 @@ class Messages {
         movingToTrashConfirmationMsg:
             "Do you want to move the item to the trash?",
         trash: "Trash",
-        filter: "Filter",
+        sort: "Sort",
       );
 }
