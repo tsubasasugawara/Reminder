@@ -106,6 +106,7 @@ class MainView extends StatelessWidget {
                   ),
                   title: Text(AppLocalizations.of(context)!.setting),
                   onTap: () async {
+                    Navigator.pop(context);
                     await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) {
@@ -113,7 +114,6 @@ class MainView extends StatelessWidget {
                         },
                       ),
                     );
-                    Navigator.pop(context);
                     provider.update();
                     provider.allSelectOrNot(false);
                   },
@@ -125,6 +125,7 @@ class MainView extends StatelessWidget {
                   ),
                   title: Text(AppLocalizations.of(context)!.trash),
                   onTap: () async {
+                    Navigator.pop(context);
                     await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) {
@@ -132,7 +133,6 @@ class MainView extends StatelessWidget {
                         },
                       ),
                     );
-                    Navigator.pop(context);
                     provider.update();
                     provider.allSelectOrNot(false);
                   },
