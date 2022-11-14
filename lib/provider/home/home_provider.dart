@@ -28,6 +28,8 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
   /// 昇順、降順の設定
   String sortBy = Notifications.asc;
 
+  bool topUpSetAlarmReminder = false;
+
   /// ソート条件をつけないときに取得するカラム
   final List<Object?> stdColumns = [
     Notifications.idKey,
@@ -51,6 +53,10 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
         sortBy == Notifications.asc ? Notifications.desc : Notifications.asc;
   }
 
+  void changeTopUpSetAlarmReminder() {
+    topUpSetAlarmReminder = !topUpSetAlarmReminder;
+  }
+
   /// データ一覧を取得し、modelに保存
   Future<void> setData() async {
     // もしカラムリストに含まれていなかったら追加する
@@ -64,7 +70,8 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
       where: isTrash
           ? '${Notifications.deletedKey} = 1'
           : '${Notifications.deletedKey} = 0',
-      orderBy: '$orderBy $sortBy',
+      orderBy:
+          '${topUpSetAlarmReminder ? '${Notifications.setAlarmKey} ${Notifications.desc}, ' : ''} $orderBy $sortBy',
     );
     changeSelectedItemsLen(length: model.dataList.length);
     notifyListeners();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/view/home/appBar/reverse_button.dart';
+import 'package:reminder/view/home/appBar/top_up_set_alarm_button.dart';
 
 import '../../../components/snack_bar/snackbar.dart';
 import '../../../model/db/db.dart';
@@ -158,6 +159,12 @@ class Actions {
                         provider.changeSortBy();
                       },
                       provider.sortBy,
+                    ),
+                    TopUpSetAlarmButton(
+                      () {
+                        provider.changeTopUpSetAlarmReminder();
+                      },
+                      provider.topUpSetAlarmReminder,
                     ),
                   ],
                 ),
