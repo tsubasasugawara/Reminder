@@ -82,7 +82,7 @@ class Actions {
     ];
   }
 
-  List<Widget> _normalMode() {
+  List<Widget> normalMode() {
     return [
       IconButton(
         tooltip: AppLocalizations.of(context)!.order,
@@ -173,6 +173,6 @@ class Actions {
   /// actionsの生成
   /// @{return} List<Widget>
   List<Widget> build() {
-    return provider.selectionMode ? _selectionMode() : _normalMode();
+    return provider.selectionMode ? _selectionMode() : normalMode();
   }
 }

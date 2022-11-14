@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:reminder/components/snack_bar/snackbar.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/home_provider.dart';
+import 'package:reminder/view/home/appBar/actions.dart' as actions;
 
 // ignore: must_be_immutable
 class Trash extends StatelessWidget {
@@ -76,9 +77,7 @@ class Trash extends StatelessWidget {
               ],
             ),
           ]
-        // ignore: todo
-        // TODO: 絞り込み機能
-        : null;
+        : actions.Actions(provider, context).build();
   }
 
   @override
