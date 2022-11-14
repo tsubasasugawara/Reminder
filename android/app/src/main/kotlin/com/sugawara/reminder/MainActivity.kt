@@ -109,7 +109,7 @@ class MainActivity: FlutterActivity() {
                         methodCall.argument<Long>("time")?.let{
                             values.put(DBHelper.timeKey, it)
                         }
-                        methodCall.argument<Int>("set_alarm")?.let{
+                        methodCall.argument<Int>("setAlarm")?.let{
                             values.put(DBHelper.setAlarmKey, it)
                         }
                         methodCall.argument<Int>("deleted")?.let{
