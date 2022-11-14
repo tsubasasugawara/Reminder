@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder/components/brightness/brightness.dart';
-import 'package:reminder/components/snack_bar/snackbar.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/home_provider.dart';
 import 'package:reminder/view/add_reminder/add_reminder_view.dart';
 import 'package:reminder/view/home/appBar/actions.dart' as actions;
 import 'package:reminder/view/trash/trash.dart';
 
-import '../../model/db/db.dart';
 import '../setting/setting_view.dart';
 
 // ignore: must_be_immutable
