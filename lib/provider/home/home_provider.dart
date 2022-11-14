@@ -22,17 +22,50 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
   /// ごみ箱(true)かホーム(false)
   late bool isTrash;
 
+  /// ソートに使用するカラム
+  String orderBy = Notifications.idKey;
+
+  /// 昇順、降順の設定
+  String sortBy = Notifications.asc;
+
+  /// ソート条件をつけないときに取得するカラム
+  final List<Object?> stdColumns = [
+    Notifications.idKey,
+    Notifications.titleKey,
+    Notifications.contentKey,
+    Notifications.timeKey,
+    Notifications.setAlarmKey,
+  ];
+
   HomeProvider(this.isTrash) {
-    model = HomeListModel(isTrash ? "deleted = 1" : "deleted = 0");
+    model = HomeListModel();
     update();
   }
 
-  /// データ一覧を取得し、modelに保存
-  Future<void> getData() async {
-    var data = await model.select();
-    if (data == null) return;
+  void setOrderBy(String _orderBy) {
+    orderBy = _orderBy;
+  }
 
-    model.dataList = data;
+  void changeSortBy() {
+    sortBy =
+        sortBy == Notifications.asc ? Notifications.desc : Notifications.asc;
+  }
+
+  /// データ一覧を取得し、modelに保存
+  Future<void> setData() async {
+    // もしカラムリストに含まれていなかったら追加する
+    var columns = [...stdColumns];
+    if (!stdColumns.contains(orderBy)) {
+      columns = [...columns, orderBy];
+    }
+
+    await model.select(
+      columns,
+      where: isTrash
+          ? '${Notifications.deletedKey} = 1'
+          : '${Notifications.deletedKey} = 0',
+      orderBy: '$orderBy $sortBy',
+    );
     changeSelectedItemsLen(length: model.dataList.length);
     notifyListeners();
   }
@@ -46,7 +79,7 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
           "${Notifications.timeKey} <= ? and ${Notifications.frequencyKey} == 0 and ${Notifications.deletedKey} == 0",
       whereArgs: [DateTime.now().millisecondsSinceEpoch],
     );
-    getData();
+    setData();
   }
 
   /// modelから文字列を取得する
@@ -129,7 +162,7 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
         },
       ),
     );
-    getData();
+    setData();
   }
 
   /// 削除確認ダイアログでOKの場合にアラームを削除

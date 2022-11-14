@@ -5,8 +5,10 @@ import 'package:reminder/components/snack_bar/snackbar.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/home_provider.dart';
 import 'package:reminder/view/add_reminder/add_reminder_view.dart';
+import 'package:reminder/view/home/appBar/actions.dart' as actions;
 import 'package:reminder/view/trash/trash.dart';
 
+import '../../model/db/db.dart';
 import '../setting/setting_view.dart';
 
 // ignore: must_be_immutable
@@ -35,53 +37,6 @@ class MainView extends StatelessWidget {
             AppLocalizations.of(context)!.appTitle,
             style: Theme.of(context).textTheme.headline6,
           );
-  }
-
-  List<Widget> _actions(HomeProvider provider, BuildContext context) {
-    return provider.selectionMode
-        ? [
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    provider.allSelectOrNot(true);
-                  },
-                  icon: const Icon(Icons.select_all),
-                ),
-                IconButton(
-                  onPressed: () async {
-                    var res = await provider.deleteButton(
-                        context, HomeProvider.moveToTrash);
-                    if (res) {
-                      ShowSnackBar(
-                        context,
-                        AppLocalizations.of(context)!.moveReminderToTrash,
-                        Theme.of(context).primaryColor,
-                      );
-                    }
-                  },
-                  icon: const Icon(Icons.delete),
-                ),
-              ],
-            ),
-          ]
-        : [
-            IconButton(
-              tooltip: AppLocalizations.of(context)!.filter,
-              iconSize: 30,
-              icon: const Icon(Icons.filter_alt_outlined),
-              onPressed: () {
-                showDialog(
-                  builder: (BuildContext context) {
-                    // ignore: todo
-                    // TODO: ダイアログの中身を作成
-                    return Container();
-                  },
-                  context: context,
-                );
-              },
-            ),
-          ];
   }
 
   Widget _drawer(HomeProvider provider, BuildContext context) {
@@ -191,7 +146,7 @@ class MainView extends StatelessWidget {
             appBar: AppBar(
               leading: _leading(provider, context),
               title: _title(provider, context),
-              actions: _actions(provider, context),
+              actions: actions.Actions(provider, context).build(),
             ),
             drawer: _drawer(provider, context),
             body: ListView.builder(
