@@ -11,6 +11,12 @@ class Notifications {
   static const timeKey = "time";
   static const setAlarmKey = "set_alarm";
   static const deletedKey = "deleted";
+  static const createdAtKey = "created_at";
+  static const updatedAtKey = "updated_at";
+
+  /// 並び替えの方式
+  static const String asc = "ASC";
+  static const String desc = "DESC";
 
   /// whereArgsに使う値をListからMapへ変換
   /// * `list` : Objectの配列

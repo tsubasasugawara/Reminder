@@ -6,17 +6,20 @@ import android.database.sqlite.SQLiteOpenHelper
 
 class DBHelper(context: Context, databaseName:String, factory: SQLiteDatabase.CursorFactory?, version: Int,) : SQLiteOpenHelper(context, databaseName, factory, version) {
 
+    // TODO: contentが常に内容があるわけではないため、正規化の必要性あり
     companion object {
-        const val version: Int = 1
-        const val dbName: String = "notifications"
-        const val tableName: String = "notifications"
-        const val idKey: String = "id"
-        const val titleKey: String = "title"
-        const val contentKey: String = "content"
+        const val version:      Int = 1
+        const val dbName:       String = "notifications"
+        const val tableName:    String = "notifications"
+        const val idKey:        String = "id"
+        const val titleKey:     String = "title"
+        const val contentKey:   String = "content"
         const val frequencyKey: String = "frequency"
-        const val timeKey: String = "time"
-        const val setAlarmKey: String = "set_alarm"
-        const val deletedKey: String = "deleted"
+        const val timeKey:      String = "time"
+        const val setAlarmKey:  String = "set_alarm"
+        const val deletedKey:   String = "deleted"
+        const val createdAtKey: String = "created_at"
+        const val updatedAtKey: String = "updated_at"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -28,7 +31,9 @@ class DBHelper(context: Context, databaseName:String, factory: SQLiteDatabase.Cu
               $frequencyKey INTEGER,
               $timeKey INTEGER not null,
               $setAlarmKey INTEGER not null,
-              $deletedKey INTEGER not null DEFAULT 0)
+              $deletedKey INTEGER not null DEFAULT 0,
+              $createdAtKey INTEGER not null,
+              $updatedAtKey INTEGER not null)
         """.trimIndent())
     }
 

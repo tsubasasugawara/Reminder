@@ -29,6 +29,14 @@ class Messages {
     required this.movingToTrashConfirmationMsg,
     required this.moveReminderToTrash,
     required this.restoreReminderToTrash,
+    required this.order,
+    required this.orderMethod,
+    required this.orderByTitle,
+    required this.orderByCreatedAt,
+    required this.orderByUpdatedAt,
+    required this.orderByAlarmTime,
+    required this.orderById,
+    required this.sortBy,
   });
 
   final String appTitle;
@@ -58,6 +66,14 @@ class Messages {
   final String movingToTrashConfirmationMsg;
   final String moveReminderToTrash;
   final String restoreReminderToTrash;
+  final String order;
+  final String orderMethod;
+  final String orderByTitle;
+  final String orderByCreatedAt;
+  final String orderByUpdatedAt;
+  final String orderByAlarmTime;
+  final String orderById;
+  final String sortBy;
 
   factory Messages.of(Locale locale) {
     switch (locale.languageCode) {
@@ -85,19 +101,27 @@ class Messages {
         setAlarmOff: 'オフ',
         setAlarmOn: 'オン',
         deletedReminder: '削除しました',
-        moveReminderToTrash: "ごみ箱に移動しました",
-        restoreReminderToTrash: "復元しました",
+        moveReminderToTrash: 'ごみ箱に移動しました',
+        restoreReminderToTrash: '復元しました',
         timeFormat: 'HH:mm',
-        ok: "完了",
-        home: "ホーム",
-        setting: "設定",
-        colorSetting: "カラー",
-        uiModeSetting: "テーマ",
-        refresh: "更新",
-        confirmation: "確認",
-        deletionConfirmationMsg: "本当に削除してもよろしいですか?",
-        movingToTrashConfirmationMsg: "ごみ箱へ移動しますか?",
-        trash: "ごみ箱",
+        ok: '完了',
+        home: 'ホーム',
+        setting: '設定',
+        colorSetting: 'カラー',
+        uiModeSetting: 'テーマ',
+        refresh: '更新',
+        confirmation: '確認',
+        deletionConfirmationMsg: '本当に削除してもよろしいですか?',
+        movingToTrashConfirmationMsg: 'ごみ箱へ移動しますか?',
+        trash: 'ごみ箱',
+        order: 'ソート',
+        orderMethod: 'ソート方法',
+        orderById: "ID",
+        orderByTitle: 'タイトル',
+        orderByCreatedAt: '作成日',
+        orderByUpdatedAt: '更新日',
+        orderByAlarmTime: 'アラーム時間',
+        sortBy: '[逆順]',
       );
 
   factory Messages.en() => Messages(
@@ -115,19 +139,27 @@ class Messages {
         setAlarmOff: 'OFF',
         setAlarmOn: 'ON',
         deletedReminder: 'Deleted.',
-        moveReminderToTrash: "Moved to trash.",
-        restoreReminderToTrash: "Restored.",
+        moveReminderToTrash: 'Moved to trash.',
+        restoreReminderToTrash: 'Restored.',
         timeFormat: 'hh:mm aa',
-        ok: "OK",
-        home: "HOME",
-        setting: "Settings",
-        colorSetting: "COLOR",
-        uiModeSetting: "THEME",
-        refresh: "Refresh",
-        confirmation: "Confirmation",
-        deletionConfirmationMsg: "Are you sure you want to delete?",
+        ok: 'OK',
+        home: 'HOME',
+        setting: 'Settings',
+        colorSetting: 'COLOR',
+        uiModeSetting: 'THEME',
+        refresh: 'Refresh',
+        confirmation: 'Confirmation',
+        deletionConfirmationMsg: 'Are you sure you want to delete?',
         movingToTrashConfirmationMsg:
-            "Do you want to move the item to the trash?",
-        trash: "Trash",
+            'Do you want to move the item to the trash?',
+        trash: 'Trash',
+        order: 'Order',
+        orderMethod: 'Order Method',
+        orderById: 'ID',
+        orderByTitle: 'Title',
+        orderByCreatedAt: 'Created Date',
+        orderByUpdatedAt: 'Updated Date',
+        orderByAlarmTime: 'Alarm Time',
+        sortBy: '[Reverse Order]',
       );
 }

@@ -45,8 +45,8 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-connect.bat
-install.bat
-pair.bat
+connect.sh
+install.sh
+pair.sh
 TODO
 .vscode/

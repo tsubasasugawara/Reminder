@@ -41,6 +41,19 @@ class DateTimePicker {
     }
   }
 
+  /// ダイアログのサイズ
+  /// * `context` : BuildContext
+  /// * @return `Size` : サイズ
+  Size _dialogSize(BuildContext context) {
+    final Orientation orientation = MediaQuery.of(context).orientation;
+    switch (orientation) {
+      case Orientation.portrait:
+        return _calendarPortraitDialogSize;
+      case Orientation.landscape:
+        return _calendarLandscapeDialogSize;
+    }
+  }
+
   /// DateTimePickerを表示する
   /// * `context` : BuildContext
   /// * `backgroundColor` : バックグランドカラー
@@ -202,18 +215,5 @@ class DateTimePicker {
         );
       },
     ).then((value) => value);
-  }
-
-  /// ダイアログのサイズ
-  /// * `context` : BuildContext
-  /// * @return `Size` : サイズ
-  Size _dialogSize(BuildContext context) {
-    final Orientation orientation = MediaQuery.of(context).orientation;
-    switch (orientation) {
-      case Orientation.portrait:
-        return _calendarPortraitDialogSize;
-      case Orientation.landscape:
-        return _calendarLandscapeDialogSize;
-    }
   }
 }

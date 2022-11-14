@@ -24,18 +24,6 @@ class AddReminderView extends StatelessWidget {
     provider = AddReminderProvider(id, title, content, time, setAlarm, isTrash);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    provider.isKeyboardShown = 0 < MediaQuery.of(context).viewInsets.bottom;
-
-    return Scaffold(
-      appBar: _appBar(context),
-      body: _textForm(context),
-      floatingActionButton: _fab(context),
-      bottomNavigationBar: _bottomAppBar(context),
-    );
-  }
-
   PreferredSizeWidget _appBar(BuildContext context) {
     return AppBar();
   }
@@ -189,6 +177,18 @@ class AddReminderView extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    provider.isKeyboardShown = 0 < MediaQuery.of(context).viewInsets.bottom;
+
+    return Scaffold(
+      appBar: _appBar(context),
+      body: _textForm(context),
+      floatingActionButton: _fab(context),
+      bottomNavigationBar: _bottomAppBar(context),
     );
   }
 }

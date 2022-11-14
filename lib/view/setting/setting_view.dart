@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/view/setting/theme/primary_color_selector.dart';
 import 'package:reminder/view/setting/theme/ui_mode_selector.dart';
+import 'package:reminder/components/spacer/spacer.dart' as spacer;
 
 // ignore: must_be_immutable
 class SettingView extends StatelessWidget {
   const SettingView({Key? key}) : super(key: key);
+
+  final double _verticalSpaceSize = 20.0;
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +29,9 @@ class SettingView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const UiModeSelector(),
-              Divider(
-                color: Theme.of(context).hintColor,
-              ),
+              spacer.Spacer(_verticalSpaceSize, _verticalSpaceSize, 0, 0),
               const PrimaryColorSelector(),
-              Divider(
-                color: Theme.of(context).hintColor,
-              ),
+              spacer.Spacer(_verticalSpaceSize, _verticalSpaceSize, 0, 0),
             ],
           ),
         ),

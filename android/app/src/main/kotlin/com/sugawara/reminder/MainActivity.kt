@@ -9,6 +9,7 @@ import io.flutter.embedding.engine.FlutterEngine
 import androidx.annotation.NonNull
 import com.sugawara.reminder.alarm.AlarmRegister
 import com.sugawara.reminder.sqlite.Notifications
+import com.sugawara.reminder.sqlite.DBHelper
 import android.util.Log
 
 class MainActivity: FlutterActivity() {
@@ -69,12 +70,14 @@ class MainActivity: FlutterActivity() {
                 "insert" -> {
                     try {
                         val values = ContentValues()
-                        values.put("title", methodCall.argument<String>("title").toString())
-                        values.put("content", methodCall.argument<String>("content").toString())
-                        values.put("frequency", methodCall.argument<Int>("frequency") ?: 0)
-                        values.put("time", methodCall.argument<Long>("time") ?: 0)
-                        values.put("set_alarm", methodCall.argument<Int>("setAlarm") ?: 0)
-                        values.put("deleted", methodCall.argument<Int>("deleted") ?: 0)
+                        values.put(DBHelper.titleKey, methodCall.argument<String>("title").toString())
+                        values.put(DBHelper.contentKey, methodCall.argument<String>("content").toString())
+                        values.put(DBHelper.frequencyKey, methodCall.argument<Int>("frequency") ?: 0)
+                        values.put(DBHelper.timeKey, methodCall.argument<Long>("time") ?: 0)
+                        values.put(DBHelper.setAlarmKey, methodCall.argument<Int>("setAlarm") ?: 0)
+                        values.put(DBHelper.deletedKey, methodCall.argument<Int>("deleted") ?: 0)
+                        values.put(DBHelper.createdAtKey, System.currentTimeMillis())
+                        values.put(DBHelper.updatedAtKey, System.currentTimeMillis())
 
                         var notifications = Notifications()
                         var res = notifications.insert(
@@ -95,23 +98,24 @@ class MainActivity: FlutterActivity() {
                         val values = ContentValues()
                         methodCall.argument<String>("title")?.let{
                             Log.d("update title", it.toString())
-                            values.put("title", it.toString())
+                            values.put(DBHelper.titleKey, it.toString())
                         }
                         methodCall.argument<String>("content")?.let{
-                            values.put("content", it.toString())
+                            values.put(DBHelper.contentKey, it.toString())
                         }
                         methodCall.argument<Int>("frequency")?.let{
-                            values.put("frequency", it)
+                            values.put(DBHelper.frequencyKey, it)
                         }
                         methodCall.argument<Long>("time")?.let{
-                            values.put("time", it)
+                            values.put(DBHelper.timeKey, it)
                         }
                         methodCall.argument<Int>("set_alarm")?.let{
-                            values.put("set_alarm", it)
+                            values.put(DBHelper.setAlarmKey, it)
                         }
                         methodCall.argument<Int>("deleted")?.let{
-                            values.put("deleted", it)
+                            values.put(DBHelper.deletedKey, it)
                         }
+                        values.put(DBHelper.updatedAtKey, System.currentTimeMillis())
 
                         var notifications = Notifications()
                         var res = notifications.update(

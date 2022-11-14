@@ -118,7 +118,7 @@ class ColorPicker extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         shape: const CircleBorder(),
-        primary: color,
+        backgroundColor: color,
         minimumSize: const Size(60, 60),
         maximumSize: const Size(60, 60),
       ),
@@ -177,7 +177,6 @@ class ColorPicker extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _createColorButton(provider, provider.getColor(), -1),
                         Container(
                           margin: const EdgeInsets.only(left: 5),
                           child: _textField(
@@ -220,37 +219,46 @@ class ColorPicker extends StatelessWidget {
                       ],
                     ),
                     Container(
-                      margin: const EdgeInsets.only(
-                        top: 10,
-                      ),
-                      child: ElevatedButton.icon(
-                        style: ButtonStyle(
-                          minimumSize: MaterialStateProperty.all(
-                            const Size(110, 40),
-                          ),
-                          maximumSize: MaterialStateProperty.all(
-                            const Size(110, 40),
-                          ),
-                        ),
-                        onPressed: () {
-                          onPressed(provider.getColor().value, -1);
-                          provider.changeCheckedItemIndex(
-                              -1, provider.getColor());
-                        },
-                        icon: Icon(
-                          Icons.refresh,
-                          color: judgeBlackWhite(
-                            Theme.of(context).backgroundColor,
-                          ),
-                        ),
-                        label: Text(
-                          AppLocalizations.of(context)!.refresh,
-                          style: TextStyle(
-                            color: judgeBlackWhite(
-                              Theme.of(context).backgroundColor,
+                      margin: const EdgeInsets.only(top: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _createColorButton(provider, provider.getColor(), -1),
+                          Container(
+                            margin: const EdgeInsets.only(
+                              top: 10,
+                            ),
+                            child: ElevatedButton.icon(
+                              style: ButtonStyle(
+                                minimumSize: MaterialStateProperty.all(
+                                  const Size(110, 40),
+                                ),
+                                maximumSize: MaterialStateProperty.all(
+                                  const Size(110, 40),
+                                ),
+                              ),
+                              onPressed: () {
+                                onPressed(provider.getColor().value, -1);
+                                provider.changeCheckedItemIndex(
+                                    -1, provider.getColor());
+                              },
+                              icon: Icon(
+                                Icons.refresh,
+                                color: judgeBlackWhite(
+                                  Theme.of(context).backgroundColor,
+                                ),
+                              ),
+                              label: Text(
+                                AppLocalizations.of(context)!.refresh,
+                                style: TextStyle(
+                                  color: judgeBlackWhite(
+                                    Theme.of(context).backgroundColor,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
                   ],
