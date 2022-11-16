@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:reminder/model/db/db.dart';
 import 'package:reminder/model/home/home_list_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
@@ -109,38 +108,6 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
   /// * @return `int`:データの行数
   int getDataListLength() {
     return model.dataList.length;
-  }
-
-  /// アラームがオン:時間の文字列,オフ:"オフ"を返す
-  /// * `index`:オン・オフを確認する対称のデータのインデックス
-  /// * `context`:BuildContext
-  /// * @retrun `String`:オン:時間の文字列, オフ:オフ
-  String alarmOnOff(int index, BuildContext context) {
-    int setAlarm = model.dataList[index]["setAlarm"];
-    int milliseconds = model.dataList[index]['time'];
-    if (setAlarm == 1) {
-      return _dateTimeFormat(milliseconds, context);
-    } else {
-      return AppLocalizations.of(context)!.setAlarmOff;
-    }
-  }
-
-  /// 時間を整形し、文字列として返す
-  /// * `milliseconds`:ミリ秒表現の時間
-  /// * `context`:BuildContext
-  /// * @return `String`:整形後の時間の文字列
-  String _dateTimeFormat(int milliseconds, BuildContext context) {
-    var dt = DateTime.fromMillisecondsSinceEpoch(milliseconds);
-    var now = DateTime.now();
-
-    var diff = dt.difference(now);
-
-    if (diff.inMilliseconds <= 0) {
-      return AppLocalizations.of(context)!.notifiedMsg;
-    } else {
-      return DateFormat(AppLocalizations.of(context)!.dateTimeFormat)
-          .format(dt);
-    }
   }
 
   /// リマインダー編集画面への遷移
