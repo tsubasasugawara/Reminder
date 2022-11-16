@@ -6,6 +6,7 @@ import 'package:reminder/view/home/appBar/top_up_set_alarm_button.dart';
 import '../../../components/snack_bar/snackbar.dart';
 import '../../../model/db/db.dart';
 import '../../../provider/home/home_provider.dart';
+import '../../search/search_view.dart';
 
 class Actions {
   late HomeProvider provider;
@@ -85,6 +86,19 @@ class Actions {
 
   List<Widget> normalMode() {
     return [
+      IconButton(
+        icon: const Icon(Icons.search),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => SearchView(
+                provider.model.dataList,
+                provider.isTrash,
+              ),
+            ),
+          );
+        },
+      ),
       IconButton(
         tooltip: AppLocalizations.of(context)!.order,
         iconSize: 30,

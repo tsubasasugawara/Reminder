@@ -8,6 +8,7 @@ import 'package:reminder/view/home/appBar/actions.dart' as actions;
 import 'package:reminder/view/trash/trash.dart';
 
 import '../setting/setting_view.dart';
+import 'list/list_item.dart';
 
 // ignore: must_be_immutable
 class MainView extends StatelessWidget {
@@ -163,80 +164,11 @@ class MainView extends StatelessWidget {
                     if (!provider.selectionMode) provider.changeMode(true);
                     provider.changeSelected(index);
                   },
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 10, top: 5),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(15),
-                        ),
-                        border: Border.all(
-                          color: provider.selectedItems[index]
-                              ? Theme.of(context).primaryColor
-                              : Theme.of(context).hintColor,
-                          width: provider.selectedItems[index] ? 2.5 : 1.5,
-                        ),
-                        color: Theme.of(context).backgroundColor,
-                      ),
-                      padding: const EdgeInsets.all(10),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        alignment: Alignment.topLeft,
-                        margin: const EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 10,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    provider.getString(index, "title"),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        ?.apply(
-                                          fontSizeDelta: 6,
-                                        ),
-                                    overflow: TextOverflow.ellipsis,
-                                    softWrap: false,
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.only(top: 5),
-                                    child: Text(
-                                      provider.alarmOnOff(index, context),
-                                      style:
-                                          Theme.of(context).textTheme.bodyText1,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              child: provider.getInt(
-                                          // ignore: todo
-                                          // TODO: Notifications.setAlarmKeyとObjectのkeyで文字が異なってしまっている
-                                          //     index, Notifications.setAlarmKey) ==
-                                          // 1
-                                          index,
-                                          "setAlarm") ==
-                                      1
-                                  ? Icon(
-                                      Icons.alarm_on,
-                                      color: Theme.of(context).primaryColor,
-                                    )
-                                  : Icon(
-                                      Icons.alarm_off,
-                                      color: Theme.of(context).hintColor,
-                                    ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                  child: ListItem(
+                    provider.selectedItems[index],
+                    provider.getString(index, "title"),
+                    provider.getInt(index, "setAlarm"),
+                    provider.getInt(index, 'time'),
                   ),
                 );
               },
