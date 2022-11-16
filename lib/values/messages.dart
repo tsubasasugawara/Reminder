@@ -38,6 +38,7 @@ class Messages {
     required this.orderById,
     required this.sortBy,
     required this.topUpSetAlarmReminder,
+    required this.searchBarHintText,
   });
 
   final String appTitle;
@@ -76,6 +77,7 @@ class Messages {
   final String orderById;
   final String sortBy;
   final String topUpSetAlarmReminder;
+  final String searchBarHintText;
 
   factory Messages.of(Locale locale) {
     switch (locale.languageCode) {
@@ -89,42 +91,44 @@ class Messages {
   }
 
   factory Messages.ja() => Messages(
-      appTitle: 'リマインダー',
-      notifiedMsg: '通知済み',
-      titleHintText: 'タイトル(必須)',
-      memoHintText: 'メモ',
-      titleError: 'タイトルを入力してください',
-      dateTimeError: '未来の日時を指定してください',
-      saved: '登録しました',
-      edited: '編集を保存しました',
-      saveButton: '保存する',
-      cancelButton: 'キャンセル',
-      dateTimeFormat: 'yyyy/MM/dd HH:mm',
-      setAlarmOff: 'オフ',
-      setAlarmOn: 'オン',
-      deletedReminder: '削除しました',
-      moveReminderToTrash: 'ごみ箱に移動しました',
-      restoreReminderToTrash: '復元しました',
-      timeFormat: 'HH:mm',
-      ok: '完了',
-      home: 'ホーム',
-      setting: '設定',
-      colorSetting: 'カラー',
-      uiModeSetting: 'テーマ',
-      refresh: '更新',
-      confirmation: '確認',
-      deletionConfirmationMsg: '本当に削除してもよろしいですか?',
-      movingToTrashConfirmationMsg: 'ごみ箱へ移動しますか?',
-      trash: 'ごみ箱',
-      order: 'ソート',
-      orderMethod: 'ソート方法',
-      orderById: "ID",
-      orderByTitle: 'タイトル',
-      orderByCreatedAt: '作成日',
-      orderByUpdatedAt: '更新日',
-      orderByAlarmTime: 'アラーム時間',
-      sortBy: '[逆順]',
-      topUpSetAlarmReminder: '[アラームONを上に表示]');
+        appTitle: 'リマインダー',
+        notifiedMsg: '通知済み',
+        titleHintText: 'タイトル(必須)',
+        memoHintText: 'メモ',
+        titleError: 'タイトルを入力してください',
+        dateTimeError: '未来の日時を指定してください',
+        saved: '登録しました',
+        edited: '編集を保存しました',
+        saveButton: '保存する',
+        cancelButton: 'キャンセル',
+        dateTimeFormat: 'yyyy/MM/dd HH:mm',
+        setAlarmOff: 'オフ',
+        setAlarmOn: 'オン',
+        deletedReminder: '削除しました',
+        moveReminderToTrash: 'ごみ箱に移動しました',
+        restoreReminderToTrash: '復元しました',
+        timeFormat: 'HH:mm',
+        ok: '完了',
+        home: 'ホーム',
+        setting: '設定',
+        colorSetting: 'カラー',
+        uiModeSetting: 'テーマ',
+        refresh: '更新',
+        confirmation: '確認',
+        deletionConfirmationMsg: '本当に削除してもよろしいですか?',
+        movingToTrashConfirmationMsg: 'ごみ箱へ移動しますか?',
+        trash: 'ごみ箱',
+        order: 'ソート',
+        orderMethod: 'ソート方法',
+        orderById: "ID",
+        orderByTitle: 'タイトル',
+        orderByCreatedAt: '作成日',
+        orderByUpdatedAt: '更新日',
+        orderByAlarmTime: 'アラーム時間',
+        sortBy: '[逆順]',
+        topUpSetAlarmReminder: '[アラームONを上に表示]',
+        searchBarHintText: 'キーワードを入力してください',
+      );
 
   factory Messages.en() => Messages(
         appTitle: 'Reminder',
@@ -164,5 +168,6 @@ class Messages {
         orderByAlarmTime: 'Alarm time',
         sortBy: '[Reverse order]',
         topUpSetAlarmReminder: '[Show alarms set on top]',
+        searchBarHintText: 'Please enter keyword',
       );
 }
