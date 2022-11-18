@@ -88,8 +88,8 @@ class Actions {
     return [
       IconButton(
         icon: const Icon(Icons.search),
-        onPressed: () {
-          Navigator.of(context).push(
+        onPressed: () async {
+          await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => SearchView(
                 provider.model.dataList,
@@ -97,6 +97,7 @@ class Actions {
               ),
             ),
           );
+          await provider.setData();
         },
       ),
       IconButton(
