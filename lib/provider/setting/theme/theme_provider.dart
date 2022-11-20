@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:reminder/components/brightness/brightness.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../setting.dart';
 
 /// App theme.
 class ThemeProvider extends ChangeNotifier {
@@ -34,21 +34,17 @@ class ThemeProvider extends ChangeNotifier {
   Color elevatedButtonBackground = const Color.fromARGB(255, 50, 50, 50);
   Color canvasColor = const Color.fromARGB(255, 60, 60, 60);
 
-  String primaryColorKey = "primaryColor";
-  String uiModeKey = "uiModeKey";
-
   ThemeProvider() {
     primaryColor = backgroundColor;
   }
 
   /// プライマリーカラーとテーマをセットする
   Future<void> setColors() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int colorCode = prefs.getInt(primaryColorKey) ?? 0xffe198b4;
+    int colorCode = await Setting.getInt(Setting.primaryColorKey) ?? 0xffe198b4;
     primaryColor = Color(colorCode);
     selectedIndex = _getIndex();
 
-    uiMode = prefs.getString(uiModeKey) ?? "A";
+    uiMode = await Setting.getString(Setting.uiModeKey) ?? "A";
     String tmpUiMode = uiMode == "A"
         ? SchedulerBinding.instance.window.platformBrightness == Brightness.dark
             ? "D"
@@ -66,8 +62,7 @@ class ThemeProvider extends ChangeNotifier {
   void changePrimaryColor(int colorCode) async {
     primaryColor = Color(colorCode);
     selectedIndex = _getIndex();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt(primaryColorKey, colorCode);
+    await Setting.setInt(Setting.primaryColorKey, colorCode);
 
     notifyListeners();
   }
@@ -107,8 +102,7 @@ class ThemeProvider extends ChangeNotifier {
     } else {
       uiMode = "A";
     }
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(uiModeKey, uiMode);
+    await Setting.setString(Setting.uiModeKey, uiMode);
 
     notifyListeners();
   }
@@ -124,6 +118,7 @@ class ThemeProvider extends ChangeNotifier {
       backgroundColor: backgroundColor,
       bottomAppBarColor: barColor,
       dialogBackgroundColor: dialogBackground,
+      unselectedWidgetColor: judgeBlackWhite(backgroundColor),
       appBarTheme: AppBarTheme(
         backgroundColor: backgroundColor,
         iconTheme: IconThemeData(

@@ -39,6 +39,10 @@ class Messages {
     required this.sortBy,
     required this.topUpSetAlarmReminder,
     required this.searchBarHintText,
+    required this.automaticDelete,
+    required this.automaticDeleteMsg,
+    required this.dayLater,
+    required this.daysLater,
   });
 
   final String appTitle;
@@ -78,6 +82,10 @@ class Messages {
   final String sortBy;
   final String topUpSetAlarmReminder;
   final String searchBarHintText;
+  final String automaticDelete;
+  final String automaticDeleteMsg;
+  final String dayLater;
+  final String daysLater;
 
   factory Messages.of(Locale locale) {
     switch (locale.languageCode) {
@@ -128,6 +136,10 @@ class Messages {
         sortBy: '[逆順]',
         topUpSetAlarmReminder: '[アラームONを上に表示]',
         searchBarHintText: 'キーワードを入力してください',
+        automaticDelete: '自動削除',
+        automaticDeleteMsg: '自動でアイテムを削除する',
+        dayLater: '日後',
+        daysLater: '日後',
       );
 
   factory Messages.en() => Messages(
@@ -169,5 +181,9 @@ class Messages {
         sortBy: '[Reverse order]',
         topUpSetAlarmReminder: '[Show alarms set on top]',
         searchBarHintText: 'Please enter keyword',
+        automaticDelete: 'AUTOMATIC DELETE',
+        automaticDeleteMsg: 'Automatically delete items',
+        dayLater: 'day later',
+        daysLater: 'days later',
       );
 }

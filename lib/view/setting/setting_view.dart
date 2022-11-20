@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
+import 'package:reminder/view/setting/auto_delete/auto_delete.dart';
 import 'package:reminder/view/setting/theme/primary_color_selector.dart';
 import 'package:reminder/view/setting/theme/ui_mode_selector.dart';
 import 'package:reminder/components/spacer/spacer.dart' as spacer;
@@ -31,6 +32,8 @@ class SettingView extends StatelessWidget {
               const UiModeSelector(),
               spacer.Spacer(_verticalSpaceSize, _verticalSpaceSize, 0, 0),
               const PrimaryColorSelector(),
+              spacer.Spacer(_verticalSpaceSize, _verticalSpaceSize, 0, 0),
+              const AutoRemove(),
               spacer.Spacer(_verticalSpaceSize, _verticalSpaceSize, 0, 0),
             ],
           ),

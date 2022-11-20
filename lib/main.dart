@@ -5,6 +5,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:reminder/provider/setting/theme/theme_provider.dart';
 import 'package:reminder/view/home/home_view.dart';
 
+import 'provider/setting/auto_delete/auto_delete_provider.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -12,14 +14,23 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  Future<void> settings(ThemeProvider tp) async {
+    await tp.setColors();
+    await AutoDeleteProvider.deleteReminder();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ThemeProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => ThemeProvider(),
+        ),
+      ],
       child: Consumer<ThemeProvider>(
         builder: (context, provider, child) {
           return FutureBuilder(
-            future: provider.setColors(),
+            future: settings(provider),
             builder: (BuildContext context, AsyncSnapshot<void> snapshot) =>
                 MaterialApp(
               theme: provider.getTheme(),
