@@ -137,7 +137,7 @@ class Messages {
         topUpSetAlarmReminder: '[アラームONを上に表示]',
         searchBarHintText: 'キーワードを入力してください',
         automaticDelete: '自動削除',
-        automaticDeleteMsg: '自動でアイテムを削除する',
+        automaticDeleteMsg: '自動でゴミ箱のアイテムを削除する',
         dayLater: '日後',
         daysLater: '日後',
       );
@@ -182,7 +182,7 @@ class Messages {
         topUpSetAlarmReminder: '[Show alarms set on top]',
         searchBarHintText: 'Please enter keyword',
         automaticDelete: 'AUTOMATIC DELETE',
-        automaticDeleteMsg: 'Automatically delete items',
+        automaticDeleteMsg: 'Automatically delete items from the trash',
         dayLater: 'day later',
         daysLater: 'days later',
       );
