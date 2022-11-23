@@ -36,6 +36,16 @@ class AlarmReceiver: BroadcastReceiver() {
 
         //     return
         // }
+
+        //if(intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
+        //    Intent(context, MainActivity::class.java).apply {
+        //        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        //        context?.startActivity(this)
+        //    }
+        //}
+
+        //Log.d("INTENT", intent.toString())
+
         this.createNotificationChannel(context)
         this.createNotification(context, intent)
     }

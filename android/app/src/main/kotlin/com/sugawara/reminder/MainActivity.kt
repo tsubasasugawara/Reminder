@@ -97,7 +97,6 @@ class MainActivity: FlutterActivity() {
 
                         val values = ContentValues()
                         methodCall.argument<String>("title")?.let{
-                            Log.d("update title", it.toString())
                             values.put(DBHelper.titleKey, it.toString())
                         }
                         methodCall.argument<String>("content")?.let{
