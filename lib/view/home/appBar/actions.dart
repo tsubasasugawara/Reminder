@@ -53,6 +53,16 @@ class Actions {
     );
   }
 
+  /// 水平線を作成
+  /// @{return} Widget : Divider
+  Widget _makeDivider() {
+    return Divider(
+      color: Theme.of(context).dividerColor,
+      height: 1,
+      thickness: 1,
+    );
+  }
+
   /// アイテムを選択するモードのときのactions
   /// @{return} List<Widget>
   List<Widget> _selectionMode() {
@@ -119,62 +129,34 @@ class Actions {
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                     ),
-                    Divider(
-                      color: Theme.of(context).dividerColor,
-                      height: 1,
-                      thickness: 1,
-                    ),
-                    _makeButton(
-                      Notifications.idKey,
-                      AppLocalizations.of(context)!.orderById,
-                    ),
-                    Divider(
-                      color: Theme.of(context).dividerColor,
-                      height: 1,
-                      thickness: 1,
-                    ),
-                    _makeButton(
-                      Notifications.titleKey,
-                      AppLocalizations.of(context)!.orderByTitle,
-                    ),
-                    Divider(
-                      color: Theme.of(context).dividerColor,
-                      height: 1,
-                      thickness: 1,
-                    ),
+                    _makeDivider(),
                     _makeButton(
                       Notifications.createdAtKey,
                       AppLocalizations.of(context)!.orderByCreatedAt,
                     ),
-                    Divider(
-                      color: Theme.of(context).dividerColor,
-                      height: 1,
-                      thickness: 1,
-                    ),
+                    _makeDivider(),
                     _makeButton(
                       Notifications.updatedAtKey,
                       AppLocalizations.of(context)!.orderByUpdatedAt,
                     ),
-                    Divider(
-                      color: Theme.of(context).dividerColor,
-                      height: 1,
-                      thickness: 1,
-                    ),
+                    _makeDivider(),
                     _makeButton(
                       Notifications.timeKey,
                       AppLocalizations.of(context)!.orderByAlarmTime,
                     ),
-                    Divider(
-                      color: Theme.of(context).dividerColor,
-                      height: 1,
-                      thickness: 1,
+                    _makeDivider(),
+                    _makeButton(
+                      Notifications.titleKey,
+                      AppLocalizations.of(context)!.orderByTitle,
                     ),
+                    _makeDivider(),
                     ReverseOrderButton(
                       () {
                         provider.changeSortBy();
                       },
                       provider.sortBy,
                     ),
+                    _makeDivider(),
                     TopUpSetAlarmButton(
                       () {
                         provider.changeTopUpSetAlarmReminder();

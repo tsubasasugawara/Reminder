@@ -22,7 +22,7 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
   late bool isTrash;
 
   /// ソートに使用するカラム
-  String orderBy = Notifications.idKey;
+  String orderBy = Notifications.createdAtKey;
 
   /// 昇順、降順の設定
   String sortBy = Notifications.asc;
