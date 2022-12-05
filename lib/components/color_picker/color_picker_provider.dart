@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../text_field_cursor/text_field_cursor.dart';
+
 class ColorPickerProvider extends ChangeNotifier {
   /// 選択している色のindex
   late int _checkedItemIndex;
@@ -66,14 +68,6 @@ class ColorPickerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// カーソルを右端に移動する
-  /// * `controller` : TextEditingController
-  void _moveCursor(TextEditingController controller) {
-    controller.selection = TextSelection.fromPosition(
-      TextPosition(offset: controller.text.length),
-    );
-  }
-
   /// 現在の色を取得
   /// * @return `Color` : 現在の色
   Color getColor() {
@@ -92,24 +86,24 @@ class ColorPickerProvider extends ChangeNotifier {
     if (RegExp(r'[^0-9]').hasMatch(value)) {
       value = value.replaceAll(RegExp(r'[^0-9]'), "");
       controller.text = value;
-      _moveCursor(controller);
+      TextFieldCursor.moveCursor(controller);
     }
     if (RegExp(r'^0+[0-9]+').hasMatch(value)) {
       value = value.replaceAll(RegExp(r'^0+'), '');
       controller.text = value;
-      _moveCursor(controller);
+      TextFieldCursor.moveCursor(controller);
     }
 
     int code = int.tryParse(value) ?? 0;
     if (code <= 0) {
       controller.text = "0";
       code = 0;
-      _moveCursor(controller);
+      TextFieldCursor.moveCursor(controller);
     }
     if (code > 255) {
       controller.text = "255";
       code = 255;
-      _moveCursor(controller);
+      TextFieldCursor.moveCursor(controller);
     }
     action(code);
   }
