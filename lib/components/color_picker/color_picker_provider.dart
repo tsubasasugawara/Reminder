@@ -89,7 +89,7 @@ class ColorPickerProvider extends ChangeNotifier {
       TextFieldCursor.moveCursor(controller);
     }
     if (RegExp(r'^0+[0-9]+').hasMatch(value)) {
-      value = value.replaceAll(RegExp(r'^0+'), '');
+      value = value.replaceAll(RegExp(r'^0+'), "");
       controller.text = value;
       TextFieldCursor.moveCursor(controller);
     }

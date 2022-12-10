@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../model/db/db.dart';
+
 class SearchProvider extends ChangeNotifier {
   // データベースのデータを格納
   List<Map> dataList = <Map>[];
@@ -26,7 +28,7 @@ class SearchProvider extends ChangeNotifier {
     str = str.toLowerCase();
 
     for (int i = 0; i < dataList.length; i++) {
-      if (dataList[i]["title"].toLowerCase().contains(str)) {
+      if (dataList[i][Notifications.titleKey].toLowerCase().contains(str)) {
         displayDataList.add(dataList[i]);
       }
     }

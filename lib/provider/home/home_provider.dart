@@ -124,11 +124,11 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
         builder: (context) {
           if (index != null) {
             return AddReminderView(
-              id: model.dataList[index]["id"],
-              title: model.dataList[index]["title"],
-              content: model.dataList[index]["content"],
-              time: model.dataList[index]["time"],
-              setAlarm: model.dataList[index]["setAlarm"],
+              id: model.dataList[index][Notifications.idKey],
+              title: model.dataList[index][Notifications.titleKey],
+              content: model.dataList[index][Notifications.contentKey],
+              time: model.dataList[index][Notifications.timeKey],
+              setAlarm: model.dataList[index][Notifications.setAlarmKey],
               isTrash: isTrash,
             );
           }

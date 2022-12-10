@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:reminder/view/search/search_bar/searchbar.dart';
 
 import '../../components/brightness/brightness.dart';
+import '../../model/db/db.dart';
 import '../../provider/search/search_provider.dart';
 import '../add_reminder/add_reminder_view.dart';
 import '../home/list/list_item.dart';
@@ -51,11 +52,16 @@ class SearchView extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) {
                         return AddReminderView(
-                          id: provider.displayDataList[index]["id"],
-                          title: provider.displayDataList[index]["title"],
-                          content: provider.displayDataList[index]["content"],
-                          time: provider.displayDataList[index]["time"],
-                          setAlarm: provider.displayDataList[index]["setAlarm"],
+                          id: provider.displayDataList[index]
+                              [Notifications.idKey],
+                          title: provider.displayDataList[index]
+                              [Notifications.titleKey],
+                          content: provider.displayDataList[index]
+                              [Notifications.contentKey],
+                          time: provider.displayDataList[index]
+                              [Notifications.timeKey],
+                          setAlarm: provider.displayDataList[index]
+                              [Notifications.setAlarmKey],
                           isTrash: isTrash,
                         );
                       },
@@ -64,9 +70,9 @@ class SearchView extends StatelessWidget {
                 },
                 child: ListItem(
                   false,
-                  provider.displayDataList[index]["title"],
-                  provider.displayDataList[index]["setAlarm"],
-                  provider.displayDataList[index]["time"],
+                  provider.displayDataList[index][Notifications.titleKey],
+                  provider.displayDataList[index][Notifications.setAlarmKey],
+                  provider.displayDataList[index][Notifications.timeKey],
                 ),
               );
             },

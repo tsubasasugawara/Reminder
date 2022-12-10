@@ -33,30 +33,6 @@ class AlarmReceiver: BroadcastReceiver() {
 
     @SuppressLint("UnspecifiedImmutableFlag")
     override fun onReceive(context: Context, intent: Intent) {
-        // if(Intent.ACTION_LOCKED_BOOT_COMPLETED.equals(intent.getAction())) {
-        //     val id = intent.extras?.getInt("id") ?: return
-        //     val title = intent.extras?.getString("title") ?: return
-        //     val content = intent.extras?.getString("content") ?: return
-        //     val time = intent.extras?.getLong("time") ?: return
-
-        //     val serviceIntent = Intent(context, AlarmRegister::class.java)
-        //     context.startService(serviceIntent)
-
-        //     val register = AlarmRegister(context)
-        //     register.registAlarm(id, title, content, time)
-
-        //     return
-        // }
-
-        //if(intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
-        //    Intent(context, MainActivity::class.java).apply {
-        //        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        //        context?.startActivity(this)
-        //    }
-        //}
-
-        //Log.d("INTENT", intent.toString())
-
         this.createNotificationChannel(context)
         this.createNotification(context, intent)
     }
@@ -85,9 +61,9 @@ class AlarmReceiver: BroadcastReceiver() {
 
     @SuppressLint("UnspecifiedImmutableFlag")
     private fun createNotification(context: Context, intent: Intent) {
-        val id = intent.extras?.getInt("id") ?: return
-        val title = intent.extras?.getString("title") ?: return
-        val content = intent.extras?.getString("content") ?: return
+        val id = intent.extras?.getInt(DBHelper.idKey) ?: return
+        val title = intent.extras?.getString(DBHelper.titleKey) ?: return
+        val content = intent.extras?.getString(DBHelper.contentKey) ?: return
 
         val activityIntent = Intent(context, MainActivity::class.java)
 
@@ -114,11 +90,11 @@ class AlarmReceiver: BroadcastReceiver() {
     }
 
     private fun reRegistAlarm(context: Context, intent: Intent) {
-        val id = intent.extras?.getInt("id") ?: return
-        val title = intent.extras?.getString("title") ?: return
-        val content = intent.extras?.getString("content") ?: return
-        val time = intent.extras?.getLong("time") ?: return
-        val frequency = intent.extras?.getLong("frequency") ?: return
+        val id = intent.extras?.getInt(DBHelper.idKey) ?: return
+        val title = intent.extras?.getString(DBHelper.titleKey) ?: return
+        val content = intent.extras?.getString(DBHelper.contentKey) ?: return
+        val time = intent.extras?.getLong(DBHelper.timeKey) ?: return
+        val frequency = intent.extras?.getLong(DBHelper.frequencyKey) ?: return
 
         // 繰り返さない場合は処理を終了
         if (frequency == AlarmReceiver.NOT_REPEAT) return
@@ -137,18 +113,18 @@ class AlarmReceiver: BroadcastReceiver() {
             else -> nextDateTime = zonedDt.plusDays(frequency).toInstant().toEpochMilli()
         }
 
-        // アラームを登録する
-        val alarmRegisterIntent = Intent(context, AlarmRegister::class.java)
-        context.startService(alarmRegisterIntent)
-        val register = AlarmRegister(context)
-        register.registAlarm(id, title, content, nextDateTime, frequency)
-
         // アラーム発火時間を更新する
         val notificationsIntent = Intent(context, Notifications::class.java)
         context.startService(notificationsIntent)
         val notifications = Notifications()
         var values = ContentValues()
         values.put(DBHelper.timeKey, nextDateTime)
-        notifications.update(context,values,"id = ?",arrayOf(id.toString()))
+        notifications.update(context,values,"${DBHelper.idKey} = ?",arrayOf(id.toString()))
+
+        // アラームを登録する
+        val alarmRegisterIntent = Intent(context, AlarmRegister::class.java)
+        context.startService(alarmRegisterIntent)
+        val register = AlarmRegister(context)
+        register.registAlarm(id, title, content, time, frequency)
     }
 }

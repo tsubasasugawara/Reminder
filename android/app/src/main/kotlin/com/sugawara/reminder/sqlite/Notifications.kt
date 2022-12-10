@@ -149,15 +149,15 @@ class Notifications {
                     // TODO: DBでのKeyとマップでのKeyの違いをなくす
                     res.add(
                         mapOf(
-                            "id"            to id,
-                            "title"         to title,
-                            "content"       to content,
-                            "frequency"     to frequency,
-                            "time"          to time,
-                            "setAlarm"      to setAlarm,
-                            "deleted"       to deleted,
-                            "createdAtKey"  to createdAt,
-                            "updatedAtKey"  to updatedAt,
+                            DBHelper.idKey              to id,
+                            DBHelper.titleKey           to title,
+                            DBHelper.contentKey         to content,
+                            DBHelper.frequencyKey       to frequency,
+                            DBHelper.timeKey            to time,
+                            DBHelper.setAlarmKey        to setAlarm,
+                            DBHelper.deletedKey         to deleted,
+                            DBHelper.createdAtKey       to createdAt,
+                            DBHelper.updatedAtKey       to updatedAt,
                         )
                     )
                     cur.moveToNext()

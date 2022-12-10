@@ -7,6 +7,7 @@ import 'package:reminder/view/add_reminder/add_reminder_view.dart';
 import 'package:reminder/view/home/appBar/actions.dart' as actions;
 import 'package:reminder/view/trash/trash.dart';
 
+import '../../model/db/db.dart';
 import '../setting/setting_view.dart';
 import 'list/list_item.dart';
 
@@ -166,9 +167,9 @@ class MainView extends StatelessWidget {
                   },
                   child: ListItem(
                     provider.selectedItems[index],
-                    provider.getString(index, "title"),
-                    provider.getInt(index, "setAlarm"),
-                    provider.getInt(index, 'time'),
+                    provider.getString(index, Notifications.titleKey),
+                    provider.getInt(index, Notifications.setAlarmKey),
+                    provider.getInt(index, Notifications.timeKey),
                   ),
                 );
               },

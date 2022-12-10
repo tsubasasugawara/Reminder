@@ -5,6 +5,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import com.sugawara.reminder.sqlite.DBHelper
 import android.os.Build
 import com.sugawara.reminder.alarm.AlarmReceiver
 
@@ -17,12 +18,12 @@ class AlarmRegister(_context: Context) {
         id: Int,
         title: String,
         content: String,
-        millis: Long,
+        time: Long,
         frequency: Long,
     ){
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val intent = createIntent(id, title, content, millis, frequency)
+        val intent = createIntent(id, title, content, time, frequency)
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             id,
@@ -32,7 +33,7 @@ class AlarmRegister(_context: Context) {
 
         val alarmInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             AlarmManager.AlarmClockInfo(
-                millis,
+                time,
                 null
             )
         } else {
@@ -50,12 +51,12 @@ class AlarmRegister(_context: Context) {
         id: Int,
         title: String,
         content: String,
-        millis: Long,
+        time: Long,
         frequency: Long,
     ){
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val intent = createIntent(id, title, content, millis, frequency)
+        val intent = createIntent(id, title, content, time, frequency)
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             id,
@@ -72,16 +73,16 @@ class AlarmRegister(_context: Context) {
         id: Int,
         title: String,
         content: String,
-        millis: Long,
+        time: Long,
         frequency: Long,
     ): Intent {
         return Intent(this.context, AlarmReceiver::class.java)
             .also {
-                it.putExtra("id", id)
-                it.putExtra("title",title)
-                it.putExtra("content",content)
-                it.putExtra("time", millis)
-                it.putExtra("frequeny", frequency)
+                it.putExtra(DBHelper.idKey, id)
+                it.putExtra(DBHelper.titleKey,title)
+                it.putExtra(DBHelper.contentKey,content)
+                it.putExtra(DBHelper.timeKey, time)
+                it.putExtra(DBHelper.frequencyKey, frequency)
             }
     }
 }

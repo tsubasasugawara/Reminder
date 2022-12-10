@@ -38,7 +38,7 @@ class Notifications {
   /// * `ids` : IDのリスト
   /// * @return `プレースホルダを用いたwhere句
   String createMultipleIDWhereClauses(List<int> ids) {
-    var statement = ' id IN(?';
+    var statement = ' $idKey IN(?';
     for (int i = 1; i < ids.length; i++) {
       statement = statement + ',?';
     }
@@ -100,12 +100,12 @@ class Notifications {
   ) async {
     var res = await MethodChannel(KotlinMethodCalling.channelName)
         .invokeMethod("insert", {
-      'title': title,
-      'content': content,
-      'frequency': frequency,
-      'time': time,
-      'setAlarm': setAlarm,
-      'deleted': deleted,
+      titleKey: title,
+      contentKey: content,
+      frequencyKey: frequency,
+      timeKey: time,
+      setAlarmKey: setAlarm,
+      deletedKey: deleted,
     });
     return res;
   }
@@ -134,14 +134,14 @@ class Notifications {
   }) async {
     var res = await MethodChannel(KotlinMethodCalling.channelName)
         .invokeMethod("update", {
-      'title': title,
-      'content': content,
-      'frequency': frequency,
-      'time': time,
-      'setAlarm': setAlarm,
-      'deleted': deleted,
-      'where': where,
-      'whereArgs': _createMapFromObjectList(whereArgs),
+      titleKey: title,
+      contentKey: content,
+      frequencyKey: frequency,
+      timeKey: time,
+      setAlarmKey: setAlarm,
+      deletedKey: deleted,
+      where: where,
+      whereArgs: _createMapFromObjectList(whereArgs),
     });
     return res;
   }

@@ -1,8 +1,12 @@
 import 'package:flutter/services.dart';
 
+import '../db/db.dart';
+
 class KotlinMethodCalling {
   static String channelName = "com.sugawara.reminder/alarm";
   static String primaryColorKey = "primaryColor";
+
+  // TODO: dart側ではidのみ送信し、その他はkotlin側で取得する
 
   /// アラームをスケジューリング
   /// * `id` : ID
@@ -18,10 +22,10 @@ class KotlinMethodCalling {
     await MethodChannel(KotlinMethodCalling.channelName).invokeMethod(
       "alarm",
       <String, dynamic>{
-        'id': id,
-        'title': title,
-        'content': content,
-        'time': time
+        Notifications.idKey: id,
+        Notifications.titleKey: title,
+        Notifications.contentKey: content,
+        Notifications.timeKey: time
       },
     );
   }
@@ -40,10 +44,10 @@ class KotlinMethodCalling {
     await MethodChannel(KotlinMethodCalling.channelName).invokeMethod(
       "deleteAlarm",
       <String, dynamic>{
-        'id': id,
-        'title': title,
-        'content': content,
-        'time': time,
+        Notifications.idKey: id,
+        Notifications.titleKey: title,
+        Notifications.contentKey: content,
+        Notifications.timeKey: time,
       },
     );
   }

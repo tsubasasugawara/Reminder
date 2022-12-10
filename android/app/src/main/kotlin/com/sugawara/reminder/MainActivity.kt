@@ -21,22 +21,22 @@ class MainActivity: FlutterActivity() {
             methodCall, result ->
             when(methodCall.method) {
                 "alarm" -> {
-                    val id = methodCall.argument<Int>("id")!!
-                    val title = methodCall.argument<String>("title").toString()
-                    val content = methodCall.argument<String>("content").toString()
-                    val time = methodCall.argument<Long>("time")!!
-                    val frequency = methodCall.argument<Long>("frequency") ?: 0
+                    val id = methodCall.argument<Int>(DBHelper.idKey)!!
+                    val title = methodCall.argument<String>(DBHelper.titleKey).toString()
+                    val content = methodCall.argument<String>(DBHelper.contentKey).toString()
+                    val time = methodCall.argument<Long>(DBHelper.timeKey)!!
+                    val frequency = methodCall.argument<Long>(DBHelper.frequencyKey) ?: 0
                     val register = AlarmRegister(context)
 
                     register.registAlarm(id,title,content,time,frequency)
                     result.success(null);
                 }
                 "deleteAlarm" -> {
-                    val id = methodCall.argument<Int>("id")!!
-                    val title = methodCall.argument<String>("title").toString()
-                    val content = methodCall.argument<String>("content").toString()
-                    val time = methodCall.argument<Long>("time")!!
-                    val frequency = methodCall.argument<Long>("frequency") ?: 0
+                    val id = methodCall.argument<Int>(DBHelper.idKey)!!
+                    val title = methodCall.argument<String>(DBHelper.titleKey).toString()
+                    val content = methodCall.argument<String>(DBHelper.contentKey).toString()
+                    val time = methodCall.argument<Long>(DBHelper.timeKey)!!
+                    val frequency = methodCall.argument<Long>(DBHelper.frequencyKey) ?: 0
 
                     val register = AlarmRegister(context)
                     register.deleteAlarm(id,title,content,time,frequency)
@@ -72,12 +72,12 @@ class MainActivity: FlutterActivity() {
                 "insert" -> {
                     try {
                         val values = ContentValues()
-                        values.put(DBHelper.titleKey, methodCall.argument<String>("title").toString())
-                        values.put(DBHelper.contentKey, methodCall.argument<String>("content").toString())
-                        values.put(DBHelper.frequencyKey, methodCall.argument<Int>("frequency") ?: 0)
-                        values.put(DBHelper.timeKey, methodCall.argument<Long>("time") ?: 0)
-                        values.put(DBHelper.setAlarmKey, methodCall.argument<Int>("setAlarm") ?: 0)
-                        values.put(DBHelper.deletedKey, methodCall.argument<Int>("deleted") ?: 0)
+                        values.put(DBHelper.titleKey, methodCall.argument<String>(DBHelper.titleKey).toString())
+                        values.put(DBHelper.contentKey, methodCall.argument<String>(DBHelper.contentKey).toString())
+                        values.put(DBHelper.frequencyKey, methodCall.argument<Int>(DBHelper.frequencyKey) ?: 0)
+                        values.put(DBHelper.timeKey, methodCall.argument<Long>(DBHelper.timeKey) ?: 0)
+                        values.put(DBHelper.setAlarmKey, methodCall.argument<Int>(DBHelper.setAlarmKey) ?: 0)
+                        values.put(DBHelper.deletedKey, methodCall.argument<Int>(DBHelper.deletedKey) ?: 0)
                         values.put(DBHelper.createdAtKey, System.currentTimeMillis())
                         values.put(DBHelper.updatedAtKey, System.currentTimeMillis())
 

@@ -5,6 +5,8 @@ import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/home_provider.dart';
 import 'package:reminder/view/home/appBar/actions.dart' as actions;
 
+import '../../model/db/db.dart';
+
 // ignore: must_be_immutable
 class Trash extends StatelessWidget {
   const Trash({Key? key}) : super(key: key);
@@ -143,7 +145,8 @@ class Trash extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    provider.getString(index, "title"),
+                                    provider.getString(
+                                        index, Notifications.titleKey),
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText1

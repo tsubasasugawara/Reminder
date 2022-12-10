@@ -69,12 +69,12 @@ class SelectionItemProvider {
   ) async {
     List<int> ids = [];
     for (var ele in _getSelectedIndex()) {
-      ids.add(dataList[ele]['id']);
+      ids.add(dataList[ele][Notifications.idKey]);
       await _setOffAlarm(
-        dataList[ele]['id'],
-        dataList[ele]['title'],
-        dataList[ele]['content'],
-        dataList[ele]['time'],
+        dataList[ele][Notifications.idKey],
+        dataList[ele][Notifications.titleKey],
+        dataList[ele][Notifications.contentKey],
+        dataList[ele][Notifications.timeKey],
       );
     }
     int? res = await Notifications().multipleDelete(ids);
@@ -91,12 +91,12 @@ class SelectionItemProvider {
   ) async {
     List<int> ids = [];
     for (var ele in _getSelectedIndex()) {
-      ids.add(dataList[ele]['id']);
+      ids.add(dataList[ele][Notifications.idKey]);
       _setOffAlarm(
-        dataList[ele]['id'],
-        dataList[ele]['title'],
-        dataList[ele]['content'],
-        dataList[ele]['time'],
+        dataList[ele][Notifications.idKey],
+        dataList[ele][Notifications.titleKey],
+        dataList[ele][Notifications.contentKey],
+        dataList[ele][Notifications.timeKey],
       );
     }
     var nt = Notifications();
