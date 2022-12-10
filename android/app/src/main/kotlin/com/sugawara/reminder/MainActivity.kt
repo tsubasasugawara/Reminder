@@ -25,9 +25,10 @@ class MainActivity: FlutterActivity() {
                     val title = methodCall.argument<String>("title").toString()
                     val content = methodCall.argument<String>("content").toString()
                     val time = methodCall.argument<Long>("time")!!
+                    val frequency = methodCall.argument<Long>("frequency") ?: 0
                     val register = AlarmRegister(context)
 
-                    register.registAlarm(id,title,content,time)
+                    register.registAlarm(id,title,content,time,frequency)
                     result.success(null);
                 }
                 "deleteAlarm" -> {
@@ -35,9 +36,10 @@ class MainActivity: FlutterActivity() {
                     val title = methodCall.argument<String>("title").toString()
                     val content = methodCall.argument<String>("content").toString()
                     val time = methodCall.argument<Long>("time")!!
+                    val frequency = methodCall.argument<Long>("frequency") ?: 0
 
                     val register = AlarmRegister(context)
-                    register.deleteAlarm(id,title,content,time)
+                    register.deleteAlarm(id,title,content,time,frequency)
                     result.success(null);
                 }
                 "select" -> {

@@ -18,11 +18,11 @@ class AlarmRegister(_context: Context) {
         title: String,
         content: String,
         millis: Long,
-        // created: Boolean
+        frequency: Long,
     ){
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val intent = createIntent(id, title, content, millis)
+        val intent = createIntent(id, title, content, millis, frequency)
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             id,
@@ -50,11 +50,12 @@ class AlarmRegister(_context: Context) {
         id: Int,
         title: String,
         content: String,
-        millis: Long
+        millis: Long,
+        frequency: Long,
     ){
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val intent = createIntent(id, title, content, millis)
+        val intent = createIntent(id, title, content, millis, frequency)
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             id,
@@ -71,7 +72,8 @@ class AlarmRegister(_context: Context) {
         id: Int,
         title: String,
         content: String,
-        millis: Long
+        millis: Long,
+        frequency: Long,
     ): Intent {
         return Intent(this.context, AlarmReceiver::class.java)
             .also {
@@ -79,6 +81,7 @@ class AlarmRegister(_context: Context) {
                 it.putExtra("title",title)
                 it.putExtra("content",content)
                 it.putExtra("time", millis)
+                it.putExtra("frequeny", frequency)
             }
     }
 }
