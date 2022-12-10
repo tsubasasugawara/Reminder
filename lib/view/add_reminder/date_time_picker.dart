@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder/components/brightness/brightness.dart';
-import 'package:reminder/components/datetimepicker/time_provider.dart';
+import 'package:reminder/provider/add_reminder/datetime/time_provider.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/setting/theme/theme_provider.dart';
 

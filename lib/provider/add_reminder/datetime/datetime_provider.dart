@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:reminder/components/datetimepicker/date_time_picker.dart';
+import 'package:reminder/view/add_reminder/date_time_picker.dart';
 import 'package:reminder/model/add_reminder/datetime_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 

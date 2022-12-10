@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:reminder/components/datetimepicker/time_model.dart';
+import 'package:reminder/model/add_reminder/time_model.dart';
 
 class TimeProvider extends ChangeNotifier {
   late TimeModel model;
