@@ -4,7 +4,7 @@ import 'package:reminder/multilingualization/app_localizations.dart';
 
 // ignore: must_be_immutable
 class ConfirmationDialog extends StatelessWidget {
-  /// ダイアログに表示するメッセージ
+  //ダイアログに表示するメッセージ
   String message;
 
   ConfirmationDialog(this.message, {Key? key}) : super(key: key);

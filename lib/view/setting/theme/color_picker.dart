@@ -4,7 +4,7 @@ import 'package:reminder/components/brightness/brightness.dart';
 import 'package:reminder/provider/setting/theme/color_picker_provider.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
-// ignore: must_be_immutable
+//ignore: must_be_immutable
 class ColorPicker extends StatelessWidget {
   late Function(int, int) onPressed;
   late List<int> colors;
@@ -15,15 +15,17 @@ class ColorPicker extends StatelessWidget {
   late double checkedItemIconSize;
   late double width;
 
-  /// コンストラクタ
-  /// * `onPressed` : 押したときの処理
-  /// * `colors` : ピッカーに表示する色
-  /// * `checkedItemIndex` : 選択されている色のindex
-  /// * `width` : カラーピッカーのwidth
-  /// * `columnCount` : 横に並べるアイテム数
-  /// * `mainAxisSpacing` : 間隔
-  /// * `crossAxisSpacing` : 間隔
-  /// * `checkedItemIconSize` : チェックマークの大きさ
+  /*
+   * コンストラクタ
+   * @param onPressed : 押したときの処理
+   * @param colors : ピッカーに表示する色
+   * @param checkedItemIndex : 選択されている色のindex
+   * @param width : カラーピッカーのwidth
+   * @param columnCount : 横に並べるアイテム数
+   * @param mainAxisSpacing : 間隔
+   * @param crossAxisSpacing : 間隔
+   * @param checkedItemIconSize : チェックマークの大きさ
+   */
   ColorPicker({
     required this.onPressed,
     required this.colors,
@@ -41,14 +43,16 @@ class ColorPicker extends StatelessWidget {
     this.checkedItemIconSize = checkedItemIconSize ?? 24.0;
   }
 
-  /// RGBエディタのフォーム
-  /// * `context` : BuildContext
-  /// * `controller` : TextEditingController
-  /// * `name` : フォームの名前
-  /// * `color` : nameのテキストカラー
-  /// * `action` : 変更時の処理
-  /// * `provider` : ColorPickerProvider
-  /// * @return `Widget` : フォーム
+  /*
+   * RGBエディタのフォーム
+   * @param context : BuildContext
+   * @param controller : TextEditingController
+   * @param name : フォームの名前
+   * @param color : nameのテキストカラー
+   * @param action : 変更時の処理
+   * @param provider : ColorPickerProvider
+   * @return Widget : フォーム
+   */
   Widget _textField(
     BuildContext context,
     TextEditingController controller,
@@ -105,11 +109,13 @@ class ColorPicker extends StatelessWidget {
     );
   }
 
-  /// カラー選択ボタンを作成
-  /// * `provider` : ColorPickerProvider
-  /// * `color` : ボタンの色
-  /// * `index` : 選択されている色のindex
-  /// * @return `Widget` : カラー選択ボタン
+  /*
+   * カラー選択ボタンを作成
+   * @param provider : ColorPickerProvider
+   * @param color : ボタンの色
+   * @param index : 選択されている色のindex
+   * @return Widget : カラー選択ボタン
+   */
   Widget _createColorButton(
     ColorPickerProvider provider,
     Color color,
@@ -138,9 +144,11 @@ class ColorPicker extends StatelessWidget {
     );
   }
 
-  /// カラー選択ボタンのリストを作成
-  /// * `provider` : ColorPickerProvider
-  /// * @return `List<Widget` : カラー選択ボタンのリスト
+  /*
+   * カラー選択ボタンのリストを作成
+   * @param provider : ColorPickerProvider
+   * @return List<Widget : カラー選択ボタンのリスト
+   */
   List<Widget> createButtonsList(ColorPickerProvider provider) {
     return [
       for (int index = 0; index < colors.length; index++)

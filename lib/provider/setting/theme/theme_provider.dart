@@ -3,7 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:reminder/components/brightness/brightness.dart';
 import '../setting.dart';
 
-/// App theme.
+//App theme.
 class ThemeProvider extends ChangeNotifier {
   List<int> colors = [
     0xffe5a323, //パンプキン
@@ -20,10 +20,10 @@ class ThemeProvider extends ChangeNotifier {
     0xff9400d3, //ダークバイオレット
   ];
 
-  late String uiMode; // D:ダーク, L:ライト, A:自動
+  late String uiMode; //D:ダーク, L:ライト, A:自動
   late Color primaryColor;
 
-  int selectedIndex = 0; // 現在のプライマリーカラーの番号
+  int selectedIndex = 0; //現在のプライマリーカラーの番号
 
   Color backgroundColor = const Color.fromARGB(255, 40, 40, 40);
   Color barColor = const Color.fromARGB(255, 50, 50, 50);
@@ -38,7 +38,7 @@ class ThemeProvider extends ChangeNotifier {
     primaryColor = backgroundColor;
   }
 
-  /// プライマリーカラーとテーマをセットする
+  //プライマリーカラーとテーマをセットする
   Future<void> setColors() async {
     int colorCode = await Setting.getInt(Setting.primaryColorKey) ?? 0xffe198b4;
     primaryColor = Color(colorCode);
@@ -57,8 +57,10 @@ class ThemeProvider extends ChangeNotifier {
     }
   }
 
-  /// プライマリーカラーを変更する
-  /// * `colorCode`:16進数のカラーコード
+  /*
+   * プライマリーカラーを変更する
+   * @param colorCode:16進数のカラーコード
+   */
   void changePrimaryColor(int colorCode) async {
     primaryColor = Color(colorCode);
     selectedIndex = _getIndex();
@@ -67,7 +69,7 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// ダークテーマに変更
+  //ダークテーマに変更
   void _darkTheme() {
     backgroundColor = const Color.fromARGB(255, 40, 40, 40);
     barColor = const Color.fromARGB(255, 50, 50, 50);
@@ -79,7 +81,7 @@ class ThemeProvider extends ChangeNotifier {
     canvasColor = const Color.fromARGB(255, 60, 60, 60);
   }
 
-  /// ライトテーマに変更
+  //ライトテーマに変更
   void _lightTheme() {
     backgroundColor = Colors.white;
     barColor = Colors.white;
@@ -91,9 +93,11 @@ class ThemeProvider extends ChangeNotifier {
     canvasColor = const Color.fromARGB(255, 240, 240, 240);
   }
 
-  /// テーマを保存
-  /// * `mode`:選択されたモード
-  ///   "D"ダークモード. "L"ライトモード. "A"自動.
+  /*
+   * テーマを保存
+   * @param mode:選択されたモード
+   * "D"ダークモード. "L"ライトモード. "A"自動.
+   */
   Future<void> changeUiMode(String mode) async {
     if (mode == "D") {
       uiMode = "D";
@@ -107,7 +111,7 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// ThemeDataを作成し、返す
+  //ThemeDataを作成し、返す
   ThemeData? getTheme() {
     return ThemeData(
       primarySwatch: Colors.grey,
@@ -170,7 +174,7 @@ class ThemeProvider extends ChangeNotifier {
     );
   }
 
-  /// 現在のプライマリーカラーの番号を返す
+  //現在のプライマリーカラーの番号を返す
   int _getIndex() {
     for (int i = 0; i < colors.length; i++) {
       if (primaryColor.value == colors[i]) return i;

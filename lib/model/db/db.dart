@@ -14,13 +14,15 @@ class Notifications {
   static const createdAtKey = "created_at";
   static const updatedAtKey = "updated_at";
 
-  /// 並び替えの方式
+  //並び替えの方式
   static const String asc = "ASC";
   static const String desc = "DESC";
 
-  /// whereArgsに使う値をListからMapへ変換
-  /// * `list` : Objectの配列
-  /// @return Map<String, String>?
+  /*
+   * whereArgsに使う値をListからMapへ変換
+   * @param list : Objectの配列
+   * @return Map<String, String>?
+   */
   Map<String, String>? _createMapFromObjectList(
     List<Object?>? list,
   ) {
@@ -34,9 +36,11 @@ class Notifications {
     return map;
   }
 
-  /// IDによって複数のカラムを指定するwhere句を作成
-  /// * `ids` : IDのリスト
-  /// * @return `プレースホルダを用いたwhere句
+  /*
+   * IDによって複数のカラムを指定するwhere句を作成
+   * @param ids : IDのリスト
+   * @return プレースホルダを用いたwhere句
+   */
   String createMultipleIDWhereClauses(List<int> ids) {
     var statement = ' $idKey IN(?';
     for (int i = 1; i < ids.length; i++) {
@@ -47,17 +51,17 @@ class Notifications {
     return statement;
   }
 
-  /// SELECT文
-  ///
-  /// * `columns` : 取得したいカラムのリスト
-  /// * `where` : WHERE句
-  /// * `whereArgs` : WHERE句のプレースホルダに入れる値
-  /// * `groupBy` : GROUP BY句
-  /// * `having` : HAVING句
-  /// * `orderBy` : ORDER BY句
-  /// * `limit` : LIMIT句
-  ///
-  /// * @return `res` : 取得したデータベースのデータ
+  /*
+   * SELECT文
+   * @param columns : 取得したいカラムのリスト
+   * @param where : WHERE句
+   * @param whereArgs : WHERE句のプレースホルダに入れる値
+   * @param groupBy : GROUP BY句
+   * @param having : HAVING句
+   * @param orderBy : ORDER BY句
+   * @param limit : LIMIT句
+   * @return res : 取得したデータベースのデータ
+   */
   Future<List<Object?>?> select(
     List<Object?> columns, {
     String? where,
@@ -80,16 +84,16 @@ class Notifications {
     return res;
   }
 
-  /// INSERT文
-  ///
-  /// * `title` : タイトル
-  /// * `content` : メモ
-  /// * `frequency` : 頻度
-  /// * `time` : 発火時間
-  /// * `setAlarm` : アラームのオン(1)オフ(0)
-  /// * `deleted` : ごみ箱(1), ホーム(0)
-  ///
-  /// * @return `res` : 挿入した行数
+  /*
+   * INSERT文
+   * @param title : タイトル
+   * @param content : メモ
+   * @param frequency : 頻度
+   * @param time : 発火時間
+   * @param setAlarm : アラームのオン(1)オフ(0)
+   * @param deleted : ごみ箱(1), ホーム(0)
+   * @return res : 挿入した行数
+   */
   Future<int?> insert(
     String title,
     String content,
@@ -110,18 +114,18 @@ class Notifications {
     return res;
   }
 
-  /// UPDATE文
-  ///
-  /// * `title` : タイトル
-  /// * `content` : メモ
-  /// * `frequency` : 頻度
-  /// * `time` : 発火時間
-  /// * `setAlarm` : アラームのオン(1)オフ(0)
-  /// * `deleted` : ごみ箱(1), ホーム(0)
-  /// * `where` : WHERE句
-  /// * `wherArgs` : WHERE句のプレースホルダに入れる値
-  ///
-  /// * @return `res` : 更新した行数
+  /*
+   * UPDATE文
+   * @param title : タイトル
+   * @param content : メモ
+   * @param frequency : 頻度
+   * @param time : 発火時間
+   * @param setAlarm : アラームのオン(1)オフ(0)
+   * @param deleted : ごみ箱(1), ホーム(0)
+   * @param where : WHERE句
+   * @param wherArgs : WHERE句のプレースホルダに入れる値
+   * @return res : 更新した行数
+   */
   Future<int?> update({
     String? title,
     String? content,
@@ -146,11 +150,12 @@ class Notifications {
     return res;
   }
 
-  /// DELETE文
-  /// * `where` : WHERE句
-  /// * `wherArgs` : WHERE句のプレースホルダに入れる値
-  ///
-  /// * @return `res` : 削除した行数
+  /*
+   * DELETE文
+   * @param where : WHERE句
+   * @param wherArgs : WHERE句のプレースホルダに入れる値
+   * @return res : 削除した行数
+   */
   Future<int?> delete(
     String? where,
     List<Object?>? whereArgs,
@@ -163,9 +168,11 @@ class Notifications {
     return res;
   }
 
-  /// idによる複数削除
-  /// * `ids` : 削除したいデータのidリスト
-  /// * @return `int?` : 削除した数
+  /*
+   * idによる複数削除
+   * @param ids : 削除したいデータのidリスト
+   * @return int? : 削除した数
+   */
   Future<int?> multipleDelete(List<int> ids) async {
     if (ids.isEmpty) return null;
 

@@ -13,15 +13,15 @@ class AutoDeleteProvider extends ChangeNotifier {
 
   AutoDeleteProvider();
 
-  /// FutureBuilderで行う処理
+  //FutureBuilderで行う処理
   Future<void> init() async {
     checkBoxCondition = await Setting.getBool(Setting.onOffKey) ?? false;
     date = await Setting.getInt(Setting.dateUntilDeletedKey) ?? 0;
 
     controller.text = date.toString();
 
-    // 日付を編集したときにnotifyListneresで更新すると、
-    // カーソルがずれるため、ここで修正する
+    //日付を編集したときにnotifyListneresで更新すると、
+    //カーソルがずれるため、ここで修正する
     TextFieldCursor.moveCursor(controller);
   }
 
@@ -29,16 +29,20 @@ class AutoDeleteProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// チェックボックスの値を変更する
-  /// * `value` : 変更後の値
+  /*
+   * チェックボックスの値を変更する
+   * @param value : 変更後の値
+   */
   Future<void> onChangeCheckBox(bool? value) async {
     checkBoxCondition = value ?? false;
     await Setting.setBool(Setting.onOffKey, checkBoxCondition);
     reload();
   }
 
-  /// 削除までの日数に負の数や数字以外が入力された時、それらを排除する
-  /// * `value` : 入力値
+  /*
+   * 削除までの日数に負の数や数字以外が入力された時、それらを排除する
+   * @param value : 入力値
+   */
   void _validate(String? value) {
     if (value == null) return;
 
@@ -54,8 +58,10 @@ class AutoDeleteProvider extends ChangeNotifier {
     }
   }
 
-  /// フォームのテキストが更新されたときに行う処理
-  /// * `value` : フォームの値
+  /*
+   * フォームのテキストが更新されたときに行う処理
+   * @param value : フォームの値
+   */
   Future<void> onChangeTextField(String? value) async {
     _validate(value);
     await Setting.setInt(
@@ -66,7 +72,7 @@ class AutoDeleteProvider extends ChangeNotifier {
     reload();
   }
 
-  /// 削除までの日にちを過ぎたリマインダーを削除する
+  //削除までの日にちを過ぎたリマインダーを削除する
   static Future<void> deleteReminder() async {
     bool? autoDeleteOn = await Setting.getBool(Setting.onOffKey);
     if (autoDeleteOn == null || !autoDeleteOn) return;

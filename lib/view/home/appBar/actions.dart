@@ -14,10 +14,12 @@ class Actions {
 
   Actions(this.provider, this.context);
 
-  /// ソート方法選択ボタンの生成
-  /// * `dbKey` : ソートに使うカラムのキー
-  /// * `text` : ボタンに表示するテキスト
-  /// @{return} ソート方法選択ボタン
+  /*
+   * ソート方法選択ボタンの生成
+   * @param dbKey : ソートに使うカラムのキー
+   * @param text : ボタンに表示するテキスト
+   * @return Widget : ソート方法選択ボタン
+   */
   Widget _makeButton(
     String dbKey,
     String text,
@@ -53,8 +55,10 @@ class Actions {
     );
   }
 
-  /// 水平線を作成
-  /// @{return} Widget : Divider
+  /*
+   * 水平線を作成
+   * @return Widget : Divider
+   */
   Widget _makeDivider() {
     return Divider(
       color: Theme.of(context).dividerColor,
@@ -63,8 +67,10 @@ class Actions {
     );
   }
 
-  /// アイテムを選択するモードのときのactions
-  /// @{return} List<Widget>
+  /*
+   * アイテムを選択するモードのときのactions
+   * @return List<Widget>
+   */
   List<Widget> _selectionMode() {
     return [
       Row(
@@ -174,8 +180,10 @@ class Actions {
     ];
   }
 
-  /// actionsの生成
-  /// @{return} List<Widget>
+  /*
+   * actionsの生成
+   * @return List<Widget>
+   */
   List<Widget> build() {
     return provider.selectionMode ? _selectionMode() : normalMode();
   }

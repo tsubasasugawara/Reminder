@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import '../../../components/text_field_cursor/text_field_cursor.dart';
 
 class ColorPickerProvider extends ChangeNotifier {
-  /// 選択している色のindex
+  //選択している色のindex
   late int _checkedItemIndex;
 
-  /// 0~255
+  //0~255
   late int _red;
   late int _green;
   late int _blue;
@@ -16,16 +16,20 @@ class ColorPickerProvider extends ChangeNotifier {
   TextEditingController gController = TextEditingController();
   TextEditingController bController = TextEditingController();
 
-  /// コンストラクタ
-  /// * `checkedItemIndex` : 選択されている色のindex
-  /// * `primaryColor` : 現在のプライマリーカラー
+  /*
+   * コンストラクタ
+   * @param checkedItemIndex : 選択されている色のindex
+   * @param primaryColor : 現在のプライマリーカラー
+   */
   ColorPickerProvider(int checkedItemIndex, Color primaryColor) {
     _init(checkedItemIndex, primaryColor);
   }
 
-  /// 初期化
-  /// * `index` : 選択されている色のindex
-  /// * `color` : 現在のプライマリーカラー
+  /*
+   * 初期化
+   * @param index : 選択されている色のindex
+   * @param color : 現在のプライマリーカラー
+   */
   void _init(int index, Color color) {
     _checkedItemIndex = index;
     _red = color.red;
@@ -36,15 +40,19 @@ class ColorPickerProvider extends ChangeNotifier {
     bController.text = _blue.toString();
   }
 
-  /// 選択されている色のindexを取得
-  /// * @return `int` : 選択されている色のindex
+  /*
+   * 選択されている色のindexを取得
+   * @param @return int : 選択されている色のindex
+   */
   int getCheckedItemIndex() {
     return _checkedItemIndex;
   }
 
-  /// 色の変更
-  /// * `index` : 選択されている色のindex
-  /// * `color` : 現在のプライマリーカラー
+  /*
+   * 色の変更
+   * @param index : 選択されている色のindex
+   * @param color : 現在のプライマリーカラー
+   */
   void changeCheckedItemIndex(int index, Color color) {
     _init(index, color);
     notifyListeners();
@@ -53,10 +61,12 @@ class ColorPickerProvider extends ChangeNotifier {
   /* RGBEditor
    -----------------------------------------------------------*/
 
-  /// RGBを編集
-  /// * `r` : Red(0~255)
-  /// * `g` : Green(0~255)
-  /// * `b` : Blue(0~255)
+  /*
+   * RGBを編集
+   * @param r : Red(0~255)
+   * @param g : Green(0~255)
+   * @param b : Blue(0~255)
+   */
   void editRGB({
     int? r,
     int? g,
@@ -68,16 +78,20 @@ class ColorPickerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 現在の色を取得
-  /// * @return `Color` : 現在の色
+  /*
+   * 現在の色を取得
+   * @param @return Color : 現在の色
+   */
   Color getColor() {
     return Color.fromARGB(255, _red, _green, _blue);
   }
 
-  /// RGBエディタの値を確認
-  /// * `controller` : TextEditingController
-  /// * `value` : 現在フォームにあるデータ
-  /// * `action` : 編集時の処理
+  /*
+   * RGBエディタの値を確認
+   * @param controller : TextEditingController
+   * @param value : 現在フォームにあるデータ
+   * @param action : 編集時の処理
+   */
   void checkEditorValue(
     TextEditingController controller,
     String value,

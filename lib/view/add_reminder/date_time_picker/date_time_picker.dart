@@ -6,6 +6,7 @@ import 'package:reminder/components/brightness/brightness.dart';
 import 'package:reminder/provider/add_reminder/datetime/time_provider.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/setting/theme/theme_provider.dart';
+import 'package:reminder/view/add_reminder/date_time_picker/repeat_setting_view.dart';
 
 class DateTimePicker {
   static const Size _calendarPortraitDialogSize = Size(330.0, 518.0);
@@ -177,15 +178,17 @@ class DateTimePicker {
                                           ),
                                         ),
                                         style: TextStyle(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1!
-                                                .color),
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1!
+                                              .color,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
+                              RepeatSettingView(backgroundColor),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [

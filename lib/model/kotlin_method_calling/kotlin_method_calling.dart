@@ -8,11 +8,13 @@ class KotlinMethodCalling {
 
   // TODO: dart側ではidのみ送信し、その他はkotlin側で取得する
 
-  /// アラームをスケジューリング
-  /// * `id` : ID
-  /// * `title` : タイトル
-  /// * `content` : メモ
-  /// * `time` : 発火時間
+  /*
+   * アラームをスケジューリング
+   * @param id : ID
+   * @param title : タイトル
+   * @param content : メモ
+   * @param time : 発火時間
+   */
   static Future<void> registAlarm(
     int id,
     String title,
@@ -30,11 +32,13 @@ class KotlinMethodCalling {
     );
   }
 
-  /// アラームを解除する
-  /// * `id` : ID
-  /// * `title` : タイトル
-  /// * `content` : メモ
-  /// * `time` : 発火時間
+  /*
+   * アラームを解除する
+   * @param id : ID
+   * @param title : タイトル
+   * @param content : メモ
+   * @param time : 発火時間
+   */
   static Future<void> deleteAlarm(
     int id,
     String title,

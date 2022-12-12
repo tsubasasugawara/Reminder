@@ -11,18 +11,20 @@ class AddReminderProvider {
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
 
-  /// ごみ箱のアイテムかどうか
+  //ごみ箱のアイテムかどうか
   bool isTrash;
 
-  /// キーボードが表示されているかどうか
+  //キーボードが表示されているかどうか
   bool isKeyboardShown = false;
 
-  /// コンストラクタ
-  /// * `id`:ID
-  /// * `title`:タイトル
-  /// * `content`:メモ
-  /// * `time`:発火時間
-  /// * `setAlarm`:アラームがオン(1)かオフ(0)か
+  /*
+   * コンストラクタ
+   * @param id : ID
+   * @param title : タイトル
+   * @param content : メモ
+   * @param time : 発火時間
+   * @param setAlarm : アラームがオン(1)かオフ(0)か
+   */
   AddReminderProvider(
     int? id,
     String? title,
@@ -39,11 +41,13 @@ class AddReminderProvider {
     contentController.text = before[Notifications.contentKey] ?? "";
   }
 
-  /// 編集中のデータを一時的に保存する
-  /// * `title`:タイトル
-  /// * `content`:メモ
-  /// * `time`:発火時間
-  /// * `setAlarm`:オン(1),オフ(0)
+  /*
+   * 編集中のデータを一時的に保存する
+   * @param title : タイトル
+   * @param content : メモ
+   * @param time : 発火時間
+   * @param setAlarm : オン(1),オフ(0)
+   */
   void setData({
     String? title,
     String? content,
@@ -58,15 +62,19 @@ class AddReminderProvider {
     );
   }
 
-  /// modelから編集中のデータを取得
-  /// * `key`:データのキー値
-  /// * @return `dynamic`:キーに格納されているデータ
+  /*
+   * modelから編集中のデータを取得
+   * @param key:データのキー値
+   * @return dynamic:キーに格納されているデータ
+   */
   dynamic getData(String key) {
     return _model.getBeingEditingData()[key];
   }
 
-  /// データベースに保存する
-  /// * @return `[id, status]` : [保存したデータのID, 保存(1)か更新(0)か失敗(null)]
+  /*
+   * データベースに保存する
+   * @return [id, status] : [保存したデータのID, 保存(1)か更新(0)か失敗(null)]
+   */
   Future<List<int>?> _saveToDb() async {
     var res = await _model.updateOrInsert();
     var id = res[0];
@@ -79,10 +87,12 @@ class AddReminderProvider {
     }
   }
 
-  /// アラームをスケジューリングする
-  /// * `id` : リマインダーのID
-  /// * `status` : 保存(1)か更新(0)
-  /// * 更新の場合はアラームを削除してから登録しなおす
+  /*
+   * アラームをスケジューリングする
+   * @param id : リマインダーのID
+   * @param status : 保存(1)か更新(0)
+   * @param 更新の場合はアラームを削除してから登録しなおす
+   */
   Future<void> _registerAlarm(int id, int status) async {
     var before = _model.getBeforeEditingData();
     var being = _model.getBeingEditingData();
@@ -103,15 +113,19 @@ class AddReminderProvider {
     );
   }
 
-  /// タイトルの確認
-  /// * @return `bool` : 正常(true),異常(false)
+  /*
+   * タイトルの確認
+   * @return bool : 正常(true),異常(false)
+   */
   bool _titleValidate() {
     String value = titleController.text.replaceAll(RegExp(r'^ +'), '');
     return value != "" ? true : false;
   }
 
-  /// 発火時間の確認
-  /// * @return `bool` : 正常(true),異常(false)
+  /*
+   * 発火時間の確認
+   * @return bool : 正常(true),異常(false)
+   */
   bool _timeValidate() {
     var diff = _model.getBeingEditingData()[Notifications.timeKey] -
         DateTime.now().millisecondsSinceEpoch;
@@ -122,14 +136,18 @@ class AddReminderProvider {
     return true;
   }
 
-  /// アラームがセットされているか確認
-  /// * @return `bool` : オン(true),オフ(false)
+  /*
+   * アラームがセットされているか確認
+   * @return bool : オン(true),オフ(false)
+   */
   bool _checkSettingAlarm(int num) {
     return num == 0 ? false : true;
   }
 
-  /// リマインダーを保存
-  /// * `context` : BuildContext
+  /*
+   * リマインダーを保存
+   * @param context : BuildContext
+   */
   Future<void> saveBtn(BuildContext context) async {
     if (_titleValidate() == false) {
       ShowSnackBar(

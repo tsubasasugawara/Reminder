@@ -4,13 +4,15 @@ import 'package:reminder/model/db/db.dart';
 class HomeListModel {
   HomeListModel();
 
-  /// データベースから取得したデータを格納
+  // データベースから取得したデータを格納
   List<Map> dataList = <Map>[];
 
-  /// notificationsからデータを取得(複数)
-  /// * `columns` : 取得したいカラムの指定。
-  /// * `where` : WHERE句
-  /// * `orderBy` : orderBy句
+  /*
+   * notificationsからデータを取得(複数)
+   * @param columns : 取得したいカラムの指定。
+   * @param where : WHERE句
+   * @param orderBy : orderBy句
+   */
   Future<void> select(
     List<Object?> columns, {
     String? where,
