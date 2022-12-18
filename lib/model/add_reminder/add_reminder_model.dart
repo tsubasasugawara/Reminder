@@ -3,15 +3,15 @@
 import 'package:reminder/model/db/db.dart';
 
 class AddReminderModel {
-  // 現在編集中のリマインダーのid
-  late int? id;
+  late int? id; //現在編集中のリマインダーのid
 
   // 編集前のデータ
   var _dataBeforeEditing = <String, dynamic>{
     Notifications.titleKey: null,
     Notifications.contentKey: null,
     Notifications.timeKey: DateTime.now().millisecondsSinceEpoch,
-    Notifications.setAlarmKey: 1,
+    Notifications.setAlarmKey: Notifications.alarmOn,
+    Notifications.frequencyKey: 0,
   };
 
   // 編集中のデータ
@@ -19,7 +19,8 @@ class AddReminderModel {
     Notifications.titleKey: "",
     Notifications.contentKey: "",
     Notifications.timeKey: DateTime.now().millisecondsSinceEpoch,
-    Notifications.setAlarmKey: 1,
+    Notifications.setAlarmKey: Notifications.alarmOn,
+    Notifications.frequencyKey: 0,
   };
 
   static int update = 0;
@@ -31,19 +32,24 @@ class AddReminderModel {
     String? content,
     int? time,
     int? setAlarm,
+    int? frequency,
   ) {
     id = _id;
 
     _dataBeforeEditing[Notifications.titleKey] = title;
     _dataBeforeEditing[Notifications.contentKey] = content;
     _dataBeforeEditing[Notifications.timeKey] = time;
-    _dataBeforeEditing[Notifications.setAlarmKey] = setAlarm ?? 1;
+    _dataBeforeEditing[Notifications.setAlarmKey] =
+        setAlarm ?? Notifications.alarmOn;
+    _dataBeforeEditing[Notifications.frequencyKey] = frequency;
 
     _dataBeingEditing[Notifications.titleKey] = title ?? "";
     _dataBeingEditing[Notifications.contentKey] = content ?? "";
     _dataBeingEditing[Notifications.timeKey] =
         time ?? _dataBeingEditing[Notifications.timeKey];
-    _dataBeingEditing[Notifications.setAlarmKey] = setAlarm ?? 1;
+    _dataBeingEditing[Notifications.setAlarmKey] =
+        setAlarm ?? Notifications.alarmOn;
+    _dataBeforeEditing[Notifications.frequencyKey] = frequency;
   }
 
   /*
@@ -58,6 +64,7 @@ class AddReminderModel {
     String? content,
     int? time,
     int? setAlarm,
+    int? frequency,
   }) {
     if (title != null) {
       _dataBeingEditing[Notifications.titleKey] = title;
@@ -70,6 +77,9 @@ class AddReminderModel {
     }
     if (setAlarm != null) {
       _dataBeingEditing[Notifications.setAlarmKey] = setAlarm;
+    }
+    if (frequency != null) {
+      _dataBeingEditing[Notifications.frequencyKey] = frequency;
     }
     return;
   }
@@ -107,12 +117,13 @@ class AddReminderModel {
     var content = _dataBeingEditing[Notifications.contentKey];
     var time = _dataBeingEditing[Notifications.timeKey];
     var setAlarm = _dataBeingEditing[Notifications.setAlarmKey];
+    var frequency = _dataBeingEditing[Notifications.frequencyKey];
 
     if (id != null) {
       var resId = await nt.update(
         title: title.replaceAll(RegExp(r'^ +'), ''),
         content: content.replaceAll(RegExp(r'^ +'), ''),
-        frequency: 0,
+        frequency: frequency ?? 0,
         time: time,
         setAlarm: setAlarm,
         where: '${Notifications.idKey} = ?',
@@ -126,7 +137,14 @@ class AddReminderModel {
       }
     }
 
-    var resId = await nt.insert(title, content, 0, time, setAlarm, 0);
+    var resId = await nt.insert(
+      title,
+      content,
+      frequency ?? 0,
+      time,
+      setAlarm,
+      Notifications.inHome,
+    );
     return [resId, insert];
   }
 }

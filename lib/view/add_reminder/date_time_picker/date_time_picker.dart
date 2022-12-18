@@ -8,6 +8,8 @@ import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/setting/theme/theme_provider.dart';
 import 'package:reminder/view/add_reminder/date_time_picker/repeat_setting_view.dart';
 
+import '../../../components/pair/pair.dart';
+
 class DateTimePicker {
   static const Size _calendarPortraitDialogSize = Size(330.0, 518.0);
   static const Size _calendarLandscapeDialogSize = Size(496.0, 346.0);
@@ -20,11 +22,13 @@ class DateTimePicker {
   int hour = 0;
   int minute = 0;
 
+  int? _frequency;
+
   /*
    * コンストラクタ
    * @param dt : 日時の初期値
    */
-  DateTimePicker(DateTime dt) {
+  DateTimePicker(DateTime dt, this._frequency) {
     year = dt.year;
     month = dt.month;
     day = dt.day;
@@ -67,7 +71,7 @@ class DateTimePicker {
    * @param backgroundColor : バックグランドカラー
    * @return DateTime? : 選択した日時
    */
-  Future<DateTime?> showDateTimePicker(
+  Future<Pair<DateTime, int?>> showDateTimePicker(
     BuildContext context,
     Color backgroundColor,
   ) async {
@@ -188,7 +192,29 @@ class DateTimePicker {
                                   ),
                                 ),
                               ),
-                              RepeatSettingView(backgroundColor),
+                              //TODO: 繰り返し間隔の初期値がある場合の表示を変更する
+                              ElevatedButton.icon(
+                                icon: Icon(
+                                  Icons.repeat,
+                                  color: judgeBlackWhite(
+                                    backgroundColor,
+                                  ),
+                                ),
+                                label: Text(
+                                  AppLocalizations.of(context)!.notRepeat,
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .color,
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  var res = await RepeatSettingView(_frequency)
+                                      .showSettingRepeatDays(context);
+                                  if (res != null) _frequency = res;
+                                },
+                              ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
@@ -205,8 +231,16 @@ class DateTimePicker {
                                     onPressed: () {
                                       Navigator.pop(
                                         context,
-                                        DateTime(
-                                            year, month, day, hour, minute),
+                                        Pair(
+                                          DateTime(
+                                            year,
+                                            month,
+                                            day,
+                                            hour,
+                                            minute,
+                                          ),
+                                          _frequency,
+                                        ),
                                       );
                                     },
                                     child: Text(

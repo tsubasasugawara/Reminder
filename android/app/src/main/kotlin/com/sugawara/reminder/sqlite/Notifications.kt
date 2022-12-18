@@ -146,7 +146,6 @@ class Notifications {
                         updatedAt = cur.getLong(updatedAtIndex)
                     }
 
-                    // TODO: DBでのKeyとマップでのKeyの違いをなくす
                     res.add(
                         mapOf(
                             DBHelper.idKey              to id,

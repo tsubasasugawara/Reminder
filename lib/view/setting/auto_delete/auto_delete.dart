@@ -47,6 +47,7 @@ class AutoRemove extends StatelessWidget {
                         children: [
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.3,
+                            // TODO: 繰り返しの間隔設定も同じフォームを使用するため、共通化
                             child: TextField(
                               enabled: provider.checkBoxCondition,
                               keyboardType: TextInputType.number,

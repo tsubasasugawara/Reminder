@@ -12,6 +12,8 @@ import 'package:reminder/view/add_reminder/button/form_control_button.dart';
 class AddReminderView extends StatelessWidget {
   late AddReminderProvider provider;
 
+  int? _frequency;
+
   AddReminderView({
     Key? key,
     int? id,
@@ -19,9 +21,19 @@ class AddReminderView extends StatelessWidget {
     String? content,
     int? time,
     int? setAlarm,
+    int? frequency,
     bool isTrash = false, // ごみ箱のアイテム(true)、それ以外(false)
   }) : super(key: key) {
-    provider = AddReminderProvider(id, title, content, time, setAlarm, isTrash);
+    provider = AddReminderProvider(
+      id,
+      title,
+      content,
+      time,
+      setAlarm,
+      frequency,
+      isTrash,
+    );
+    _frequency = frequency;
   }
 
   PreferredSizeWidget _appBar(BuildContext context) {
@@ -154,6 +166,7 @@ class AddReminderView extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => DateTimeProvider(
         provider.getData(Notifications.timeKey),
+        _frequency,
       ),
       child: Consumer<DateTimeProvider>(
         builder: (context, dateTimeProvider, child) {
@@ -164,6 +177,7 @@ class AddReminderView extends StatelessWidget {
               await dateTimeProvider.selectDateTime(context);
               provider.setData(
                 time: dateTimeProvider.getMilliSecondsFromEpoch(),
+                frequency: dateTimeProvider.frequency,
               );
             },
             icon: Icon(
@@ -172,7 +186,9 @@ class AddReminderView extends StatelessWidget {
             ),
             label: Text(
               dateTimeProvider.dateTimeFormat(context),
-              style: TextStyle(color: Theme.of(context).primaryColor),
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+              ),
             ),
           );
         },

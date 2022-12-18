@@ -36,6 +36,7 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
     Notifications.contentKey,
     Notifications.timeKey,
     Notifications.setAlarmKey,
+    Notifications.frequencyKey,
   ];
 
   HomeProvider(this.isTrash) {
@@ -137,6 +138,7 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
               content: model.dataList[index][Notifications.contentKey],
               time: model.dataList[index][Notifications.timeKey],
               setAlarm: model.dataList[index][Notifications.setAlarmKey],
+              frequency: model.dataList[index][Notifications.frequencyKey],
               isTrash: isTrash,
             );
           }

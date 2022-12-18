@@ -6,6 +6,7 @@ class KotlinMethodCalling {
   static String channelName = "com.sugawara.reminder/alarm";
   static String primaryColorKey = "primaryColor";
 
+  // ignore: todo
   // TODO: dart側ではidのみ送信し、その他はkotlin側で取得する
 
   /*
