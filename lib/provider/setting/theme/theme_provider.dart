@@ -49,8 +49,8 @@ class ThemeProvider extends ChangeNotifier {
     primaryColor = Color(colorCode);
     selectedIndex = _getIndex();
 
-    uiMode = await Setting.getString(Setting.uiModeKey) ?? "A";
-    String tmpUiMode = uiMode == "A"
+    uiMode = await Setting.getString(Setting.uiModeKey) ?? auto;
+    String tmpUiMode = uiMode == auto
         ? SchedulerBinding.instance.window.platformBrightness == Brightness.dark
             ? darkTheme
             : lightTheme
@@ -110,7 +110,7 @@ class ThemeProvider extends ChangeNotifier {
     } else if (mode == lightTheme) {
       uiMode = lightTheme;
     } else {
-      uiMode = "A";
+      uiMode = auto;
     }
     await Setting.setString(Setting.uiModeKey, uiMode);
 

@@ -29,6 +29,9 @@ class DateTimeProvider extends ChangeNotifier {
       context,
       Theme.of(context).dialogBackgroundColor,
     );
+
+    if (res == null) return;
+
     model.changeDateTime(res.first);
     frequency = res.second;
     notifyListeners();

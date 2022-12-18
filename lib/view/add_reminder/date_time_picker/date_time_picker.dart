@@ -66,12 +66,42 @@ class DateTimePicker {
   }
 
   /*
+   * 繰り返し間隔の設定ダイアログを表示するボタンを生成する
+   * @param context : BuildContext
+   * @param backgroundColor : Color
+   * @return Widget : ダイアログを表示するボタン
+   */
+  Widget _generateRepeatSettingButton(
+      BuildContext context, Color backgroundColor) {
+    //TODO: 繰り返し間隔の初期値がある場合の表示を変更する
+    return ElevatedButton.icon(
+      icon: Icon(
+        Icons.repeat,
+        color: judgeBlackWhite(
+          backgroundColor,
+        ),
+      ),
+      label: Text(
+        AppLocalizations.of(context)!.notRepeat,
+        style: TextStyle(
+          color: Theme.of(context).textTheme.bodyText1!.color,
+        ),
+      ),
+      onPressed: () async {
+        var res =
+            await RepeatSettingView(_frequency).showSettingRepeatDays(context);
+        if (res != null) _frequency = res;
+      },
+    );
+  }
+
+  /*
    * DateTimePickerを表示する
    * @param context : BuildContext
    * @param backgroundColor : バックグランドカラー
    * @return DateTime? : 選択した日時
    */
-  Future<Pair<DateTime, int?>> showDateTimePicker(
+  Future<Pair<DateTime, int?>?> showDateTimePicker(
     BuildContext context,
     Color backgroundColor,
   ) async {
@@ -84,7 +114,7 @@ class DateTimePicker {
       builder: (context) {
         return Consumer<ThemeProvider>(
           builder: (context, provider, child) => Theme(
-              data: provider.uiMode == "D"
+              data: provider.uiMode == ThemeProvider.darkTheme
                   ? Theme.of(context).copyWith(
                       colorScheme: ColorScheme.dark(
                         primary: Theme.of(context).primaryColor,
@@ -192,29 +222,8 @@ class DateTimePicker {
                                   ),
                                 ),
                               ),
-                              //TODO: 繰り返し間隔の初期値がある場合の表示を変更する
-                              ElevatedButton.icon(
-                                icon: Icon(
-                                  Icons.repeat,
-                                  color: judgeBlackWhite(
-                                    backgroundColor,
-                                  ),
-                                ),
-                                label: Text(
-                                  AppLocalizations.of(context)!.notRepeat,
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1!
-                                        .color,
-                                  ),
-                                ),
-                                onPressed: () async {
-                                  var res = await RepeatSettingView(_frequency)
-                                      .showSettingRepeatDays(context);
-                                  if (res != null) _frequency = res;
-                                },
-                              ),
+                              _generateRepeatSettingButton(
+                                  context, backgroundColor),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
