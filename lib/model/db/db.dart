@@ -18,6 +18,14 @@ class Notifications {
   static const String asc = "ASC";
   static const String desc = "DESC";
 
+  //ゴミ箱かホームのどちらにあるのか
+  static const int inHome = 0;
+  static const int inTrash = 1;
+
+  //アラームのOn・Off
+  static const int alarmOn = 1;
+  static const int alarmOff = 0;
+
   /*
    * whereArgsに使う値をListからMapへ変換
    * @param list : Objectの配列
@@ -88,7 +96,7 @@ class Notifications {
    * INSERT文
    * @param title : タイトル
    * @param content : メモ
-   * @param frequency : 頻度
+   * @param frequency : 間隔
    * @param time : 発火時間
    * @param setAlarm : アラームのオン(1)オフ(0)
    * @param deleted : ごみ箱(1), ホーム(0)
@@ -118,7 +126,7 @@ class Notifications {
    * UPDATE文
    * @param title : タイトル
    * @param content : メモ
-   * @param frequency : 頻度
+   * @param frequency : 間隔
    * @param time : 発火時間
    * @param setAlarm : アラームのオン(1)オフ(0)
    * @param deleted : ごみ箱(1), ホーム(0)

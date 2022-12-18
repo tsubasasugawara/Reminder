@@ -62,6 +62,8 @@ class SearchView extends StatelessWidget {
                               [Notifications.timeKey],
                           setAlarm: provider.displayDataList[index]
                               [Notifications.setAlarmKey],
+                          frequency: provider.displayDataList[index]
+                              [Notifications.frequencyKey],
                           isTrash: isTrash,
                         );
                       },

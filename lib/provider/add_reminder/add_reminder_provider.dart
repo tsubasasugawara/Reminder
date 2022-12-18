@@ -5,8 +5,9 @@ import 'package:reminder/model/db/db.dart';
 import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
+//TODO: frequencyの保存のために多くのクラスをまたいでいるため、方法を変える。
 class AddReminderProvider {
-  late AddReminderModel _model;
+  late AddReminderModel model;
 
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
@@ -31,11 +32,12 @@ class AddReminderProvider {
     String? content,
     int? time,
     int? setAlarm,
+    int? frequency,
     this.isTrash,
   ) {
-    _model = AddReminderModel(id, title, content, time, setAlarm);
+    model = AddReminderModel(id, title, content, time, setAlarm, frequency);
 
-    var before = _model.getBeforeEditingData();
+    var before = model.getBeforeEditingData();
 
     titleController.text = before[Notifications.titleKey] ?? "";
     contentController.text = before[Notifications.contentKey] ?? "";
@@ -53,12 +55,14 @@ class AddReminderProvider {
     String? content,
     int? time,
     int? setAlarm,
+    int? frequency,
   }) {
-    _model.editData(
+    model.editData(
       title: title,
       content: content,
       time: time,
       setAlarm: setAlarm,
+      frequency: frequency,
     );
   }
 
@@ -68,7 +72,7 @@ class AddReminderProvider {
    * @return dynamic:キーに格納されているデータ
    */
   dynamic getData(String key) {
-    return _model.getBeingEditingData()[key];
+    return model.getBeingEditingData()[key];
   }
 
   /*
@@ -76,7 +80,7 @@ class AddReminderProvider {
    * @return [id, status] : [保存したデータのID, 保存(1)か更新(0)か失敗(null)]
    */
   Future<List<int>?> _saveToDb() async {
-    var res = await _model.updateOrInsert();
+    var res = await model.updateOrInsert();
     var id = res[0];
     var status = res[1];
 
@@ -94,8 +98,8 @@ class AddReminderProvider {
    * @param 更新の場合はアラームを削除してから登録しなおす
    */
   Future<void> _registerAlarm(int id, int status) async {
-    var before = _model.getBeforeEditingData();
-    var being = _model.getBeingEditingData();
+    var before = model.getBeforeEditingData();
+    var being = model.getBeingEditingData();
 
     await KotlinMethodCalling.deleteAlarm(
       id,
@@ -127,7 +131,7 @@ class AddReminderProvider {
    * @return bool : 正常(true),異常(false)
    */
   bool _timeValidate() {
-    var diff = _model.getBeingEditingData()[Notifications.timeKey] -
+    var diff = model.getBeingEditingData()[Notifications.timeKey] -
         DateTime.now().millisecondsSinceEpoch;
 
     if (diff <= 0) {
@@ -159,7 +163,7 @@ class AddReminderProvider {
     }
 
     if (_checkSettingAlarm(
-            _model.getBeingEditingData()[Notifications.setAlarmKey]) &&
+            model.getBeingEditingData()[Notifications.setAlarmKey]) &&
         _timeValidate() == false) {
       ShowSnackBar(
         context,
@@ -176,17 +180,17 @@ class AddReminderProvider {
 
     ShowSnackBar(
       context,
-      _model.id == null
+      model.id == null
           ? AppLocalizations.of(context)!.saved
           : AppLocalizations.of(context)!.edited,
       Theme.of(context).primaryColor,
     );
 
-    if (_model.id == null) {
+    if (model.id == null) {
       titleController.clear();
       contentController.clear();
     } else {
-      _model.copyToBeforeEditingData();
+      model.copyToBeforeEditingData();
     }
   }
 }

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:reminder/view/add_reminder/date_time_picker.dart';
+import 'package:reminder/view/add_reminder/date_time_picker/date_time_picker.dart';
 import 'package:reminder/model/add_reminder/datetime_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
 class DateTimeProvider extends ChangeNotifier {
   late DateTimeModel model;
 
+  int? frequency;
+
   /*
    * コンストラクタ
    * @param time : 時間の初期値(ミリ秒)
    */
-  DateTimeProvider(int? time) {
+  DateTimeProvider(int? time, this.frequency) {
     model = DateTimeModel(time ?? DateTime.now().millisecondsSinceEpoch);
   }
 
@@ -22,11 +24,13 @@ class DateTimeProvider extends ChangeNotifier {
   Future<void> selectDateTime(BuildContext context) async {
     var res = await DateTimePicker(
       model.createDateTime(),
+      frequency,
     ).showDateTimePicker(
       context,
       Theme.of(context).dialogBackgroundColor,
     );
-    if (res != null) model.changeDateTime(res);
+    model.changeDateTime(res.first);
+    frequency = res.second;
     notifyListeners();
   }
 
