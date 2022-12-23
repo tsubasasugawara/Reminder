@@ -45,7 +45,9 @@ class Messages {
     required this.daysLater,
     required this.day,
     required this.days,
+    required this.repeatingInterval,
     required this.notRepeat,
+    required this.custom,
     required this.everyday,
     required this.everyWeek,
     required this.everyMonth,
@@ -96,7 +98,9 @@ class Messages {
   final String daysLater;
   final String day;
   final String days;
+  final String repeatingInterval;
   final String notRepeat;
+  final String custom;
   final String everyday;
   final String everyWeek;
   final String everyMonth;
@@ -158,7 +162,9 @@ class Messages {
         daysLater: '日後',
         day: '日',
         days: '日',
+        repeatingInterval: '繰り返し間隔',
         notRepeat: '繰り返さない',
+        custom: 'カスタム',
         everyday: '1日ごと',
         everyWeek: '1週間ごと',
         everyMonth: '1ヶ月ごと',
@@ -211,7 +217,9 @@ class Messages {
         daysLater: 'days later',
         day: 'day',
         days: 'days',
+        repeatingInterval: 'Repeating Interval',
         notRepeat: 'Not repeat',
+        custom: 'custom',
         everyday: 'every day',
         everyWeek: 'every one week',
         everyMonth: 'every one month',

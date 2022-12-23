@@ -4,11 +4,11 @@ import 'package:reminder/multilingualization/app_localizations.dart';
 import '../../../components/text_field_cursor/text_field_cursor.dart';
 
 class RepeatSettingProvider extends ChangeNotifier {
-  final custom = 0;
-  final everyday = -1;
-  final everyWeek = -2;
-  final everyMonth = -3;
-  final everyYear = -4;
+  static const custom = 0;
+  static const everyday = -1;
+  static const everyWeek = -2;
+  static const everyMonth = -3;
+  static const everyYear = -4;
 
   late BuildContext context;
   late List<String> listItem;

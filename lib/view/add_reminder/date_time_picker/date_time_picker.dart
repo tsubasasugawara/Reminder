@@ -84,7 +84,7 @@ class DateTimePicker {
         ),
       ),
       label: Text(
-        AppLocalizations.of(context)!.notRepeat,
+        AppLocalizations.of(context)!.repeatingInterval,
         style: TextStyle(
           color: Theme.of(context).textTheme.bodyText1!.color,
         ),
