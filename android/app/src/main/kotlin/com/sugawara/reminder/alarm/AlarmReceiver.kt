@@ -36,6 +36,7 @@ class AlarmReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         this.createNotificationChannel(context)
         this.createNotification(context, intent)
+        this.deactivateAlarm(context, intent)
         this.reRegistAlarm(context, intent)
     }
 
@@ -91,7 +92,18 @@ class AlarmReceiver: BroadcastReceiver() {
         manager.notify(id, builder.build())
     }
 
-    //TODO: 再登録時の時間変更がうまくされていない可能性がある。
+    private fun deactivateAlarm(context: Context, intent: Intent) {
+        val id = intent.extras?.getInt(DBHelper.idKey) ?: return
+
+        val notificationsIntent = Intent(context, Notifications::class.java)
+        context.startService(notificationsIntent)
+
+        val notifications = Notifications()
+        var values = ContentValues()
+        values.put(DBHelper.setAlarmKey, 0)
+        notifications.update(context,values,"${DBHelper.idKey} = ?",arrayOf(id.toString()))
+    }
+
     private fun reRegistAlarm(context: Context, intent: Intent) {
         val id = intent.extras?.getInt(DBHelper.idKey) ?: return
         val title = intent.extras?.getString(DBHelper.titleKey) ?: return
