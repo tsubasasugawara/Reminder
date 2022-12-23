@@ -31,14 +31,16 @@ class SelectionItemProvider {
    * @param title : タイトル
    * @param content : メモ
    * @param time : 発火時間
+   * @param frequency:繰り返し間隔
    */
   Future<void> setOnAlarm(
     int id,
     String title,
     String content,
     int time,
+    int frequency,
   ) async {
-    await KotlinMethodCalling.registAlarm(id, title, content, time);
+    await KotlinMethodCalling.registAlarm(id, title, content, time, frequency);
   }
 
   /*
@@ -47,14 +49,16 @@ class SelectionItemProvider {
    * @param title:アラームのタイトル
    * @param content:アラームのメモ
    * @param time:アラームが発火する時間
+   * @param frequency:繰り返し間隔
    */
   Future<void> _setOffAlarm(
     int id,
     String title,
     String content,
     int time,
+    int frequency,
   ) async {
-    await KotlinMethodCalling.deleteAlarm(id, title, content, time);
+    await KotlinMethodCalling.deleteAlarm(id, title, content, time, frequency);
   }
 
   /*
@@ -85,6 +89,7 @@ class SelectionItemProvider {
         dataList[ele][Notifications.titleKey],
         dataList[ele][Notifications.contentKey],
         dataList[ele][Notifications.timeKey],
+        dataList[ele][Notifications.frequencyKey],
       );
     }
     int? res = await Notifications().multipleDelete(ids);
@@ -109,6 +114,7 @@ class SelectionItemProvider {
         dataList[ele][Notifications.titleKey],
         dataList[ele][Notifications.contentKey],
         dataList[ele][Notifications.timeKey],
+        dataList[ele][Notifications.frequencyKey],
       );
     }
     var nt = Notifications();

@@ -19,7 +19,7 @@ class AlarmRegister(_context: Context) {
         title: String,
         content: String,
         time: Long,
-        frequency: Long,
+        frequency: Int,
     ){
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
@@ -52,7 +52,7 @@ class AlarmRegister(_context: Context) {
         title: String,
         content: String,
         time: Long,
-        frequency: Long,
+        frequency: Int,
     ){
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
@@ -74,7 +74,7 @@ class AlarmRegister(_context: Context) {
         title: String,
         content: String,
         time: Long,
-        frequency: Long,
+        frequency: Int,
     ): Intent {
         return Intent(this.context, AlarmReceiver::class.java)
             .also {

@@ -119,7 +119,7 @@ class RepeatSettingView {
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.5,
-                      margin: EdgeInsets.only(bottom: 5),
+                      margin: const EdgeInsets.only(bottom: 5),
                       child: Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Row(

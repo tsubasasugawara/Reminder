@@ -12,6 +12,7 @@ import 'package:reminder/view/add_reminder/button/form_control_button.dart';
 class AddReminderView extends StatelessWidget {
   late AddReminderProvider provider;
 
+  //TODO: 上のproviderから引っ張ってくる
   int? _frequency;
 
   AddReminderView({

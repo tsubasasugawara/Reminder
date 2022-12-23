@@ -26,17 +26,17 @@ class AlarmReceiver: BroadcastReceiver() {
         const val CHANNEL_ID = "com.sugawara.reminder"
     }
 
-    private val NOT_REPEAT:   Long = 0
-    private val ONE_DAY:      Long = -1
-    private val ONE_WEEK:     Long = -2
-    private val ONE_MONTH:    Long = -3
-    private val ONE_YEAR:     Long = -4
+    private val NOT_REPEAT:   Int = 0
+    private val ONE_DAY:      Int = -1
+    private val ONE_WEEK:     Int = -2
+    private val ONE_MONTH:    Int = -3
+    private val ONE_YEAR:     Int = -4
 
     @SuppressLint("UnspecifiedImmutableFlag")
     override fun onReceive(context: Context, intent: Intent) {
         this.createNotificationChannel(context)
         this.createNotification(context, intent)
-        reRegistAlarm(context, intent)
+        this.reRegistAlarm(context, intent)
     }
 
     private fun createNotificationChannel(context: Context) {
@@ -91,12 +91,13 @@ class AlarmReceiver: BroadcastReceiver() {
         manager.notify(id, builder.build())
     }
 
+    //TODO: 再登録時の時間変更がうまくされていない可能性がある。
     private fun reRegistAlarm(context: Context, intent: Intent) {
         val id = intent.extras?.getInt(DBHelper.idKey) ?: return
         val title = intent.extras?.getString(DBHelper.titleKey) ?: return
         val content = intent.extras?.getString(DBHelper.contentKey) ?: return
         val time = intent.extras?.getLong(DBHelper.timeKey) ?: return
-        val frequency = intent.extras?.getLong(DBHelper.frequencyKey) ?: return
+        val frequency = intent.extras?.getInt(DBHelper.frequencyKey) ?: return
 
         // 繰り返さない場合は処理を終了
         if (frequency == NOT_REPEAT) return
@@ -116,16 +117,9 @@ class AlarmReceiver: BroadcastReceiver() {
         else if (frequency == ONE_YEAR)
             nextDateTime = zonedDt.plusYears(1).toInstant().toEpochMilli()
         else if (frequency > 0)
-            nextDateTime = zonedDt.plusDays(frequency).toInstant().toEpochMilli()
+            nextDateTime = zonedDt.plusDays(frequency.toLong()).toInstant().toEpochMilli()
         else
             return
-        // when(frequency) {
-        //     ONE_DAY -> nextDateTime = zonedDt.plusDays(1).toInstant().toEpochMilli()
-        //     ONE_WEEK -> nextDateTime = zonedDt.plusWeeks(1).toInstant().toEpochMilli()
-        //     ONE_MONTH -> nextDateTime = zonedDt.plusMonths(1).toInstant().toEpochMilli()
-        //     ONE_YEAR -> nextDateTime = zonedDt.plusYears(1).toInstant().toEpochMilli()
-        //     else -> nextDateTime = zonedDt.plusDays(frequency).toInstant().toEpochMilli()
-        // }
 
         // アラーム発火時間を更新する
         val notificationsIntent = Intent(context, Notifications::class.java)
@@ -139,6 +133,6 @@ class AlarmReceiver: BroadcastReceiver() {
         val alarmRegisterIntent = Intent(context, AlarmRegister::class.java)
         context.startService(alarmRegisterIntent)
         val register = AlarmRegister(context)
-        register.registAlarm(id, title, content, time, frequency)
+        register.registAlarm(id, title, content, nextDateTime, frequency)
     }
 }

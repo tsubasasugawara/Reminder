@@ -5,7 +5,7 @@ import 'package:reminder/model/db/db.dart';
 import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
-//TODO: frequencyの保存のために多くのクラスをまたいでいるため、方法を変える。
+//TODO: frequencyの保存のために多くのクラスをまたいでいるため、方法を変える。 DateTimeProviderのfrequencyを各所から参照するなど
 class AddReminderProvider {
   late AddReminderModel model;
 
@@ -106,6 +106,7 @@ class AddReminderProvider {
       before[Notifications.titleKey] ?? being[Notifications.titleKey],
       before[Notifications.contentKey] ?? being[Notifications.contentKey],
       before[Notifications.timeKey] ?? being[Notifications.timeKey],
+      being[Notifications.frequencyKey],
     );
     if (being[Notifications.setAlarmKey] == 0) return;
 
@@ -114,6 +115,7 @@ class AddReminderProvider {
       being[Notifications.titleKey],
       being[Notifications.contentKey],
       being[Notifications.timeKey],
+      being[Notifications.frequencyKey],
     );
   }
 

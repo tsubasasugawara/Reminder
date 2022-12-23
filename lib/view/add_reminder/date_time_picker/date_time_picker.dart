@@ -72,7 +72,9 @@ class DateTimePicker {
    * @return Widget : ダイアログを表示するボタン
    */
   Widget _generateRepeatSettingButton(
-      BuildContext context, Color backgroundColor) {
+    BuildContext context,
+    Color backgroundColor,
+  ) {
     //TODO: 繰り返し間隔の初期値がある場合の表示を変更する
     return ElevatedButton.icon(
       icon: Icon(

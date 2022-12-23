@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/view/home/appBar/reverse_button.dart';
 import 'package:reminder/view/home/appBar/top_up_set_alarm_button.dart';
@@ -13,6 +15,43 @@ class Actions {
   late BuildContext context;
 
   Actions(this.provider, this.context);
+
+  /*
+   * デバッグ専用のリマインダーを追加するボタン
+   * @return Widget:デバッグモードであれば、ボタンが見える
+   */
+  Widget _addReminderForDebugging() {
+    return Visibility(
+      visible: kDebugMode,
+      child: IconButton(
+        icon: const Icon(Icons.developer_mode),
+        onPressed: () async {
+          var title = "Test";
+          var content = "Test Test Test Test Test Test";
+          var frequency = -3;
+          var time = DateTime.now()
+              .add(const Duration(seconds: 15))
+              .millisecondsSinceEpoch;
+          var onOff = Notifications.alarmOn;
+          var homeOrTrash = Notifications.inHome;
+
+          var notifications = Notifications();
+          var res = await notifications.insert(
+            title,
+            content,
+            frequency,
+            time,
+            onOff,
+            homeOrTrash,
+          );
+          if (res == null) return;
+
+          await KotlinMethodCalling.registAlarm(
+              res, title, content, time, frequency);
+        },
+      ),
+    );
+  }
 
   /*
    * ソート方法選択ボタンの生成
@@ -102,6 +141,7 @@ class Actions {
 
   List<Widget> normalMode() {
     return [
+      _addReminderForDebugging(),
       IconButton(
         icon: const Icon(Icons.search),
         onPressed: () async {

@@ -25,7 +25,7 @@ class MainActivity: FlutterActivity() {
                     val title = methodCall.argument<String>(DBHelper.titleKey).toString()
                     val content = methodCall.argument<String>(DBHelper.contentKey).toString()
                     val time = methodCall.argument<Long>(DBHelper.timeKey)!!
-                    val frequency = methodCall.argument<Long>(DBHelper.frequencyKey) ?: 0
+                    val frequency = methodCall.argument<Int>(DBHelper.frequencyKey) ?: 0
                     val register = AlarmRegister(context)
 
                     register.registAlarm(id,title,content,time,frequency)
@@ -36,7 +36,7 @@ class MainActivity: FlutterActivity() {
                     val title = methodCall.argument<String>(DBHelper.titleKey).toString()
                     val content = methodCall.argument<String>(DBHelper.contentKey).toString()
                     val time = methodCall.argument<Long>(DBHelper.timeKey)!!
-                    val frequency = methodCall.argument<Long>(DBHelper.frequencyKey) ?: 0
+                    val frequency = methodCall.argument<Int>(DBHelper.frequencyKey) ?: 0
 
                     val register = AlarmRegister(context)
                     register.deleteAlarm(id,title,content,time,frequency)
