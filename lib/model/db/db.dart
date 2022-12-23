@@ -152,8 +152,8 @@ class Notifications {
       timeKey: time,
       setAlarmKey: setAlarm,
       deletedKey: deleted,
-      where: where,
-      whereArgs: _createMapFromObjectList(whereArgs),
+      'where': where,
+      'whereArgs': _createMapFromObjectList(whereArgs),
     });
     return res;
   }

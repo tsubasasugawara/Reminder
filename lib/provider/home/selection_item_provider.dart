@@ -82,14 +82,14 @@ class SelectionItemProvider {
     List<Map<dynamic, dynamic>> dataList,
   ) async {
     List<int> ids = [];
-    for (var ele in _getSelectedIndex()) {
-      ids.add(dataList[ele][Notifications.idKey]);
+    for (var i in _getSelectedIndex()) {
+      ids.add(dataList[i][Notifications.idKey]);
       await _setOffAlarm(
-        dataList[ele][Notifications.idKey],
-        dataList[ele][Notifications.titleKey],
-        dataList[ele][Notifications.contentKey],
-        dataList[ele][Notifications.timeKey],
-        dataList[ele][Notifications.frequencyKey],
+        dataList[i][Notifications.idKey],
+        dataList[i][Notifications.titleKey],
+        dataList[i][Notifications.contentKey],
+        dataList[i][Notifications.timeKey],
+        dataList[i][Notifications.frequencyKey],
       );
     }
     int? res = await Notifications().multipleDelete(ids);
@@ -107,14 +107,14 @@ class SelectionItemProvider {
     bool trash,
   ) async {
     List<int> ids = [];
-    for (var ele in _getSelectedIndex()) {
-      ids.add(dataList[ele][Notifications.idKey]);
-      _setOffAlarm(
-        dataList[ele][Notifications.idKey],
-        dataList[ele][Notifications.titleKey],
-        dataList[ele][Notifications.contentKey],
-        dataList[ele][Notifications.timeKey],
-        dataList[ele][Notifications.frequencyKey],
+    for (var i in _getSelectedIndex()) {
+      ids.add(dataList[i][Notifications.idKey]);
+      await _setOffAlarm(
+        dataList[i][Notifications.idKey],
+        dataList[i][Notifications.titleKey],
+        dataList[i][Notifications.contentKey],
+        dataList[i][Notifications.timeKey],
+        dataList[i][Notifications.frequencyKey],
       );
     }
     var nt = Notifications();

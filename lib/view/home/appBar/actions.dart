@@ -28,9 +28,9 @@ class Actions {
         onPressed: () async {
           var title = "Test";
           var content = "Test Test Test Test Test Test";
-          var frequency = -3;
+          var frequency = 0;
           var time = DateTime.now()
-              .add(const Duration(seconds: 15))
+              .add(const Duration(seconds: 5))
               .millisecondsSinceEpoch;
           var onOff = Notifications.alarmOn;
           var homeOrTrash = Notifications.inHome;
@@ -123,7 +123,9 @@ class Actions {
           IconButton(
             onPressed: () async {
               var res = await provider.deleteButton(
-                  context, HomeProvider.moveToTrash);
+                context,
+                HomeProvider.moveToTrash,
+              );
               if (res) {
                 ShowSnackBar(
                   context,

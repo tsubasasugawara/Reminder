@@ -163,9 +163,10 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
       res = await showDialog(
         context: context,
         builder: (context) => ConfirmationDialog(
-            movement == HomeProvider.completeDeletion
-                ? AppLocalizations.of(context)!.deletionConfirmationMsg
-                : AppLocalizations.of(context)!.movingToTrashConfirmationMsg),
+          movement == HomeProvider.completeDeletion
+              ? AppLocalizations.of(context)!.deletionConfirmationMsg
+              : AppLocalizations.of(context)!.movingToTrashConfirmationMsg,
+        ),
       ).then(
         (value) => value ?? false,
       );

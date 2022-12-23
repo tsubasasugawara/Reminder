@@ -98,22 +98,22 @@ class MainActivity: FlutterActivity() {
                         val whereArgs: Map<String, String>? = methodCall.argument<Map<String, String>>("whereArgs") ?: null
 
                         val values = ContentValues()
-                        methodCall.argument<String>("title")?.let{
+                        methodCall.argument<String>(DBHelper.titleKey)?.let{
                             values.put(DBHelper.titleKey, it.toString())
                         }
-                        methodCall.argument<String>("content")?.let{
+                        methodCall.argument<String>(DBHelper.contentKey)?.let{
                             values.put(DBHelper.contentKey, it.toString())
                         }
-                        methodCall.argument<Int>("frequency")?.let{
+                        methodCall.argument<Int>(DBHelper.frequencyKey)?.let{
                             values.put(DBHelper.frequencyKey, it)
                         }
-                        methodCall.argument<Long>("time")?.let{
+                        methodCall.argument<Long>(DBHelper.timeKey)?.let{
                             values.put(DBHelper.timeKey, it)
                         }
-                        methodCall.argument<Int>("setAlarm")?.let{
+                        methodCall.argument<Int>(DBHelper.setAlarmKey)?.let{
                             values.put(DBHelper.setAlarmKey, it)
                         }
-                        methodCall.argument<Int>("deleted")?.let{
+                        methodCall.argument<Int>(DBHelper.deletedKey)?.let{
                             values.put(DBHelper.deletedKey, it)
                         }
                         values.put(DBHelper.updatedAtKey, System.currentTimeMillis())

@@ -184,7 +184,7 @@ class Notifications {
     ): Long {
         try {
             val dbHelper = DBHelper(context, DBHelper.dbName, null, DBHelper.version);
-            val db = dbHelper.readableDatabase
+            val db = dbHelper.writableDatabase
             val num = db.insert(DBHelper.dbName, null, values)
             db.close()
             return num
@@ -200,7 +200,7 @@ class Notifications {
      * @param {context}: Context
      * @param {values}: ContentValues? 更新するデータ
      * @param {whereClause}: String? WHERE句
-     * @param {whereArgs}: Array<String?>? WHERE句のプレースホルダに入れる値
+     * @param {whereArgs}: Array<String>? WHERE句のプレースホルダに入れる値
      *
      * @return {num}: Int 更新した行数
      * */
@@ -212,7 +212,7 @@ class Notifications {
     ): Int {
         try {
             val dbHelper = DBHelper(context, DBHelper.dbName, null, DBHelper.version)
-            val db = dbHelper.readableDatabase
+            val db = dbHelper.writableDatabase
             val num = db.update(DBHelper.tableName, values, whereClause, whereArgs)
             db.close()
             return num
@@ -238,7 +238,7 @@ class Notifications {
     ): Int {
         try {
             val dbHelper = DBHelper(context, DBHelper.dbName, null, DBHelper.version)
-            val db = dbHelper.readableDatabase
+            val db = dbHelper.writableDatabase
             val num = db.delete(DBHelper.tableName, whereClause, whereArgs)
             db.close()
             return num
