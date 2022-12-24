@@ -83,6 +83,14 @@ class RepeatSettingView {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 20),
+                      child: Text(
+                        AppLocalizations.of(context)!.repeatingInterval,
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                    ),
+                    _createDivider(context),
                     _makeButton(
                       AppLocalizations.of(context)!.everyday,
                       RepeatSettingProvider.everyday,
@@ -165,6 +173,13 @@ class RepeatSettingView {
                           ],
                         ),
                       ),
+                    ),
+                    _createDivider(context),
+                    _makeButton(
+                      AppLocalizations.of(context)!.notRepeat,
+                      RepeatSettingProvider.notRepeating,
+                      provider,
+                      context,
                     ),
                     _createDivider(context),
                     Row(

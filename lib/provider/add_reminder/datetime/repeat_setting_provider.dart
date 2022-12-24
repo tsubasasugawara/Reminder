@@ -9,6 +9,7 @@ class RepeatSettingProvider extends ChangeNotifier {
   static const everyWeek = -2;
   static const everyMonth = -3;
   static const everyYear = -4;
+  static const notRepeating = -5;
 
   late BuildContext context;
   late List<String> listItem;
@@ -31,7 +32,8 @@ class RepeatSettingProvider extends ChangeNotifier {
     setDays(_days);
   }
 
-  /* 繰り返しの間隔を設定する
+  /*
+   * 繰り返しの間隔を設定する
    * @param days : 繰り返しの間隔 or デフォルトの選択肢(マイナス)
   */
   void setDays(int? days) {
