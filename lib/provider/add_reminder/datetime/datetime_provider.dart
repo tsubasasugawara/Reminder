@@ -7,14 +7,16 @@ import 'package:reminder/multilingualization/app_localizations.dart';
 class DateTimeProvider extends ChangeNotifier {
   late DateTimeModel model;
 
-  int? frequency;
-
   /*
    * コンストラクタ
    * @param time : 時間の初期値(ミリ秒)
+   * @param frequency:繰り返し間隔
    */
-  DateTimeProvider(int? time, this.frequency) {
-    model = DateTimeModel(time ?? DateTime.now().millisecondsSinceEpoch);
+  DateTimeProvider(int? time, int? frequency) {
+    model = DateTimeModel(
+      time ?? DateTime.now().millisecondsSinceEpoch,
+      frequency,
+    );
   }
 
   /*
@@ -24,7 +26,7 @@ class DateTimeProvider extends ChangeNotifier {
   Future<void> selectDateTime(BuildContext context) async {
     var res = await DateTimePicker(
       model.createDateTime(),
-      frequency,
+      model.frequency,
     ).showDateTimePicker(
       context,
       Theme.of(context).dialogBackgroundColor,
@@ -33,7 +35,7 @@ class DateTimeProvider extends ChangeNotifier {
     if (res == null) return;
 
     model.changeDateTime(res.first);
-    frequency = res.second;
+    model.frequency = res.second;
     notifyListeners();
   }
 
@@ -54,5 +56,13 @@ class DateTimeProvider extends ChangeNotifier {
    */
   int getMilliSecondsFromEpoch() {
     return (model.createDateTime()).millisecondsSinceEpoch;
+  }
+
+  /*
+   * 繰り返し間隔を取得する
+   * @return int? : 繰り返し間隔
+   */
+  int? getFrequency() {
+    return model.frequency;
   }
 }

@@ -5,7 +5,6 @@ import 'package:reminder/model/db/db.dart';
 import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
-//TODO: frequencyの保存のために多くのクラスをまたいでいるため、方法を変える。 DateTimeProviderのfrequencyを各所から参照するなど
 class AddReminderProvider {
   late AddReminderModel model;
 

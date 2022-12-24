@@ -12,9 +12,6 @@ import 'package:reminder/view/add_reminder/button/form_control_button.dart';
 class AddReminderView extends StatelessWidget {
   late AddReminderProvider provider;
 
-  //TODO: 上のproviderから引っ張ってくる
-  int? _frequency;
-
   AddReminderView({
     Key? key,
     int? id,
@@ -34,7 +31,6 @@ class AddReminderView extends StatelessWidget {
       frequency,
       isTrash,
     );
-    _frequency = frequency;
   }
 
   PreferredSizeWidget _appBar(BuildContext context) {
@@ -146,7 +142,7 @@ class AddReminderView extends StatelessWidget {
           ),
           Expanded(
             flex: 5,
-            child: _dateTimeSelecter(context),
+            child: _dateTimeSelector(context),
           ),
           Expanded(
             flex: 3,
@@ -163,11 +159,11 @@ class AddReminderView extends StatelessWidget {
     );
   }
 
-  Widget _dateTimeSelecter(BuildContext context) {
+  Widget _dateTimeSelector(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => DateTimeProvider(
         provider.getData(Notifications.timeKey),
-        _frequency,
+        provider.getData(Notifications.frequencyKey),
       ),
       child: Consumer<DateTimeProvider>(
         builder: (context, dateTimeProvider, child) {
@@ -178,7 +174,7 @@ class AddReminderView extends StatelessWidget {
               await dateTimeProvider.selectDateTime(context);
               provider.setData(
                 time: dateTimeProvider.getMilliSecondsFromEpoch(),
-                frequency: dateTimeProvider.frequency,
+                frequency: dateTimeProvider.getFrequency(),
               );
             },
             icon: Icon(

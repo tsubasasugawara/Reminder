@@ -5,11 +5,13 @@ class DateTimeModel {
   int _hour = 0;
   int _minute = 0;
 
+  int? frequency;
+
   /*
    * コンストラクタ
    * @param milliseconds : 日時の初期値
    */
-  DateTimeModel(int milliseconds) {
+  DateTimeModel(int milliseconds, this.frequency) {
     final dateTime = DateTime.fromMillisecondsSinceEpoch(milliseconds);
     _year = dateTime.year;
     _month = dateTime.month;

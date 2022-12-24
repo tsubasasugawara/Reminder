@@ -131,7 +131,7 @@ class Notifications {
    * @param setAlarm : アラームのオン(1)オフ(0)
    * @param deleted : ごみ箱(1), ホーム(0)
    * @param where : WHERE句
-   * @param wherArgs : WHERE句のプレースホルダに入れる値
+   * @param whereArgs : WHERE句のプレースホルダに入れる値
    * @return res : 更新した行数
    */
   Future<int?> update({
@@ -161,7 +161,7 @@ class Notifications {
   /*
    * DELETE文
    * @param where : WHERE句
-   * @param wherArgs : WHERE句のプレースホルダに入れる値
+   * @param whereArgs : WHERE句のプレースホルダに入れる値
    * @return res : 削除した行数
    */
   Future<int?> delete(
