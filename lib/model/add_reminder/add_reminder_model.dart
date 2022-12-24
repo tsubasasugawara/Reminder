@@ -49,7 +49,7 @@ class AddReminderModel {
         time ?? _dataBeingEditing[Notifications.timeKey];
     _dataBeingEditing[Notifications.setAlarmKey] =
         setAlarm ?? Notifications.alarmOn;
-    _dataBeforeEditing[Notifications.frequencyKey] = frequency;
+    _dataBeingEditing[Notifications.frequencyKey] = frequency;
   }
 
   /*

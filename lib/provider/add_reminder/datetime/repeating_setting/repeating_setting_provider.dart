@@ -27,9 +27,9 @@ class RepeatingSettingProvider extends ChangeNotifier {
       AppLocalizations.of(context)!.everyYear,
     ];
 
-    controller = TextEditingController();
-    controller.text = "0";
     setDays(_days);
+    controller = TextEditingController();
+    controller.text = days.toString();
   }
 
   /*
