@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
-import '../../../components/text_field_cursor/text_field_cursor.dart';
+import '../../../../components/text_field_cursor/text_field_cursor.dart';
 
-class RepeatSettingProvider extends ChangeNotifier {
+class RepeatingSettingProvider extends ChangeNotifier {
   static const custom = 0;
   static const everyday = -1;
   static const everyWeek = -2;
@@ -19,7 +19,7 @@ class RepeatSettingProvider extends ChangeNotifier {
 
   late TextEditingController controller; //間隔を指定するフォームのコントローラ
 
-  RepeatSettingProvider(this.context, int? _days) {
+  RepeatingSettingProvider(this.context, int? _days) {
     listItem = [
       AppLocalizations.of(context)!.everyday,
       AppLocalizations.of(context)!.everyWeek,

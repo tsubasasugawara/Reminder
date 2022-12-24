@@ -2,27 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
-import '../../../provider/add_reminder/datetime/repeat_setting_provider.dart';
+import '../../../../provider/add_reminder/datetime/repeating_setting/repeating_setting_provider.dart';
 
-class RepeatSettingView {
+class RepeatingSettingView {
   int? days; //繰り返しの間隔 or デフォルトの選択肢(マイナス)
 
   final int numberOfCharacters = 5;
 
-  RepeatSettingView(this.days);
+  RepeatingSettingView(this.days);
 
   /*
    * デフォルトオプション用のボタンを作成する
    * @param text : ボタンに表示するテキスト
    * @param value : ボタンの値
-   * @param provider : RepeatSettingProvider
+   * @param provider : RepeatingSettingProvider
    * @param context : BuildContext
    * @return Widget : ボタン
    */
   Widget _makeButton(
     String text,
     int value,
-    RepeatSettingProvider provider,
+    RepeatingSettingProvider provider,
     BuildContext context,
   ) {
     return TextButton(
@@ -77,8 +77,8 @@ class RepeatSettingView {
       builder: (context) {
         return Dialog(
           child: ChangeNotifierProvider(
-            create: (_) => RepeatSettingProvider(context, days),
-            child: Consumer<RepeatSettingProvider>(
+            create: (_) => RepeatingSettingProvider(context, days),
+            child: Consumer<RepeatingSettingProvider>(
               builder: (context, provider, child) {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
@@ -93,35 +93,35 @@ class RepeatSettingView {
                     _createDivider(context),
                     _makeButton(
                       AppLocalizations.of(context)!.everyday,
-                      RepeatSettingProvider.everyday,
+                      RepeatingSettingProvider.everyday,
                       provider,
                       context,
                     ),
                     _createDivider(context),
                     _makeButton(
                       AppLocalizations.of(context)!.everyWeek,
-                      RepeatSettingProvider.everyWeek,
+                      RepeatingSettingProvider.everyWeek,
                       provider,
                       context,
                     ),
                     _createDivider(context),
                     _makeButton(
                       AppLocalizations.of(context)!.everyMonth,
-                      RepeatSettingProvider.everyMonth,
+                      RepeatingSettingProvider.everyMonth,
                       provider,
                       context,
                     ),
                     _createDivider(context),
                     _makeButton(
                       AppLocalizations.of(context)!.everyYear,
-                      RepeatSettingProvider.everyYear,
+                      RepeatingSettingProvider.everyYear,
                       provider,
                       context,
                     ),
                     _createDivider(context),
                     _makeButton(
                       AppLocalizations.of(context)!.custom,
-                      RepeatSettingProvider.custom,
+                      RepeatingSettingProvider.custom,
                       provider,
                       context,
                     ),
@@ -177,7 +177,7 @@ class RepeatSettingView {
                     _createDivider(context),
                     _makeButton(
                       AppLocalizations.of(context)!.notRepeat,
-                      RepeatSettingProvider.notRepeating,
+                      RepeatingSettingProvider.notRepeating,
                       provider,
                       context,
                     ),

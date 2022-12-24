@@ -218,12 +218,12 @@ class Messages {
         day: 'day',
         days: 'days',
         repeatingInterval: 'Repeating Interval',
-        notRepeat: 'Not repeat',
-        custom: 'custom',
-        everyday: 'every day',
-        everyWeek: 'every one week',
-        everyMonth: 'every one month',
-        everyYear: 'every one year',
+        notRepeat: 'Don\'t repeat',
+        custom: 'Custom',
+        everyday: 'Every day',
+        everyWeek: 'Every week',
+        everyMonth: 'Every month',
+        everyYear: 'Every year',
         repeatsEvery: 'Repeats every',
       );
 }
