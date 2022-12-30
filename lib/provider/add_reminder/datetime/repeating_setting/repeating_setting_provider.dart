@@ -15,7 +15,7 @@ class RepeatingSettingProvider extends ChangeNotifier {
   late List<String> listItem;
 
   int days = 0; // 繰り返しの間隔(日数)を格納
-  int option = 0; // 選択肢の中から選択した場合
+  int option = RepeatingSettingProvider.notRepeating; // 選択肢の中から選択した場合
 
   late TextEditingController controller; //間隔を指定するフォームのコントローラ
 
