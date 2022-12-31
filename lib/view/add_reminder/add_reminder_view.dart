@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder/components/brightness/brightness.dart';
-import 'package:reminder/model/db/db.dart';
+import 'package:reminder/model/db/notifications.dart';
 import 'package:reminder/provider/add_reminder/add_reminder_provider.dart';
 import 'package:reminder/provider/add_reminder/alarm_switch_button.dart';
 import 'package:reminder/provider/add_reminder/datetime/datetime_provider.dart';
@@ -19,9 +19,18 @@ class AddReminderView extends StatelessWidget {
     String? content,
     int? time,
     int? setAlarm,
+    int? frequency,
     bool isTrash = false, // ごみ箱のアイテム(true)、それ以外(false)
   }) : super(key: key) {
-    provider = AddReminderProvider(id, title, content, time, setAlarm, isTrash);
+    provider = AddReminderProvider(
+      id,
+      title,
+      content,
+      time,
+      setAlarm,
+      frequency,
+      isTrash,
+    );
   }
 
   PreferredSizeWidget _appBar(BuildContext context) {
@@ -133,7 +142,7 @@ class AddReminderView extends StatelessWidget {
           ),
           Expanded(
             flex: 5,
-            child: _dateTimeSelecter(context),
+            child: _dateTimeSelector(context),
           ),
           Expanded(
             flex: 3,
@@ -150,10 +159,11 @@ class AddReminderView extends StatelessWidget {
     );
   }
 
-  Widget _dateTimeSelecter(BuildContext context) {
+  Widget _dateTimeSelector(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => DateTimeProvider(
         provider.getData(Notifications.timeKey),
+        provider.getData(Notifications.frequencyKey),
       ),
       child: Consumer<DateTimeProvider>(
         builder: (context, dateTimeProvider, child) {
@@ -164,6 +174,7 @@ class AddReminderView extends StatelessWidget {
               await dateTimeProvider.selectDateTime(context);
               provider.setData(
                 time: dateTimeProvider.getMilliSecondsFromEpoch(),
+                frequency: dateTimeProvider.getFrequency(),
               );
             },
             icon: Icon(
@@ -172,7 +183,9 @@ class AddReminderView extends StatelessWidget {
             ),
             label: Text(
               dateTimeProvider.dateTimeFormat(context),
-              style: TextStyle(color: Theme.of(context).primaryColor),
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+              ),
             ),
           );
         },

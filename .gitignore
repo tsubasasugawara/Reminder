@@ -48,5 +48,6 @@ app.*.map.json
 connect.sh
 install.sh
 pair.sh
+count.sh
 TODO
 .vscode/

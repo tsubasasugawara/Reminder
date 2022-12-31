@@ -4,14 +4,16 @@ import 'package:reminder/multilingualization/app_localizations.dart';
 class AlarmSwitchButtonProvider extends ChangeNotifier {
   AlarmSwitchButtonProvider(this.setAlarm);
 
-  /// アラームが設定されているか。1:on, 2:off
+  //アラームが設定されているか。1:on, 2:off
   int setAlarm;
 
-  /// オン・オフのアイコンを返す
-  /// * `context`:BuildContext
-  /// * `action`:アイコンを押したときの処理
-  /// * `isTrash` : ごみ箱(true)にいるかホーム(false)にいるか
-  /// * @return `Widget`:オン・オフのアイコン
+  /*
+   * オン・オフのアイコンを返す
+   * @param context:BuildContext
+   * @param action:アイコンを押したときの処理
+   * @param isTrash : ごみ箱(true)にいるかホーム(false)にいるか
+   * @return Widget:オン・オフのアイコン
+   */
   Widget changeIcon(
     BuildContext context,
     Function() action, {
@@ -50,19 +52,21 @@ class AlarmSwitchButtonProvider extends ChangeNotifier {
     }
   }
 
-  /// アラームのオン・オフを変更
+  //アラームのオン・オフを変更
   void _changeSetAlarm() {
     setAlarm = 1 - setAlarm;
     notifyListeners();
   }
 
-  /// アイコンボタンを作成
-  /// * `context`:BuildContext
-  /// * `foregroundColor`:アイコンの色
-  /// * `action`:アイコンを押したときの処理
-  /// * `icon`:アイコン
-  /// * `label`:アイコンの説明文
-  /// * @return `Widget`:アイコンボタン
+  /*
+   * アイコンボタンを作成
+   * @param context:BuildContext
+   * @param foregroundColor:アイコンの色
+   * @param action:アイコンを押したときの処理
+   * @param icon:アイコン
+   * @param label:アイコンの説明文
+   * @return Widget:アイコンボタン
+   */
   Widget _textButtonIcon(
     BuildContext context,
     Color foregroundColor,

@@ -17,10 +17,12 @@ class ListItem extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  /// 時間を整形し、文字列として返す
-  /// * `milliseconds`:ミリ秒表現の時間
-  /// * `context`:BuildContext
-  /// * @return `String`:整形後の時間の文字列
+  /*
+   * 時間を整形し、文字列として返す
+   * @param milliseconds:ミリ秒表現の時間
+   * @param context:BuildContext
+   * @return String:整形後の時間の文字列
+   */
   String _dateTimeFormat(int milliseconds, BuildContext context) {
     var dt = DateTime.fromMillisecondsSinceEpoch(milliseconds);
     var now = DateTime.now();

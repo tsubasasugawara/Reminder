@@ -22,8 +22,11 @@
         <receiver android:name=".alarm.AlarmReceiver" android:exported="false" android:directBootAware="true">
             <intent-filter>
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
-                <!-- <action android:name="android.intent.action.BOOT_COMPLETED" /> -->
-                <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
     </application>

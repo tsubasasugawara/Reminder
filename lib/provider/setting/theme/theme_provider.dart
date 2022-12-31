@@ -3,8 +3,12 @@ import 'package:flutter/scheduler.dart';
 import 'package:reminder/components/brightness/brightness.dart';
 import '../setting.dart';
 
-/// App theme.
+//App theme.
 class ThemeProvider extends ChangeNotifier {
+  static const darkTheme = "D";
+  static const lightTheme = "L";
+  static const auto = "A";
+
   List<int> colors = [
     0xffe5a323, //パンプキン
     0xff009b9f, //ターコイズ
@@ -20,10 +24,10 @@ class ThemeProvider extends ChangeNotifier {
     0xff9400d3, //ダークバイオレット
   ];
 
-  late String uiMode; // D:ダーク, L:ライト, A:自動
+  late String uiMode; //D:ダーク, L:ライト, A:自動
   late Color primaryColor;
 
-  int selectedIndex = 0; // 現在のプライマリーカラーの番号
+  int selectedIndex = 0; //現在のプライマリーカラーの番号
 
   Color backgroundColor = const Color.fromARGB(255, 40, 40, 40);
   Color barColor = const Color.fromARGB(255, 50, 50, 50);
@@ -33,32 +37,35 @@ class ThemeProvider extends ChangeNotifier {
   Color dialogBackground = const Color.fromARGB(255, 40, 40, 40);
   Color elevatedButtonBackground = const Color.fromARGB(255, 50, 50, 50);
   Color canvasColor = const Color.fromARGB(255, 60, 60, 60);
+  Color highlightColor = const Color.fromARGB(255, 50, 50, 50);
 
   ThemeProvider() {
     primaryColor = backgroundColor;
   }
 
-  /// プライマリーカラーとテーマをセットする
+  //プライマリーカラーとテーマをセットする
   Future<void> setColors() async {
     int colorCode = await Setting.getInt(Setting.primaryColorKey) ?? 0xffe198b4;
     primaryColor = Color(colorCode);
     selectedIndex = _getIndex();
 
-    uiMode = await Setting.getString(Setting.uiModeKey) ?? "A";
-    String tmpUiMode = uiMode == "A"
+    uiMode = await Setting.getString(Setting.uiModeKey) ?? auto;
+    String tmpUiMode = uiMode == auto
         ? SchedulerBinding.instance.window.platformBrightness == Brightness.dark
-            ? "D"
-            : "L"
+            ? darkTheme
+            : lightTheme
         : uiMode;
-    if (tmpUiMode == "D") {
+    if (tmpUiMode == darkTheme) {
       _darkTheme();
     } else {
       _lightTheme();
     }
   }
 
-  /// プライマリーカラーを変更する
-  /// * `colorCode`:16進数のカラーコード
+  /*
+   * プライマリーカラーを変更する
+   * @param colorCode:16進数のカラーコード
+   */
   void changePrimaryColor(int colorCode) async {
     primaryColor = Color(colorCode);
     selectedIndex = _getIndex();
@@ -67,7 +74,7 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// ダークテーマに変更
+  //ダークテーマに変更
   void _darkTheme() {
     backgroundColor = const Color.fromARGB(255, 40, 40, 40);
     barColor = const Color.fromARGB(255, 50, 50, 50);
@@ -77,9 +84,10 @@ class ThemeProvider extends ChangeNotifier {
     dialogBackground = const Color.fromARGB(255, 40, 40, 40);
     elevatedButtonBackground = const Color.fromARGB(255, 40, 40, 40);
     canvasColor = const Color.fromARGB(255, 60, 60, 60);
+    highlightColor = const Color.fromARGB(255, 50, 50, 50);
   }
 
-  /// ライトテーマに変更
+  //ライトテーマに変更
   void _lightTheme() {
     backgroundColor = Colors.white;
     barColor = Colors.white;
@@ -89,25 +97,27 @@ class ThemeProvider extends ChangeNotifier {
     dialogBackground = Colors.white;
     elevatedButtonBackground = Colors.white;
     canvasColor = const Color.fromARGB(255, 240, 240, 240);
+    highlightColor = const Color.fromARGB(255, 220, 220, 220);
   }
 
-  /// テーマを保存
-  /// * `mode`:選択されたモード
-  ///   "D"ダークモード. "L"ライトモード. "A"自動.
+  /*
+   * テーマを保存
+   * @param mode:選択されたモード
+   */
   Future<void> changeUiMode(String mode) async {
-    if (mode == "D") {
-      uiMode = "D";
-    } else if (mode == "L") {
-      uiMode = "L";
+    if (mode == darkTheme) {
+      uiMode = darkTheme;
+    } else if (mode == lightTheme) {
+      uiMode = lightTheme;
     } else {
-      uiMode = "A";
+      uiMode = auto;
     }
     await Setting.setString(Setting.uiModeKey, uiMode);
 
     notifyListeners();
   }
 
-  /// ThemeDataを作成し、返す
+  //ThemeDataを作成し、返す
   ThemeData? getTheme() {
     return ThemeData(
       primarySwatch: Colors.grey,
@@ -119,6 +129,7 @@ class ThemeProvider extends ChangeNotifier {
       bottomAppBarColor: barColor,
       dialogBackgroundColor: dialogBackground,
       unselectedWidgetColor: judgeBlackWhite(backgroundColor),
+      highlightColor: highlightColor,
       appBarTheme: AppBarTheme(
         backgroundColor: backgroundColor,
         iconTheme: IconThemeData(
@@ -170,7 +181,7 @@ class ThemeProvider extends ChangeNotifier {
     );
   }
 
-  /// 現在のプライマリーカラーの番号を返す
+  //現在のプライマリーカラーの番号を返す
   int _getIndex() {
     for (int i = 0; i < colors.length; i++) {
       if (primaryColor.value == colors[i]) return i;

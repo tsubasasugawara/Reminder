@@ -1,10 +1,11 @@
-package com.sugawara.reminder.sqlite
+package com.sugawara.reminder.sqlite.notifications
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.util.Log
 import java.lang.Exception
+import com.sugawara.reminder.sqlite.DBEnv
 
 class Notifications {
     /**
@@ -23,22 +24,22 @@ class Notifications {
         if (index < 0) return null
 
         if (
-            columnName == DBHelper.idKey ||
-            columnName == DBHelper.frequencyKey ||
-            columnName == DBHelper.setAlarmKey ||
-            columnName == DBHelper.deletedKey
+            columnName == NotificationsHelper.idKey ||
+            columnName == NotificationsHelper.frequencyKey ||
+            columnName == NotificationsHelper.setAlarmKey ||
+            columnName == NotificationsHelper.deletedKey
         ) {
             return cur.getInt(index)
         } else if (
-            columnName == DBHelper.timeKey ||
-            columnName == DBHelper.createdAtKey ||
-            columnName == DBHelper.updatedAtKey
+            columnName == NotificationsHelper.timeKey ||
+            columnName == NotificationsHelper.createdAtKey ||
+            columnName == NotificationsHelper.updatedAtKey
         ) {
             return cur.getLong(index)
         }
          else if (
-            columnName == DBHelper.titleKey ||
-            columnName == DBHelper.contentKey
+            columnName == NotificationsHelper.titleKey ||
+            columnName == NotificationsHelper.contentKey
         ) {
             return cur.getString(index)
         }
@@ -81,12 +82,12 @@ class Notifications {
     ): ArrayList<Map<String, Any?>>? {
         try {
             val res: ArrayList<Map<String,Any?>> = arrayListOf()
-            val dbHelper = DBHelper(context, DBHelper.dbName, null, DBHelper.version);
-            val db = dbHelper.readableDatabase
+            val notificationsHelper = NotificationsHelper(context, DBEnv.dbName, null, NotificationsHelper.version);
+            val db = notificationsHelper.readableDatabase
 
             val cur =
                 db.query(
-                    DBHelper.tableName,
+                    NotificationsHelper.tableName,
                     columns,
                     where,
                     whereArgs,
@@ -98,15 +99,15 @@ class Notifications {
             if (cur.count > 0) {
                 cur.moveToFirst()
                 while (!cur.isAfterLast) {
-                    var idIndex         = cur.getColumnIndex(DBHelper.idKey)
-                    var titleIndex      = cur.getColumnIndex(DBHelper.titleKey)
-                    var contentIndex    = cur.getColumnIndex(DBHelper.contentKey)
-                    var frequencyIndex  = cur.getColumnIndex(DBHelper.frequencyKey)
-                    var timeIndex       = cur.getColumnIndex(DBHelper.timeKey)
-                    var setAlarmIndex   = cur.getColumnIndex(DBHelper.setAlarmKey)
-                    var deletedIndex    = cur.getColumnIndex(DBHelper.deletedKey)
-                    var createdAtIndex  = cur.getColumnIndex(DBHelper.createdAtKey)
-                    var updatedAtIndex  = cur.getColumnIndex(DBHelper.updatedAtKey)
+                    var idIndex         = cur.getColumnIndex(NotificationsHelper.idKey)
+                    var titleIndex      = cur.getColumnIndex(NotificationsHelper.titleKey)
+                    var contentIndex    = cur.getColumnIndex(NotificationsHelper.contentKey)
+                    var frequencyIndex  = cur.getColumnIndex(NotificationsHelper.frequencyKey)
+                    var timeIndex       = cur.getColumnIndex(NotificationsHelper.timeKey)
+                    var setAlarmIndex   = cur.getColumnIndex(NotificationsHelper.setAlarmKey)
+                    var deletedIndex    = cur.getColumnIndex(NotificationsHelper.deletedKey)
+                    var createdAtIndex  = cur.getColumnIndex(NotificationsHelper.createdAtKey)
+                    var updatedAtIndex  = cur.getColumnIndex(NotificationsHelper.updatedAtKey)
 
                     var id:             Int?    = null
                     var title:          String? = null
@@ -148,15 +149,15 @@ class Notifications {
 
                     res.add(
                         mapOf(
-                            "id"            to id,
-                            "title"         to title,
-                            "content"       to content,
-                            "frequency"     to frequency,
-                            "time"          to time,
-                            "setAlarm"      to setAlarm,
-                            "deleted"       to deleted,
-                            "createdAtKey"  to createdAt,
-                            "updatedAtKey"  to updatedAt,
+                            NotificationsHelper.idKey              to id,
+                            NotificationsHelper.titleKey           to title,
+                            NotificationsHelper.contentKey         to content,
+                            NotificationsHelper.frequencyKey       to frequency,
+                            NotificationsHelper.timeKey            to time,
+                            NotificationsHelper.setAlarmKey        to setAlarm,
+                            NotificationsHelper.deletedKey         to deleted,
+                            NotificationsHelper.createdAtKey       to createdAt,
+                            NotificationsHelper.updatedAtKey       to updatedAt,
                         )
                     )
                     cur.moveToNext()
@@ -183,9 +184,9 @@ class Notifications {
         values: ContentValues?,
     ): Long {
         try {
-            val dbHelper = DBHelper(context, DBHelper.dbName, null, DBHelper.version);
-            val db = dbHelper.readableDatabase
-            val num = db.insert(DBHelper.dbName, null, values)
+            val notificationsHelper = NotificationsHelper(context, DBEnv.dbName, null, NotificationsHelper.version);
+            val db = notificationsHelper.writableDatabase
+            val num = db.insert(NotificationsHelper.tableName, null, values)
             db.close()
             return num
         } catch (e: Exception) {
@@ -200,7 +201,7 @@ class Notifications {
      * @param {context}: Context
      * @param {values}: ContentValues? 更新するデータ
      * @param {whereClause}: String? WHERE句
-     * @param {whereArgs}: Array<String?>? WHERE句のプレースホルダに入れる値
+     * @param {whereArgs}: Array<String>? WHERE句のプレースホルダに入れる値
      *
      * @return {num}: Int 更新した行数
      * */
@@ -211,9 +212,9 @@ class Notifications {
         whereArgs: Array<String>?,
     ): Int {
         try {
-            val dbHelper = DBHelper(context, DBHelper.dbName, null, DBHelper.version)
-            val db = dbHelper.readableDatabase
-            val num = db.update(DBHelper.tableName, values, whereClause, whereArgs)
+            val notificationsHelper = NotificationsHelper(context, DBEnv.dbName, null, NotificationsHelper.version)
+            val db = notificationsHelper.writableDatabase
+            val num = db.update(NotificationsHelper.tableName, values, whereClause, whereArgs)
             db.close()
             return num
         } catch (e: Exception) {
@@ -237,9 +238,9 @@ class Notifications {
         whereArgs: Array<String>?,
     ): Int {
         try {
-            val dbHelper = DBHelper(context, DBHelper.dbName, null, DBHelper.version)
-            val db = dbHelper.readableDatabase
-            val num = db.delete(DBHelper.tableName, whereClause, whereArgs)
+            val notificationsHelper = NotificationsHelper(context, DBEnv.dbName, null, NotificationsHelper.version)
+            val db = notificationsHelper.writableDatabase
+            val num = db.delete(NotificationsHelper.tableName, whereClause, whereArgs)
             db.close()
             return num
         } catch (e: Exception) {

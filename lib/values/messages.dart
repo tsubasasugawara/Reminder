@@ -43,6 +43,16 @@ class Messages {
     required this.automaticDeleteMsg,
     required this.dayLater,
     required this.daysLater,
+    required this.day,
+    required this.days,
+    required this.repeatingInterval,
+    required this.notRepeat,
+    required this.custom,
+    required this.everyday,
+    required this.everyWeek,
+    required this.everyMonth,
+    required this.everyYear,
+    required this.repeatsEvery,
   });
 
   final String appTitle;
@@ -86,6 +96,16 @@ class Messages {
   final String automaticDeleteMsg;
   final String dayLater;
   final String daysLater;
+  final String day;
+  final String days;
+  final String repeatingInterval;
+  final String notRepeat;
+  final String custom;
+  final String everyday;
+  final String everyWeek;
+  final String everyMonth;
+  final String everyYear;
+  final String repeatsEvery;
 
   factory Messages.of(Locale locale) {
     switch (locale.languageCode) {
@@ -106,7 +126,7 @@ class Messages {
         titleError: 'タイトルを入力してください',
         dateTimeError: '未来の日時を指定してください',
         saved: '登録しました',
-        edited: '編集を保存しました',
+        edited: '保存しました',
         saveButton: '保存する',
         cancelButton: 'キャンセル',
         dateTimeFormat: 'yyyy/MM/dd HH:mm',
@@ -137,9 +157,19 @@ class Messages {
         topUpSetAlarmReminder: '[アラームONを上に表示]',
         searchBarHintText: 'キーワードを入力してください',
         automaticDelete: '自動削除',
-        automaticDeleteMsg: '自動でアイテムを削除する',
+        automaticDeleteMsg: '自動でゴミ箱のアイテムを削除する',
         dayLater: '日後',
         daysLater: '日後',
+        day: '日',
+        days: '日',
+        repeatingInterval: '繰り返し間隔',
+        notRepeat: '繰り返さない',
+        custom: 'カスタム',
+        everyday: '1日ごと',
+        everyWeek: '1週間ごと',
+        everyMonth: '1ヶ月ごと',
+        everyYear: '1年ごと',
+        repeatsEvery: '繰り返す間隔',
       );
 
   factory Messages.en() => Messages(
@@ -150,7 +180,7 @@ class Messages {
         titleError: 'Please enter a title.',
         dateTimeError: 'Please specify a future date and time.',
         saved: 'Registered.',
-        edited: 'Edited.',
+        edited: 'Saved.',
         saveButton: 'SAVE',
         cancelButton: 'CANCEL',
         dateTimeFormat: 'MM/dd/yyyy hh:mm aa',
@@ -182,8 +212,18 @@ class Messages {
         topUpSetAlarmReminder: '[Show alarms set on top]',
         searchBarHintText: 'Please enter keyword',
         automaticDelete: 'AUTOMATIC DELETE',
-        automaticDeleteMsg: 'Automatically delete items',
+        automaticDeleteMsg: 'Automatically delete items from the trash',
         dayLater: 'day later',
         daysLater: 'days later',
+        day: 'day',
+        days: 'days',
+        repeatingInterval: 'Repeating Interval',
+        notRepeat: 'Don\'t repeat',
+        custom: 'Custom',
+        everyday: 'Every day',
+        everyWeek: 'Every week',
+        everyMonth: 'Every month',
+        everyYear: 'Every year',
+        repeatsEvery: 'Repeats every',
       );
 }

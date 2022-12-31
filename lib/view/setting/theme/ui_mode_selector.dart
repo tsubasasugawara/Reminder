@@ -31,10 +31,10 @@ class UiModeSelector extends StatelessWidget {
                 children: [
                   IconButton(
                     onPressed: () {
-                      themeProvider.changeUiMode("L");
+                      themeProvider.changeUiMode(ThemeProvider.lightTheme);
                     },
                     icon: Icon(
-                      themeProvider.uiMode == "L"
+                      themeProvider.uiMode == ThemeProvider.lightTheme
                           ? Icons.wb_sunny
                           : Icons.wb_sunny_outlined,
                       color: judgeBlackWhite(
@@ -45,10 +45,10 @@ class UiModeSelector extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () {
-                      themeProvider.changeUiMode("D");
+                      themeProvider.changeUiMode(ThemeProvider.darkTheme);
                     },
                     icon: Icon(
-                      themeProvider.uiMode == "D"
+                      themeProvider.uiMode == ThemeProvider.darkTheme
                           ? Icons.mode_night
                           : Icons.mode_night_outlined,
                       color: judgeBlackWhite(
@@ -59,10 +59,10 @@ class UiModeSelector extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () {
-                      themeProvider.changeUiMode("A");
+                      themeProvider.changeUiMode(ThemeProvider.auto);
                     },
                     icon: Icon(
-                      themeProvider.uiMode == "A"
+                      themeProvider.uiMode == ThemeProvider.auto
                           ? Icons.brightness_auto
                           : Icons.brightness_auto_outlined,
                       color: judgeBlackWhite(

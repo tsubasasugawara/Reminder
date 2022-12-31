@@ -5,9 +5,13 @@ class DateTimeModel {
   int _hour = 0;
   int _minute = 0;
 
-  /// コンストラクタ
-  /// * `milliseconds` : 日時の初期値
-  DateTimeModel(int milliseconds) {
+  int? frequency;
+
+  /*
+   * コンストラクタ
+   * @param milliseconds : 日時の初期値
+   */
+  DateTimeModel(int milliseconds, this.frequency) {
     final dateTime = DateTime.fromMillisecondsSinceEpoch(milliseconds);
     _year = dateTime.year;
     _month = dateTime.month;
@@ -16,8 +20,10 @@ class DateTimeModel {
     _minute = dateTime.minute;
   }
 
-  /// 日時を変更
-  /// * `dt` : 変更する日時のデータ
+  /*
+   * 日時を変更
+   * @param dt : 変更する日時のデータ
+   */
   void changeDateTime(DateTime dt) {
     _year = dt.year;
     _month = dt.month;
@@ -26,8 +32,10 @@ class DateTimeModel {
     _minute = dt.minute;
   }
 
-  /// 現在保存されている日時情報を基にインスタンス化
-  /// * @return `DateTime` : DateTimeインスタンス
+  /*
+   * 現在保存されている日時情報を基にインスタンス化
+   * @return DateTime : DateTimeインスタンス
+   */
   DateTime createDateTime() {
     return DateTime(_year, _month, _day, _hour, _minute);
   }

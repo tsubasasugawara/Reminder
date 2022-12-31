@@ -7,6 +7,7 @@ import 'package:reminder/view/add_reminder/add_reminder_view.dart';
 import 'package:reminder/view/home/appBar/actions.dart' as actions;
 import 'package:reminder/view/trash/trash.dart';
 
+import '../../model/db/notifications.dart';
 import '../setting/setting_view.dart';
 import 'list/list_item.dart';
 
@@ -148,30 +149,37 @@ class MainView extends StatelessWidget {
               actions: actions.Actions(provider, context).build(),
             ),
             drawer: _drawer(provider, context),
-            body: ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: provider.getDataListLength(),
-              itemBuilder: (BuildContext context, int index) {
-                return GestureDetector(
-                  onTap: () async {
-                    if (provider.selectionMode) {
-                      provider.changeSelected(index);
-                    } else {
-                      await provider.moveToAddView(context, index: index);
-                    }
-                  },
-                  onLongPress: () {
-                    if (!provider.selectionMode) provider.changeMode(true);
-                    provider.changeSelected(index);
-                  },
-                  child: ListItem(
-                    provider.selectedItems[index],
-                    provider.getString(index, "title"),
-                    provider.getInt(index, "setAlarm"),
-                    provider.getInt(index, 'time'),
-                  ),
-                );
+            body: RefreshIndicator(
+              color: Theme.of(context).primaryColor,
+              displacement: 40,
+              onRefresh: () async {
+                await provider.setData();
               },
+              child: ListView.builder(
+                padding: const EdgeInsets.all(8),
+                itemCount: provider.getDataListLength(),
+                itemBuilder: (BuildContext context, int index) {
+                  return GestureDetector(
+                    onTap: () async {
+                      if (provider.selectionMode) {
+                        provider.changeSelected(index);
+                      } else {
+                        await provider.moveToAddView(context, index: index);
+                      }
+                    },
+                    onLongPress: () {
+                      if (!provider.selectionMode) provider.changeMode(true);
+                      provider.changeSelected(index);
+                    },
+                    child: ListItem(
+                      provider.selectedItems[index],
+                      provider.getString(index, Notifications.titleKey),
+                      provider.getInt(index, Notifications.setAlarmKey),
+                      provider.getInt(index, Notifications.timeKey),
+                    ),
+                  );
+                },
+              ),
             ),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerFloat,

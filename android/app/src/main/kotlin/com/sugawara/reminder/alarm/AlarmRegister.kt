@@ -5,7 +5,10 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import com.sugawara.reminder.sqlite.notifications.NotificationsHelper
 import android.os.Build
+import com.sugawara.reminder.sqlite.notifications.Notifications
+import android.content.ContentValues
 import com.sugawara.reminder.alarm.AlarmReceiver
 
 class AlarmRegister(_context: Context) {
@@ -17,12 +20,12 @@ class AlarmRegister(_context: Context) {
         id: Int,
         title: String,
         content: String,
-        millis: Long,
-        // created: Boolean
+        time: Long,
+        frequency: Int,
     ){
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val intent = createIntent(id, title, content, millis)
+        val intent = createIntent(id, title, content, time, frequency)
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             id,
@@ -32,7 +35,7 @@ class AlarmRegister(_context: Context) {
 
         val alarmInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             AlarmManager.AlarmClockInfo(
-                millis,
+                time,
                 null
             )
         } else {
@@ -43,6 +46,11 @@ class AlarmRegister(_context: Context) {
             alarmInfo,
             pendingIntent
         )
+
+        var notifications = Notifications()
+        var values = ContentValues()
+        values.put(NotificationsHelper.setAlarmKey, 1)
+        notifications.update(context,values,"${NotificationsHelper.idKey} = ?",arrayOf(id.toString()))
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")
@@ -50,11 +58,12 @@ class AlarmRegister(_context: Context) {
         id: Int,
         title: String,
         content: String,
-        millis: Long
+        time: Long,
+        frequency: Int,
     ){
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val intent = createIntent(id, title, content, millis)
+        val intent = createIntent(id, title, content, time, frequency)
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             id,
@@ -71,14 +80,16 @@ class AlarmRegister(_context: Context) {
         id: Int,
         title: String,
         content: String,
-        millis: Long
+        time: Long,
+        frequency: Int,
     ): Intent {
         return Intent(this.context, AlarmReceiver::class.java)
             .also {
-                it.putExtra("id", id)
-                it.putExtra("title",title)
-                it.putExtra("content",content)
-                it.putExtra("time", millis)
+                it.putExtra(NotificationsHelper.idKey, id)
+                it.putExtra(NotificationsHelper.titleKey,title)
+                it.putExtra(NotificationsHelper.contentKey,content)
+                it.putExtra(NotificationsHelper.timeKey, time)
+                it.putExtra(NotificationsHelper.frequencyKey, frequency)
             }
     }
 }
