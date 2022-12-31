@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:reminder/view/search/search_bar/searchbar.dart';
 
 import '../../components/brightness/brightness.dart';
-import '../../model/db/db.dart';
+import '../../model/db/notifications.dart';
 import '../../provider/search/search_provider.dart';
 import '../add_reminder/add_reminder_view.dart';
 import '../home/list/list_item.dart';

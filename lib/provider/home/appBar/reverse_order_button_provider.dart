@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:reminder/model/db/db.dart';
+
+import '../../../model/db/db_env.dart';
 
 class ReverseOrderButtonProvider extends ChangeNotifier {
   late String sortby;
@@ -7,8 +8,7 @@ class ReverseOrderButtonProvider extends ChangeNotifier {
   ReverseOrderButtonProvider(this.sortby);
 
   void changeSortBy() {
-    sortby =
-        sortby == Notifications.asc ? Notifications.desc : Notifications.asc;
+    sortby = sortby == DBEnv.asc ? DBEnv.desc : DBEnv.asc;
     notifyListeners();
   }
 }

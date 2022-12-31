@@ -1,4 +1,4 @@
-import 'package:reminder/model/db/db.dart';
+import 'package:reminder/model/db/notifications.dart';
 import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
 
 //アイテムの複数選択のためのクラス

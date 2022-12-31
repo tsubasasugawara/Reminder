@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../components/text_field_cursor/text_field_cursor.dart';
-import '../../../model/db/db.dart';
+import '../../../model/db/notifications.dart';
 import '../setting.dart';
 
 class AutoDeleteProvider extends ChangeNotifier {

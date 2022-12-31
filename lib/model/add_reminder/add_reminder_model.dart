@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_final_fields
 
-import 'package:reminder/model/db/db.dart';
+import 'package:reminder/model/db/notifications.dart';
 
 class AddReminderModel {
   late int? id; //現在編集中のリマインダーのid
@@ -41,7 +41,8 @@ class AddReminderModel {
     _dataBeforeEditing[Notifications.timeKey] = time;
     _dataBeforeEditing[Notifications.setAlarmKey] =
         setAlarm ?? Notifications.alarmOn;
-    _dataBeforeEditing[Notifications.frequencyKey] = frequency;
+    _dataBeforeEditing[Notifications.frequencyKey] =
+        frequency ?? Notifications.notRepeating;
 
     _dataBeingEditing[Notifications.titleKey] = title ?? "";
     _dataBeingEditing[Notifications.contentKey] = content ?? "";
@@ -49,7 +50,8 @@ class AddReminderModel {
         time ?? _dataBeingEditing[Notifications.timeKey];
     _dataBeingEditing[Notifications.setAlarmKey] =
         setAlarm ?? Notifications.alarmOn;
-    _dataBeingEditing[Notifications.frequencyKey] = frequency;
+    _dataBeingEditing[Notifications.frequencyKey] =
+        frequency ?? Notifications.notRepeating;
   }
 
   /*

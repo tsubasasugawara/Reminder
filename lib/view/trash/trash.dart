@@ -5,7 +5,7 @@ import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/home_provider.dart';
 import 'package:reminder/view/home/appBar/actions.dart' as actions;
 
-import '../../model/db/db.dart';
+import '../../model/db/notifications.dart';
 
 // ignore: must_be_immutable
 class Trash extends StatelessWidget {

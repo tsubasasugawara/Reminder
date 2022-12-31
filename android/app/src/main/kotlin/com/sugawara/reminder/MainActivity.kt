@@ -8,8 +8,8 @@ import io.flutter.plugins.GeneratedPluginRegistrant
 import io.flutter.embedding.engine.FlutterEngine
 import androidx.annotation.NonNull
 import com.sugawara.reminder.alarm.AlarmRegister
-import com.sugawara.reminder.sqlite.Notifications
-import com.sugawara.reminder.sqlite.DBHelper
+import com.sugawara.reminder.sqlite.notifications.Notifications
+import com.sugawara.reminder.sqlite.notifications.NotificationsHelper
 import android.util.Log
 
 class MainActivity: FlutterActivity() {
@@ -21,27 +21,28 @@ class MainActivity: FlutterActivity() {
             methodCall, result ->
             when(methodCall.method) {
                 "alarm" -> {
-                    val id = methodCall.argument<Int>(DBHelper.idKey)!!
-                    val title = methodCall.argument<String>(DBHelper.titleKey).toString()
-                    val content = methodCall.argument<String>(DBHelper.contentKey).toString()
-                    val time = methodCall.argument<Long>(DBHelper.timeKey)!!
-                    val frequency = methodCall.argument<Int>(DBHelper.frequencyKey) ?: 0
+                    val id = methodCall.argument<Int>(NotificationsHelper.idKey)!!
+                    val title = methodCall.argument<String>(NotificationsHelper.titleKey).toString()
+                    val content = methodCall.argument<String>(NotificationsHelper.contentKey).toString()
+                    val time = methodCall.argument<Long>(NotificationsHelper.timeKey)!!
+                    val frequency = methodCall.argument<Int>(NotificationsHelper.frequencyKey) ?: 0
                     val register = AlarmRegister(context)
 
                     register.registAlarm(id,title,content,time,frequency)
                     result.success(null);
                 }
                 "deleteAlarm" -> {
-                    val id = methodCall.argument<Int>(DBHelper.idKey)!!
-                    val title = methodCall.argument<String>(DBHelper.titleKey).toString()
-                    val content = methodCall.argument<String>(DBHelper.contentKey).toString()
-                    val time = methodCall.argument<Long>(DBHelper.timeKey)!!
-                    val frequency = methodCall.argument<Int>(DBHelper.frequencyKey) ?: 0
+                    val id = methodCall.argument<Int>(NotificationsHelper.idKey)!!
+                    val title = methodCall.argument<String>(NotificationsHelper.titleKey).toString()
+                    val content = methodCall.argument<String>(NotificationsHelper.contentKey).toString()
+                    val time = methodCall.argument<Long>(NotificationsHelper.timeKey)!!
+                    val frequency = methodCall.argument<Int>(NotificationsHelper.frequencyKey) ?: 0
 
                     val register = AlarmRegister(context)
                     register.deleteAlarm(id,title,content,time,frequency)
                     result.success(null);
                 }
+                // TODO: selectでなく、notifications_selectのようにする
                 "select" -> {
                     try {
                         val columns = methodCall.argument<Map<String, String>>("columns")!!
@@ -72,14 +73,14 @@ class MainActivity: FlutterActivity() {
                 "insert" -> {
                     try {
                         val values = ContentValues()
-                        values.put(DBHelper.titleKey, methodCall.argument<String>(DBHelper.titleKey).toString())
-                        values.put(DBHelper.contentKey, methodCall.argument<String>(DBHelper.contentKey).toString())
-                        values.put(DBHelper.frequencyKey, methodCall.argument<Int>(DBHelper.frequencyKey) ?: 0)
-                        values.put(DBHelper.timeKey, methodCall.argument<Long>(DBHelper.timeKey) ?: 0)
-                        values.put(DBHelper.setAlarmKey, methodCall.argument<Int>(DBHelper.setAlarmKey) ?: 0)
-                        values.put(DBHelper.deletedKey, methodCall.argument<Int>(DBHelper.deletedKey) ?: 0)
-                        values.put(DBHelper.createdAtKey, System.currentTimeMillis())
-                        values.put(DBHelper.updatedAtKey, System.currentTimeMillis())
+                        values.put(NotificationsHelper.titleKey, methodCall.argument<String>(NotificationsHelper.titleKey).toString())
+                        values.put(NotificationsHelper.contentKey, methodCall.argument<String>(NotificationsHelper.contentKey).toString())
+                        values.put(NotificationsHelper.frequencyKey, methodCall.argument<Int>(NotificationsHelper.frequencyKey) ?: 0)
+                        values.put(NotificationsHelper.timeKey, methodCall.argument<Long>(NotificationsHelper.timeKey) ?: 0)
+                        values.put(NotificationsHelper.setAlarmKey, methodCall.argument<Int>(NotificationsHelper.setAlarmKey) ?: 0)
+                        values.put(NotificationsHelper.deletedKey, methodCall.argument<Int>(NotificationsHelper.deletedKey) ?: 0)
+                        values.put(NotificationsHelper.createdAtKey, System.currentTimeMillis())
+                        values.put(NotificationsHelper.updatedAtKey, System.currentTimeMillis())
 
                         var notifications = Notifications()
                         var res = notifications.insert(
@@ -98,25 +99,25 @@ class MainActivity: FlutterActivity() {
                         val whereArgs: Map<String, String>? = methodCall.argument<Map<String, String>>("whereArgs") ?: null
 
                         val values = ContentValues()
-                        methodCall.argument<String>(DBHelper.titleKey)?.let{
-                            values.put(DBHelper.titleKey, it.toString())
+                        methodCall.argument<String>(NotificationsHelper.titleKey)?.let{
+                            values.put(NotificationsHelper.titleKey, it.toString())
                         }
-                        methodCall.argument<String>(DBHelper.contentKey)?.let{
-                            values.put(DBHelper.contentKey, it.toString())
+                        methodCall.argument<String>(NotificationsHelper.contentKey)?.let{
+                            values.put(NotificationsHelper.contentKey, it.toString())
                         }
-                        methodCall.argument<Int>(DBHelper.frequencyKey)?.let{
-                            values.put(DBHelper.frequencyKey, it)
+                        methodCall.argument<Int>(NotificationsHelper.frequencyKey)?.let{
+                            values.put(NotificationsHelper.frequencyKey, it)
                         }
-                        methodCall.argument<Long>(DBHelper.timeKey)?.let{
-                            values.put(DBHelper.timeKey, it)
+                        methodCall.argument<Long>(NotificationsHelper.timeKey)?.let{
+                            values.put(NotificationsHelper.timeKey, it)
                         }
-                        methodCall.argument<Int>(DBHelper.setAlarmKey)?.let{
-                            values.put(DBHelper.setAlarmKey, it)
+                        methodCall.argument<Int>(NotificationsHelper.setAlarmKey)?.let{
+                            values.put(NotificationsHelper.setAlarmKey, it)
                         }
-                        methodCall.argument<Int>(DBHelper.deletedKey)?.let{
-                            values.put(DBHelper.deletedKey, it)
+                        methodCall.argument<Int>(NotificationsHelper.deletedKey)?.let{
+                            values.put(NotificationsHelper.deletedKey, it)
                         }
-                        values.put(DBHelper.updatedAtKey, System.currentTimeMillis())
+                        values.put(NotificationsHelper.updatedAtKey, System.currentTimeMillis())
 
                         var notifications = Notifications()
                         var res = notifications.update(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
-import 'package:reminder/provider/add_reminder/datetime/repeating_setting/repeating_setting_provider.dart';
+
+import '../../../../model/db/notifications.dart';
 
 class RepeatingDialogButtonProvider extends ChangeNotifier {
   BuildContext context;
@@ -17,16 +18,15 @@ class RepeatingDialogButtonProvider extends ChangeNotifier {
    * @param frequency:繰り返し間隔
    */
   void changeButtonMsg(int? frequency) {
-    if (_frequency == RepeatingSettingProvider.everyday) {
+    if (_frequency == Notifications.everyday) {
       buttonMsg = AppLocalizations.of(context)!.everyday;
-    } else if (_frequency == RepeatingSettingProvider.everyWeek) {
+    } else if (_frequency == Notifications.everyWeek) {
       buttonMsg = AppLocalizations.of(context)!.everyWeek;
-    } else if (_frequency == RepeatingSettingProvider.everyMonth) {
+    } else if (_frequency == Notifications.everyMonth) {
       buttonMsg = AppLocalizations.of(context)!.everyMonth;
-    } else if (_frequency == RepeatingSettingProvider.everyYear) {
+    } else if (_frequency == Notifications.everyYear) {
       buttonMsg = AppLocalizations.of(context)!.everyYear;
-    } else if (_frequency != null &&
-        _frequency! > RepeatingSettingProvider.custom) {
+    } else if (_frequency != null && _frequency! > Notifications.custom) {
       buttonMsg = _frequency.toString() + " ";
       buttonMsg += _frequency == 1
           ? AppLocalizations.of(context)!.day

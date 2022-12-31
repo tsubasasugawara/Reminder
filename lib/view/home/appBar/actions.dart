@@ -6,7 +6,7 @@ import 'package:reminder/view/home/appBar/reverse_button.dart';
 import 'package:reminder/view/home/appBar/top_up_set_alarm_button.dart';
 
 import '../../../components/snack_bar/snackbar.dart';
-import '../../../model/db/db.dart';
+import '../../../model/db/notifications.dart';
 import '../../../provider/home/home_provider.dart';
 import '../../search/search_view.dart';
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:reminder/model/db/db.dart';
+import 'package:reminder/model/db/db_env.dart';
+import 'package:reminder/model/db/notifications.dart';
 import 'package:reminder/model/home/home_list_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/selection_item_provider.dart';
@@ -25,7 +26,7 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
   String orderBy = Notifications.createdAtKey;
 
   //昇順、降順の設定
-  String sortBy = Notifications.asc;
+  String sortBy = DBEnv.asc;
 
   bool topUpSetAlarmReminder = false;
 
@@ -49,8 +50,7 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
   }
 
   void changeSortBy() {
-    sortBy =
-        sortBy == Notifications.asc ? Notifications.desc : Notifications.asc;
+    sortBy = sortBy == DBEnv.asc ? DBEnv.desc : DBEnv.asc;
   }
 
   void changeTopUpSetAlarmReminder() {
@@ -71,7 +71,7 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
           ? '${Notifications.deletedKey} = 1'
           : '${Notifications.deletedKey} = 0',
       orderBy:
-          '${topUpSetAlarmReminder ? '${Notifications.setAlarmKey} ${Notifications.desc}, ' : ''} $orderBy $sortBy',
+          '${topUpSetAlarmReminder ? '${Notifications.setAlarmKey} ${DBEnv.desc}, ' : ''} $orderBy $sortBy',
     );
     changeSelectedItemsLen(length: model.dataList.length);
     notifyListeners();

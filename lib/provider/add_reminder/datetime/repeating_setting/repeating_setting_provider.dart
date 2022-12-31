@@ -2,20 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
 import '../../../../components/text_field_cursor/text_field_cursor.dart';
+import '../../../../model/db/notifications.dart';
 
 class RepeatingSettingProvider extends ChangeNotifier {
-  static const custom = 0;
-  static const everyday = -1;
-  static const everyWeek = -2;
-  static const everyMonth = -3;
-  static const everyYear = -4;
-  static const notRepeating = -5;
-
   late BuildContext context;
   late List<String> listItem;
 
   int days = 0; // 繰り返しの間隔(日数)を格納
-  int option = RepeatingSettingProvider.notRepeating; // 選択肢の中から選択した場合
+  int option = Notifications.notRepeating; // 選択肢の中から選択した場合
 
   late TextEditingController controller; //間隔を指定するフォームのコントローラ
 

@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 
-import '../db/db.dart';
+import '../db/notifications.dart';
 
 class KotlinMethodCalling {
   static String channelName = "com.sugawara.reminder/alarm";

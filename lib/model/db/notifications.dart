@@ -1,22 +1,18 @@
 import 'package:flutter/services.dart';
+import 'package:reminder/model/db/db_env.dart';
+import 'package:reminder/model/db/db_interface.dart';
 import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
 
-class Notifications {
-  static const dbName = "notifications";
-  static const tableName = "notifications";
-  static const idKey = "id";
+class Notifications implements DBInterface {
+  static const idKey = "notification_id";
   static const titleKey = "title";
   static const contentKey = "content";
   static const frequencyKey = "frequency";
   static const timeKey = "time";
   static const setAlarmKey = "set_alarm";
   static const deletedKey = "deleted";
-  static const createdAtKey = "created_at";
-  static const updatedAtKey = "updated_at";
-
-  //並び替えの方式
-  static const String asc = "ASC";
-  static const String desc = "DESC";
+  static const createdAtKey = DBEnv.createdAtKey;
+  static const updatedAtKey = DBEnv.updatedAtKey;
 
   //ゴミ箱かホームのどちらにあるのか
   static const int inHome = 0;
@@ -25,6 +21,14 @@ class Notifications {
   //アラームのOn・Off
   static const int alarmOn = 1;
   static const int alarmOff = 0;
+
+  //繰り返し間隔のオプション
+  static const custom = 0;
+  static const everyday = -1;
+  static const everyWeek = -2;
+  static const everyMonth = -3;
+  static const everyYear = -4;
+  static const notRepeating = -5;
 
   /*
    * whereArgsに使う値をListからMapへ変換

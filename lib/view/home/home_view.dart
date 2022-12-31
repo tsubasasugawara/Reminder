@@ -7,7 +7,7 @@ import 'package:reminder/view/add_reminder/add_reminder_view.dart';
 import 'package:reminder/view/home/appBar/actions.dart' as actions;
 import 'package:reminder/view/trash/trash.dart';
 
-import '../../model/db/db.dart';
+import '../../model/db/notifications.dart';
 import '../setting/setting_view.dart';
 import 'list/list_item.dart';
 

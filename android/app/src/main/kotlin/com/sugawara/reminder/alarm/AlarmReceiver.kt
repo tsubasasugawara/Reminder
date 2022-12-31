@@ -13,8 +13,8 @@ import android.content.Intent
 import com.sugawara.reminder.MainActivity
 import com.sugawara.reminder.R
 import com.sugawara.reminder.alarm.AlarmRegister
-import com.sugawara.reminder.sqlite.Notifications
-import com.sugawara.reminder.sqlite.DBHelper
+import com.sugawara.reminder.sqlite.notifications.Notifications
+import com.sugawara.reminder.sqlite.notifications.NotificationsHelper
 import android.util.Log
 import java.time.ZonedDateTime
 import java.time.ZoneId
@@ -64,9 +64,9 @@ class AlarmReceiver: BroadcastReceiver() {
 
     @SuppressLint("UnspecifiedImmutableFlag")
     private fun createNotification(context: Context, intent: Intent) {
-        val id = intent.extras?.getInt(DBHelper.idKey) ?: return
-        val title = intent.extras?.getString(DBHelper.titleKey) ?: return
-        val content = intent.extras?.getString(DBHelper.contentKey) ?: return
+        val id = intent.extras?.getInt(NotificationsHelper.idKey) ?: return
+        val title = intent.extras?.getString(NotificationsHelper.titleKey) ?: return
+        val content = intent.extras?.getString(NotificationsHelper.contentKey) ?: return
 
         val activityIntent = Intent(context, MainActivity::class.java)
 
@@ -93,23 +93,23 @@ class AlarmReceiver: BroadcastReceiver() {
     }
 
     private fun deactivateAlarm(context: Context, intent: Intent) {
-        val id = intent.extras?.getInt(DBHelper.idKey) ?: return
+        val id = intent.extras?.getInt(NotificationsHelper.idKey) ?: return
 
         val notificationsIntent = Intent(context, Notifications::class.java)
         context.startService(notificationsIntent)
 
         val notifications = Notifications()
         var values = ContentValues()
-        values.put(DBHelper.setAlarmKey, 0)
-        notifications.update(context,values,"${DBHelper.idKey} = ?",arrayOf(id.toString()))
+        values.put(NotificationsHelper.setAlarmKey, 0)
+        notifications.update(context,values,"${NotificationsHelper.idKey} = ?",arrayOf(id.toString()))
     }
 
     private fun reRegistAlarm(context: Context, intent: Intent) {
-        val id = intent.extras?.getInt(DBHelper.idKey) ?: return
-        val title = intent.extras?.getString(DBHelper.titleKey) ?: return
-        val content = intent.extras?.getString(DBHelper.contentKey) ?: return
-        val time = intent.extras?.getLong(DBHelper.timeKey) ?: return
-        val frequency = intent.extras?.getInt(DBHelper.frequencyKey) ?: return
+        val id = intent.extras?.getInt(NotificationsHelper.idKey) ?: return
+        val title = intent.extras?.getString(NotificationsHelper.titleKey) ?: return
+        val content = intent.extras?.getString(NotificationsHelper.contentKey) ?: return
+        val time = intent.extras?.getLong(NotificationsHelper.timeKey) ?: return
+        val frequency = intent.extras?.getInt(NotificationsHelper.frequencyKey) ?: return
 
         // 繰り返さない場合は処理を終了
         if (frequency == NOT_REPEAT) return
@@ -138,8 +138,8 @@ class AlarmReceiver: BroadcastReceiver() {
         context.startService(notificationsIntent)
         val notifications = Notifications()
         var values = ContentValues()
-        values.put(DBHelper.timeKey, nextDateTime)
-        notifications.update(context,values,"${DBHelper.idKey} = ?",arrayOf(id.toString()))
+        values.put(NotificationsHelper.timeKey, nextDateTime)
+        notifications.update(context,values,"${NotificationsHelper.idKey} = ?",arrayOf(id.toString()))
 
         // アラームを登録する
         val alarmRegisterIntent = Intent(context, AlarmRegister::class.java)

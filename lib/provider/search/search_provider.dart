@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../model/db/db.dart';
+import '../../model/db/notifications.dart';
 
 class SearchProvider extends ChangeNotifier {
   // データベースのデータを格納

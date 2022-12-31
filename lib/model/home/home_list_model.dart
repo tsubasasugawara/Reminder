@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:reminder/model/db/db.dart';
+import 'package:reminder/model/db/notifications.dart';
 
 class HomeListModel {
   HomeListModel();

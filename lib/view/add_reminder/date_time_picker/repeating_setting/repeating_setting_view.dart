@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
+import '../../../../model/db/notifications.dart';
 import '../../../../provider/add_reminder/datetime/repeating_setting/repeating_setting_provider.dart';
 
 class RepeatingSettingView {
@@ -93,35 +94,35 @@ class RepeatingSettingView {
                     _createDivider(context),
                     _makeButton(
                       AppLocalizations.of(context)!.everyday,
-                      RepeatingSettingProvider.everyday,
+                      Notifications.everyday,
                       provider,
                       context,
                     ),
                     _createDivider(context),
                     _makeButton(
                       AppLocalizations.of(context)!.everyWeek,
-                      RepeatingSettingProvider.everyWeek,
+                      Notifications.everyWeek,
                       provider,
                       context,
                     ),
                     _createDivider(context),
                     _makeButton(
                       AppLocalizations.of(context)!.everyMonth,
-                      RepeatingSettingProvider.everyMonth,
+                      Notifications.everyMonth,
                       provider,
                       context,
                     ),
                     _createDivider(context),
                     _makeButton(
                       AppLocalizations.of(context)!.everyYear,
-                      RepeatingSettingProvider.everyYear,
+                      Notifications.everyYear,
                       provider,
                       context,
                     ),
                     _createDivider(context),
                     _makeButton(
                       AppLocalizations.of(context)!.custom,
-                      RepeatingSettingProvider.custom,
+                      Notifications.custom,
                       provider,
                       context,
                     ),
@@ -177,7 +178,7 @@ class RepeatingSettingView {
                     _createDivider(context),
                     _makeButton(
                       AppLocalizations.of(context)!.notRepeat,
-                      RepeatingSettingProvider.notRepeating,
+                      Notifications.notRepeating,
                       provider,
                       context,
                     ),

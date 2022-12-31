@@ -5,9 +5,9 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import com.sugawara.reminder.sqlite.DBHelper
+import com.sugawara.reminder.sqlite.notifications.NotificationsHelper
 import android.os.Build
-import com.sugawara.reminder.sqlite.Notifications
+import com.sugawara.reminder.sqlite.notifications.Notifications
 import android.content.ContentValues
 import com.sugawara.reminder.alarm.AlarmReceiver
 
@@ -49,8 +49,8 @@ class AlarmRegister(_context: Context) {
 
         var notifications = Notifications()
         var values = ContentValues()
-        values.put(DBHelper.setAlarmKey, 1)
-        notifications.update(context,values,"${DBHelper.idKey} = ?",arrayOf(id.toString()))
+        values.put(NotificationsHelper.setAlarmKey, 1)
+        notifications.update(context,values,"${NotificationsHelper.idKey} = ?",arrayOf(id.toString()))
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")
@@ -85,11 +85,11 @@ class AlarmRegister(_context: Context) {
     ): Intent {
         return Intent(this.context, AlarmReceiver::class.java)
             .also {
-                it.putExtra(DBHelper.idKey, id)
-                it.putExtra(DBHelper.titleKey,title)
-                it.putExtra(DBHelper.contentKey,content)
-                it.putExtra(DBHelper.timeKey, time)
-                it.putExtra(DBHelper.frequencyKey, frequency)
+                it.putExtra(NotificationsHelper.idKey, id)
+                it.putExtra(NotificationsHelper.titleKey,title)
+                it.putExtra(NotificationsHelper.contentKey,content)
+                it.putExtra(NotificationsHelper.timeKey, time)
+                it.putExtra(NotificationsHelper.frequencyKey, frequency)
             }
     }
 }
