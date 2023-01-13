@@ -4,10 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/appBar/sort_selection_provider.dart';
-import 'package:reminder/view/home/appBar/reverse_button.dart';
-import 'package:reminder/view/home/appBar/top_up_set_alarm_button.dart';
+import 'package:reminder/utils/complete_and_cancel_button/complete_and_cancel_button.dart';
 
-import '../../../components/snack_bar/snackbar.dart';
+import '../../../utils/snack_bar/snackbar.dart';
+import '../../../model/db/db_env.dart';
 import '../../../model/db/notifications.dart';
 import '../../../provider/home/home_provider.dart';
 import '../../search/search_view.dart';
@@ -52,6 +52,66 @@ class Actions {
               res, title, content, time, frequency);
         },
       ),
+    );
+  }
+
+  Widget switchDescAscBtn(Function onPressed, String sortby) {
+    return TextButton(
+      onPressed: () {
+        onPressed();
+      },
+      style: TextButton.styleFrom(minimumSize: const Size.fromHeight(50)),
+      child: (DBEnv.desc == sortby)
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.check,
+                  color: Theme.of(context).primaryColor,
+                  size: 20,
+                ),
+                Text(
+                  AppLocalizations.of(context)!.sortBy,
+                  style: Theme.of(context).textTheme.bodyText1?.apply(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                ),
+              ],
+            )
+          : Text(
+              AppLocalizations.of(context)!.sortBy,
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
+    );
+  }
+
+  Widget switchOnAboveBringBtn(Function onPressed, bool topup) {
+    return TextButton(
+      onPressed: () {
+        onPressed();
+      },
+      style: TextButton.styleFrom(minimumSize: const Size.fromHeight(50)),
+      child: (topup)
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.check,
+                  color: Theme.of(context).primaryColor,
+                  size: 20,
+                ),
+                Text(
+                  AppLocalizations.of(context)!.topUpSetAlarmReminder,
+                  style: Theme.of(context).textTheme.bodyText1?.apply(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                ),
+              ],
+            )
+          : Text(
+              AppLocalizations.of(context)!.topUpSetAlarmReminder,
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
     );
   }
 
@@ -205,47 +265,30 @@ class Actions {
                           provider,
                         ),
                         _makeDivider(),
-                        ReverseOrderButton(
+                        switchDescAscBtn(
                           () {
                             provider.changeSortBy();
                           },
                           provider.sortBy,
                         ),
                         _makeDivider(),
-                        TopUpSetAlarmButton(
+                        switchOnAboveBringBtn(
                           () {
                             provider.changeTopUp();
                           },
                           provider.topup,
                         ),
                         _makeDivider(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                AppLocalizations.of(context)!.cancelButton,
-                                style: TextStyle(
-                                    color: Theme.of(context).primaryColor),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () async {
-                                homeProvider.setSortBy(provider.orderBy,
-                                    provider.sortBy, provider.topup);
-                                await homeProvider.setData();
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                AppLocalizations.of(context)!.ok,
-                                style: TextStyle(
-                                    color: Theme.of(context).primaryColor),
-                              ),
-                            ),
-                          ],
+                        CompleteAndCancelButton(
+                          () {
+                            Navigator.pop(context);
+                          },
+                          () async {
+                            homeProvider.setSortBy(provider.orderBy,
+                                provider.sortBy, provider.topup);
+                            await homeProvider.setData();
+                            Navigator.pop(context);
+                          },
                         ),
                       ],
                     );

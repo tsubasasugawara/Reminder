@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:reminder/components/brightness/brightness.dart';
+import 'package:reminder/utils/brightness/brightness.dart';
 import '../setting.dart';
 
 //App theme.

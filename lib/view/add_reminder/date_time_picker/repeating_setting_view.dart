@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
+import 'package:reminder/utils/complete_and_cancel_button/complete_and_cancel_button.dart';
 
-import '../../../../model/db/notifications.dart';
-import '../../../../provider/add_reminder/datetime/repeating_setting/repeating_setting_provider.dart';
+import '../../../model/db/notifications.dart';
+import '../../../provider/add_reminder/datetime/repeating_setting/repeating_setting_provider.dart';
 
 class RepeatingSettingView {
   int? days; //繰り返しの間隔 or デフォルトの選択肢(マイナス)
@@ -52,6 +53,56 @@ class RepeatingSettingView {
               text,
               style: TextStyle(color: Theme.of(context).primaryColor),
             ),
+    );
+  }
+
+  Widget repeatingIntervalForm(
+      BuildContext context, RepeatingSettingProvider provider) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.5,
+      margin: const EdgeInsets.only(bottom: 5),
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: Theme.of(context).textTheme.bodyText1!.fontSize! *
+                  numberOfCharacters,
+              child: TextField(
+                enabled: provider.option == 0 ? true : false,
+                keyboardType: TextInputType.number,
+                textAlign: TextAlign.center,
+                controller: provider.controller,
+                style: Theme.of(context).textTheme.bodyText1,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Theme.of(context).highlightColor,
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                  contentPadding: const EdgeInsets.all(10),
+                ),
+                onChanged: (value) {
+                  provider.onChanged(value);
+                },
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(left: 5),
+              child: Text(
+                provider.controller.text == "1"
+                    ? AppLocalizations.of(context)!.day
+                    : AppLocalizations.of(context)!.days,
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -126,55 +177,7 @@ class RepeatingSettingView {
                       provider,
                       context,
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      margin: const EdgeInsets.only(bottom: 5),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SizedBox(
-                              width: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .fontSize! *
-                                  numberOfCharacters,
-                              child: TextField(
-                                enabled: provider.option == 0 ? true : false,
-                                keyboardType: TextInputType.number,
-                                textAlign: TextAlign.center,
-                                controller: provider.controller,
-                                style: Theme.of(context).textTheme.bodyText1,
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Theme.of(context).highlightColor,
-                                  border: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  errorBorder: InputBorder.none,
-                                  disabledBorder: InputBorder.none,
-                                  contentPadding: const EdgeInsets.all(10),
-                                ),
-                                onChanged: (value) {
-                                  provider.onChanged(value);
-                                },
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 5),
-                              child: Text(
-                                provider.controller.text == "1"
-                                    ? AppLocalizations.of(context)!.day
-                                    : AppLocalizations.of(context)!.days,
-                                style: Theme.of(context).textTheme.bodyText1,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    repeatingIntervalForm(context, provider),
                     _createDivider(context),
                     _makeButton(
                       AppLocalizations.of(context)!.notRepeat,
@@ -183,35 +186,16 @@ class RepeatingSettingView {
                       context,
                     ),
                     _createDivider(context),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            AppLocalizations.of(context)!.cancelButton,
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColor),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(
-                              context,
-                              provider.days == 0
-                                  ? provider.option
-                                  : provider.days,
-                            );
-                          },
-                          child: Text(
-                            AppLocalizations.of(context)!.ok,
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColor),
-                          ),
-                        ),
-                      ],
+                    CompleteAndCancelButton(
+                      () {
+                        Navigator.pop(context);
+                      },
+                      () {
+                        Navigator.pop(
+                          context,
+                          provider.days == 0 ? provider.option : provider.days,
+                        );
+                      },
                     ),
                   ],
                 );

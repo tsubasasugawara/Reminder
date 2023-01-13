@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reminder/components/snack_bar/snackbar.dart';
+import 'package:reminder/utils/snack_bar/snackbar.dart';
 import 'package:reminder/model/add_reminder/add_reminder_model.dart';
 import 'package:reminder/model/db/notifications.dart';
 import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';

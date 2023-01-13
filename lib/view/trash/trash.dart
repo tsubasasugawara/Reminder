@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reminder/components/snack_bar/snackbar.dart';
+import 'package:reminder/utils/snack_bar/snackbar.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/home_provider.dart';
 import 'package:reminder/view/home/appBar/actions.dart' as actions;

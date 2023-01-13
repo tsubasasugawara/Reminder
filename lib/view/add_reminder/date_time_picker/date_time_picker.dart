@@ -2,14 +2,15 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:reminder/components/brightness/brightness.dart';
+import 'package:reminder/utils/brightness/brightness.dart';
 import 'package:reminder/provider/add_reminder/datetime/repeating_setting/repeating_dialog_button_provider.dart';
 import 'package:reminder/provider/add_reminder/datetime/time_provider.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/setting/theme/theme_provider.dart';
-import 'package:reminder/view/add_reminder/date_time_picker/repeating_setting/repeating_setting_view.dart';
+import 'package:reminder/utils/complete_and_cancel_button/complete_and_cancel_button.dart';
+import 'package:reminder/view/add_reminder/date_time_picker/repeating_setting_view.dart';
 
-import '../../../components/pair/pair.dart';
+import '../../../utils/pair/pair.dart';
 
 class DateTimePicker {
   static const Size _calendarPortraitDialogSize = Size(330.0, 518.0);
@@ -233,42 +234,25 @@ class DateTimePicker {
                           ),
                           _generateRepeatSettingButton(
                               context, backgroundColor),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  AppLocalizations.of(context)!.cancelButton,
-                                  style: TextStyle(
-                                      color: Theme.of(context).primaryColor),
+                          CompleteAndCancelButton(
+                            () {
+                              Navigator.pop(context);
+                            },
+                            () {
+                              Navigator.pop(
+                                context,
+                                Pair(
+                                  DateTime(
+                                    year,
+                                    month,
+                                    day,
+                                    hour,
+                                    minute,
+                                  ),
+                                  _frequency,
                                 ),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(
-                                    context,
-                                    Pair(
-                                      DateTime(
-                                        year,
-                                        month,
-                                        day,
-                                        hour,
-                                        minute,
-                                      ),
-                                      _frequency,
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  AppLocalizations.of(context)!.ok,
-                                  style: TextStyle(
-                                      color: Theme.of(context).primaryColor),
-                                ),
-                              ),
-                            ],
+                              );
+                            },
                           ),
                         ],
                       ),
