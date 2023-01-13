@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
+import 'package:reminder/provider/home/appBar/sort_selection_provider.dart';
 import 'package:reminder/view/home/appBar/reverse_button.dart';
 import 'package:reminder/view/home/appBar/top_up_set_alarm_button.dart';
 
@@ -11,10 +13,10 @@ import '../../../provider/home/home_provider.dart';
 import '../../search/search_view.dart';
 
 class Actions {
-  late HomeProvider provider;
+  late HomeProvider homeProvider;
   late BuildContext context;
 
-  Actions(this.provider, this.context);
+  Actions(this.homeProvider, this.context);
 
   /*
    * デバッグ専用のリマインダーを追加するボタン
@@ -60,17 +62,13 @@ class Actions {
    * @return Widget : ソート方法選択ボタン
    */
   Widget _makeButton(
-    String dbKey,
-    String text,
-  ) {
+      String dbKey, String text, SortSelectionProvider provider) {
     return TextButton(
       onPressed: () async {
         provider.setOrderBy(dbKey);
-        await provider.setData();
-        Navigator.pop(context);
       },
       style: TextButton.styleFrom(minimumSize: const Size.fromHeight(50)),
-      child: (dbKey == provider.orderBy)
+      child: (provider.equalsOrderBy(dbKey))
           ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -116,13 +114,13 @@ class Actions {
         children: [
           IconButton(
             onPressed: () {
-              provider.allSelectOrNot(true);
+              homeProvider.allSelectOrNot(true);
             },
             icon: const Icon(Icons.select_all),
           ),
           IconButton(
             onPressed: () async {
-              var res = await provider.deleteButton(
+              var res = await homeProvider.deleteButton(
                 context,
                 HomeProvider.moveToTrash,
               );
@@ -150,12 +148,12 @@ class Actions {
           await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => SearchView(
-                provider.model.dataList,
-                provider.isTrash,
+                homeProvider.model.dataList,
+                homeProvider.isTrash,
               ),
             ),
           );
-          await provider.setData();
+          await homeProvider.setData();
         },
       ),
       IconButton(
@@ -166,52 +164,92 @@ class Actions {
           await showDialog(
             builder: (BuildContext context) {
               return Dialog(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 20),
-                      child: Text(
-                        AppLocalizations.of(context)!.orderMethod,
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                    ),
-                    _makeDivider(),
-                    _makeButton(
-                      Notifications.createdAtKey,
-                      AppLocalizations.of(context)!.orderByCreatedAt,
-                    ),
-                    _makeDivider(),
-                    _makeButton(
-                      Notifications.updatedAtKey,
-                      AppLocalizations.of(context)!.orderByUpdatedAt,
-                    ),
-                    _makeDivider(),
-                    _makeButton(
-                      Notifications.timeKey,
-                      AppLocalizations.of(context)!.orderByAlarmTime,
-                    ),
-                    _makeDivider(),
-                    _makeButton(
-                      Notifications.titleKey,
-                      AppLocalizations.of(context)!.orderByTitle,
-                    ),
-                    _makeDivider(),
-                    ReverseOrderButton(
-                      () {
-                        provider.changeSortBy();
-                      },
-                      provider.sortBy,
-                    ),
-                    _makeDivider(),
-                    TopUpSetAlarmButton(
-                      () {
-                        provider.changeTopUpSetAlarmReminder();
-                      },
-                      provider.topUpSetAlarmReminder,
-                    ),
-                  ],
+                child: ChangeNotifierProvider(
+                  create: (_) => SortSelectionProvider(homeProvider.orderBy,
+                      homeProvider.sortBy, homeProvider.topup),
+                  child: Consumer<SortSelectionProvider>(
+                      builder: (context, provider, child) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.symmetric(vertical: 20),
+                          child: Text(
+                            AppLocalizations.of(context)!.orderMethod,
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        ),
+                        _makeDivider(),
+                        _makeButton(
+                          Notifications.createdAtKey,
+                          AppLocalizations.of(context)!.orderByCreatedAt,
+                          provider,
+                        ),
+                        _makeDivider(),
+                        _makeButton(
+                          Notifications.updatedAtKey,
+                          AppLocalizations.of(context)!.orderByUpdatedAt,
+                          provider,
+                        ),
+                        _makeDivider(),
+                        _makeButton(
+                          Notifications.timeKey,
+                          AppLocalizations.of(context)!.orderByAlarmTime,
+                          provider,
+                        ),
+                        _makeDivider(),
+                        _makeButton(
+                          Notifications.titleKey,
+                          AppLocalizations.of(context)!.orderByTitle,
+                          provider,
+                        ),
+                        _makeDivider(),
+                        ReverseOrderButton(
+                          () {
+                            provider.changeSortBy();
+                          },
+                          provider.sortBy,
+                        ),
+                        _makeDivider(),
+                        TopUpSetAlarmButton(
+                          () {
+                            provider.changeTopUp();
+                          },
+                          provider.topup,
+                        ),
+                        _makeDivider(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                AppLocalizations.of(context)!.cancelButton,
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColor),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                homeProvider.setSortBy(provider.orderBy,
+                                    provider.sortBy, provider.topup);
+                                await homeProvider.setData();
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                AppLocalizations.of(context)!.ok,
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColor),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  }),
                 ),
               );
             },
@@ -227,6 +265,6 @@ class Actions {
    * @return List<Widget>
    */
   List<Widget> build() {
-    return provider.selectionMode ? _selectionMode() : normalMode();
+    return homeProvider.selectionMode ? _selectionMode() : normalMode();
   }
 }

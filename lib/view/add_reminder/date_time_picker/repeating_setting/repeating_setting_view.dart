@@ -192,6 +192,8 @@ class RepeatingSettingView {
                           },
                           child: Text(
                             AppLocalizations.of(context)!.cancelButton,
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor),
                           ),
                         ),
                         TextButton(
@@ -205,6 +207,8 @@ class RepeatingSettingView {
                           },
                           child: Text(
                             AppLocalizations.of(context)!.ok,
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor),
                           ),
                         ),
                       ],

@@ -242,6 +242,8 @@ class DateTimePicker {
                                 },
                                 child: Text(
                                   AppLocalizations.of(context)!.cancelButton,
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor),
                                 ),
                               ),
                               TextButton(
@@ -262,6 +264,8 @@ class DateTimePicker {
                                 },
                                 child: Text(
                                   AppLocalizations.of(context)!.ok,
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor),
                                 ),
                               ),
                             ],

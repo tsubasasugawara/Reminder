@@ -28,7 +28,7 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
   //昇順、降順の設定
   String sortBy = DBEnv.asc;
 
-  bool topUpSetAlarmReminder = false;
+  bool topup = false;
 
   //ソート条件をつけないときに取得するカラム
   final List<Object?> stdColumns = [
@@ -45,16 +45,10 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
     update();
   }
 
-  void setOrderBy(String _orderBy) {
+  void setSortBy(String _orderBy, String _sortBy, bool _topup) {
     orderBy = _orderBy;
-  }
-
-  void changeSortBy() {
-    sortBy = sortBy == DBEnv.asc ? DBEnv.desc : DBEnv.asc;
-  }
-
-  void changeTopUpSetAlarmReminder() {
-    topUpSetAlarmReminder = !topUpSetAlarmReminder;
+    sortBy = _sortBy;
+    topup = _topup;
   }
 
   //データ一覧を取得し、modelに保存
@@ -71,7 +65,7 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
           ? '${Notifications.deletedKey} = 1'
           : '${Notifications.deletedKey} = 0',
       orderBy:
-          '${topUpSetAlarmReminder ? '${Notifications.setAlarmKey} ${DBEnv.desc}, ' : ''} $orderBy $sortBy',
+          '${topup ? '${Notifications.setAlarmKey} ${DBEnv.desc}, ' : ''} $orderBy $sortBy',
     );
     changeSelectedItemsLen(length: model.dataList.length);
     notifyListeners();
