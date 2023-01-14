@@ -10,6 +10,10 @@ import androidx.annotation.NonNull
 import com.sugawara.reminder.alarm.AlarmRegister
 import com.sugawara.reminder.sqlite.notifications.Notifications
 import com.sugawara.reminder.sqlite.notifications.NotificationsHelper
+import com.sugawara.reminder.sqlite.tags.Tags
+import com.sugawara.reminder.sqlite.tags.TagsHelper
+import com.sugawara.reminder.sqlite.notificationsTags.NotificationsTags
+import com.sugawara.reminder.sqlite.notificationsTags.NotificationsTagsHelper
 import android.util.Log
 
 class MainActivity: FlutterActivity() {
@@ -42,8 +46,7 @@ class MainActivity: FlutterActivity() {
                     register.deleteAlarm(id,title,content,time,frequency)
                     result.success(null);
                 }
-                // TODO: selectでなく、notifications_selectのようにする
-                "select" -> {
+                "notifications_select" -> {
                     try {
                         val columns = methodCall.argument<Map<String, String>>("columns")!!
                         val where: String? = methodCall.argument<String>("where")
@@ -66,11 +69,11 @@ class MainActivity: FlutterActivity() {
                         )
                         result.success(res)
                     } catch(e: Exception) {
-                        Log.d("select", e.toString())
+                        Log.d("notifications_select", e.toString())
                         result.success(null)
                     }
                 }
-                "insert" -> {
+                "notifications_insert" -> {
                     try {
                         val values = ContentValues()
                         values.put(NotificationsHelper.titleKey, methodCall.argument<String>(NotificationsHelper.titleKey).toString())
@@ -89,11 +92,11 @@ class MainActivity: FlutterActivity() {
                         )
                         result.success(res)
                     } catch(e: Exception) {
-                        Log.d("insert", e.toString())
+                        Log.d("notifications_insert", e.toString())
                         result.success(null)
                     }
                 }
-                "update" -> {
+                "notifications_update" -> {
                     try {
                         val where: String? = methodCall.argument<String>("where") ?: null
                         val whereArgs: Map<String, String>? = methodCall.argument<Map<String, String>>("whereArgs") ?: null
@@ -129,11 +132,11 @@ class MainActivity: FlutterActivity() {
 
                         result.success(res)
                     } catch(e: Exception) {
-                        Log.d("update", e.toString())
+                        Log.d("notifications_update", e.toString())
                         result.success(null)
                     }
                 }
-                "delete" -> {
+                "notifications_delete" -> {
                     try {
                         val where: String? = methodCall.argument<String>("where") ?: null
                         val whereArgs: Map<String, String>? = methodCall.argument<Map<String, String>>("whereArgs") ?: null
@@ -147,7 +150,187 @@ class MainActivity: FlutterActivity() {
 
                         result.success(res)
                     } catch(e: Exception) {
-                        Log.d("delete", e.toString())
+                        Log.d("notifications_delete", e.toString())
+                        result.success(null)
+                    }
+                }
+                "tags_select" -> {
+                    try {
+                        val columns = methodCall.argument<Map<String, String>>("columns")!!
+                        val where: String? = methodCall.argument<String>("where")
+                        val whereArgs: Map<String, String>? = methodCall.argument<Map<String, String>>("whereArgs")
+                        val groupBy: String? = methodCall.argument<String>("groupBy")
+                        val having: String? = methodCall.argument<String>("having")
+                        val orderBy: String? = methodCall.argument<String>("orderBy")
+                        val limit: String? = methodCall.argument<String>("limit")
+
+                        var tags = Tags()
+                        val res = tags.select(
+                            context = context,
+                            columns = tags.mapToArray(columns)!!,
+                            where = where,
+                            whereArgs = tags.mapToArray(whereArgs),
+                            groupBy = groupBy,
+                            having = having,
+                            orderBy = orderBy,
+                            limit = limit,
+                        )
+                        result.success(res)
+                    } catch(e: Exception) {
+                        Log.d("tags_select", e.toString())
+                        result.success(null)
+                    }
+                }
+                "tags_insert" -> {
+                    try {
+                        val values = ContentValues()
+                        values.put(TagsHelper.tagKey, methodCall.argument<String>(TagsHelper.tagKey).toString())
+                        values.put(TagsHelper.createdAtKey, System.currentTimeMillis())
+                        values.put(TagsHelper.updatedAtKey, System.currentTimeMillis())
+
+                        var tags = Tags()
+                        var res = tags.insert(
+                            context = context,
+                            values = values,
+                        )
+                        result.success(res)
+                    } catch(e: Exception) {
+                        Log.d("tags_insert", e.toString())
+                        result.success(null)
+                    }
+                }
+                "tags_update" -> {
+                    try {
+                        val where: String? = methodCall.argument<String>("where") ?: null
+                        val whereArgs: Map<String, String>? = methodCall.argument<Map<String, String>>("whereArgs") ?: null
+
+                        val values = ContentValues()
+                        methodCall.argument<String>(TagsHelper.tagKey)?.let{
+                            values.put(TagsHelper.tagKey, it.toString())
+                        }
+                        values.put(TagsHelper.updatedAtKey, System.currentTimeMillis())
+
+                        var tags = Tags()
+                        var res = tags.update(
+                            context = context,
+                            values = values,
+                            whereClause = where,
+                            whereArgs = tags.mapToArray(whereArgs),
+                        )
+
+                        result.success(res)
+                    } catch(e: Exception) {
+                        Log.d("tags_update", e.toString())
+                        result.success(null)
+                    }
+                }
+                "tags_delete" -> {
+                    try {
+                        val where: String? = methodCall.argument<String>("where") ?: null
+                        val whereArgs: Map<String, String>? = methodCall.argument<Map<String, String>>("whereArgs") ?: null
+
+                        var tags = Tags()
+                        var res = tags.delete(
+                            context = context,
+                            whereClause = where,
+                            whereArgs = tags.mapToArray(whereArgs),
+                        )
+
+                        result.success(res)
+                    } catch(e: Exception) {
+                        Log.d("tags_delete", e.toString())
+                        result.success(null)
+                    }
+                }
+                "notifications_tags_select" -> {
+                    try {
+                        val columns = methodCall.argument<Map<String, String>>("columns")!!
+                        val where: String? = methodCall.argument<String>("where")
+                        val whereArgs: Map<String, String>? = methodCall.argument<Map<String, String>>("whereArgs")
+                        val groupBy: String? = methodCall.argument<String>("groupBy")
+                        val having: String? = methodCall.argument<String>("having")
+                        val orderBy: String? = methodCall.argument<String>("orderBy")
+                        val limit: String? = methodCall.argument<String>("limit")
+
+                        var notificationsTags = NotificationsTags()
+                        val res = notificationsTags.select(
+                            context = context,
+                            columns = notificationsTags.mapToArray(columns)!!,
+                            where = where,
+                            whereArgs = notificationsTags.mapToArray(whereArgs),
+                            groupBy = groupBy,
+                            having = having,
+                            orderBy = orderBy,
+                            limit = limit,
+                        )
+                        result.success(res)
+                    } catch(e: Exception) {
+                        Log.d("notifications_tags_select", e.toString())
+                        result.success(null)
+                    }
+                }
+                "notifications_tags_insert" -> {
+                    try {
+                        val values = ContentValues()
+                        values.put(NotificationsTagsHelper.tagIdKey, methodCall.argument<Int>(NotificationsTagsHelper.tagIdKey) ?: 0)
+                        values.put(NotificationsTagsHelper.notificationIdKey, methodCall.argument<Int>(NotificationsTagsHelper.notificationIdKey) ?: 0)
+                        values.put(NotificationsTagsHelper.createdAtKey, System.currentTimeMillis())
+                        values.put(NotificationsTagsHelper.updatedAtKey, System.currentTimeMillis())
+
+                        var notificationsTags = NotificationsTags()
+                        var res = notificationsTags.insert(
+                            context = context,
+                            values = values,
+                        )
+                        result.success(res)
+                    } catch(e: Exception) {
+                        Log.d("notifications_tags_insert", e.toString())
+                        result.success(null)
+                    }
+                }
+                "notifications_tags_update" -> {
+                    try {
+                        val where: String? = methodCall.argument<String>("where") ?: null
+                        val whereArgs: Map<String, String>? = methodCall.argument<Map<String, String>>("whereArgs") ?: null
+
+                        val values = ContentValues()
+                        methodCall.argument<Int>(NotificationsTagsHelper.tagIdKey)?.let{
+                            values.put(NotificationsTagsHelper.tagIdKey, it)
+                        }
+                        methodCall.argument<Long>(NotificationsTagsHelper.notificationIdKey)?.let{
+                            values.put(NotificationsTagsHelper.notificationIdKey, it)
+                        }
+                        values.put(NotificationsTagsHelper.updatedAtKey, System.currentTimeMillis())
+
+                        var notificationsTags = NotificationsTags()
+                        var res = notificationsTags.update(
+                            context = context,
+                            values = values,
+                            whereClause = where,
+                            whereArgs = notificationsTags.mapToArray(whereArgs),
+                        )
+
+                        result.success(res)
+                    } catch(e: Exception) {
+                        Log.d("notification_tags_update", e.toString())
+                        result.success(null)
+                    }
+                }
+                "notifications_tags_delete" -> {
+                    try {
+                        val where: String? = methodCall.argument<String>("where") ?: null
+                        val whereArgs: Map<String, String>? = methodCall.argument<Map<String, String>>("whereArgs") ?: null
+
+                        var notificationsTags = NotificationsTags()
+                        var res = notificationsTags.delete(
+                            context = context,
+                            whereClause = where,
+                            whereArgs = notificationsTags.mapToArray(whereArgs),
+                        )
+
+                        result.success(res)
+                    } catch(e: Exception) {
+                        Log.d("notifications_tags_delete", e.toString())
                         result.success(null)
                     }
                 }

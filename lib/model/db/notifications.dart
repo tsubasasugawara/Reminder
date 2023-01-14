@@ -83,8 +83,8 @@ class Notifications implements DBInterface {
     String? orderBy,
     int? limit,
   }) async {
-    var res = await MethodChannel(KotlinMethodCalling.channelName)
-        .invokeMethod("select", {
+    var res = await const MethodChannel(KotlinMethodCalling.channelName)
+        .invokeMethod("notifications_select", {
       'columns': _createMapFromObjectList(columns),
       'where': where,
       'whereArgs': _createMapFromObjectList(whereArgs),
@@ -114,8 +114,8 @@ class Notifications implements DBInterface {
     int setAlarm,
     int deleted,
   ) async {
-    var res = await MethodChannel(KotlinMethodCalling.channelName)
-        .invokeMethod("insert", {
+    var res = await const MethodChannel(KotlinMethodCalling.channelName)
+        .invokeMethod("notifications_insert", {
       titleKey: title,
       contentKey: content,
       frequencyKey: frequency,
@@ -148,8 +148,8 @@ class Notifications implements DBInterface {
     String? where,
     List<Object?>? whereArgs,
   }) async {
-    var res = await MethodChannel(KotlinMethodCalling.channelName)
-        .invokeMethod("update", {
+    var res = await const MethodChannel(KotlinMethodCalling.channelName)
+        .invokeMethod("notifications_update", {
       titleKey: title,
       contentKey: content,
       frequencyKey: frequency,
@@ -172,8 +172,8 @@ class Notifications implements DBInterface {
     String? where,
     List<Object?>? whereArgs,
   ) async {
-    var res = await MethodChannel(KotlinMethodCalling.channelName)
-        .invokeMethod("delete", {
+    var res = await const MethodChannel(KotlinMethodCalling.channelName)
+        .invokeMethod("notifications_delete", {
       'where': where,
       'whereArgs': _createMapFromObjectList(whereArgs),
     });
