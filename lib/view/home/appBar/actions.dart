@@ -6,8 +6,8 @@ import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/appBar/sort_selection_provider.dart';
 import 'package:reminder/utils/complete_and_cancel_button/complete_and_cancel_button.dart';
 
+import '../../../model/db/db.dart';
 import '../../../utils/snack_bar/snackbar.dart';
-import '../../../model/db/db_env.dart';
 import '../../../model/db/notifications.dart';
 import '../../../provider/home/home_provider.dart';
 import '../../search/search_view.dart';
@@ -61,7 +61,7 @@ class Actions {
         onPressed();
       },
       style: TextButton.styleFrom(minimumSize: const Size.fromHeight(50)),
-      child: (DBEnv.desc == sortby)
+      child: (DB.desc == sortby)
           ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:reminder/model/db/db_env.dart';
 import 'package:reminder/model/db/notifications.dart';
 import 'package:reminder/model/home/home_list_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/selection_item_provider.dart';
 import 'package:reminder/view/add_reminder/add_reminder_view.dart';
 import 'package:reminder/view/home/confirmation_dialog.dart';
+
+import '../../model/db/db.dart';
 
 class HomeProvider extends ChangeNotifier with SelectionItemProvider {
   late HomeListModel model;
@@ -26,7 +27,7 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
   String orderBy = Notifications.createdAtKey;
 
   //昇順、降順の設定
-  String sortBy = DBEnv.asc;
+  String sortBy = DB.asc;
 
   bool topup = false;
 
@@ -65,7 +66,7 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
           ? '${Notifications.deletedKey} = 1'
           : '${Notifications.deletedKey} = 0',
       orderBy:
-          '${topup ? '${Notifications.setAlarmKey} ${DBEnv.desc}, ' : ''} $orderBy $sortBy',
+          '${topup ? '${Notifications.setAlarmKey} ${DB.desc}, ' : ''} $orderBy $sortBy',
     );
     changeSelectedItemsLen(length: model.dataList.length);
     notifyListeners();

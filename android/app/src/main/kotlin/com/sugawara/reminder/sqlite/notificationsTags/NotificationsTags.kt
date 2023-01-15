@@ -30,7 +30,6 @@ class NotificationsTags {
         ) {
             return cur.getInt(index)
         } else if (
-            columnName == NotificationsTagsHelper.timeKey ||
             columnName == NotificationsTagsHelper.createdAtKey ||
             columnName == NotificationsTagsHelper.updatedAtKey
         ) {

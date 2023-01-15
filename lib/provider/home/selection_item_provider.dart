@@ -1,6 +1,8 @@
 import 'package:reminder/model/db/notifications.dart';
 import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
 
+import '../../model/db/db.dart';
+
 //アイテムの複数選択のためのクラス
 class SelectionItemProvider {
   //アイテムが選択されているかどうかを格納
@@ -121,7 +123,7 @@ class SelectionItemProvider {
     int? res = await nt.update(
       setAlarm: 0,
       deleted: trash ? 1 : 0,
-      where: nt.createMultipleIDWhereClauses(ids),
+      where: DB.createMultipleIDWhereClauses(Notifications.idKey, ids),
       whereArgs: ids,
     );
     return _checkForOperation(res);

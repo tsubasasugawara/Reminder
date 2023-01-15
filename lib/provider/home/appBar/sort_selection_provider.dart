@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../model/db/db_env.dart';
+import '../../../model/db/db.dart';
 
 class SortSelectionProvider extends ChangeNotifier {
   late String orderBy;
@@ -20,7 +20,7 @@ class SortSelectionProvider extends ChangeNotifier {
   }
 
   void changeSortBy() {
-    sortBy = sortBy == DBEnv.asc ? DBEnv.desc : DBEnv.asc;
+    sortBy = sortBy == DB.asc ? DB.desc : DB.asc;
     notifyListeners();
   }
 

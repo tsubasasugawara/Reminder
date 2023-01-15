@@ -73,7 +73,7 @@ class Tags {
     ): ArrayList<Map<String, Any?>>? {
         try {
             val res: ArrayList<Map<String,Any?>> = arrayListOf()
-            val tagsHelper = TagsHelper(context, TagsHelper.dbName, null, TagsHelper.version);
+            val tagsHelper = TagsHelper(context, DBEnv.dbName, null, TagsHelper.version);
             val db = tagsHelper.readableDatabase
 
             val cur =
@@ -145,9 +145,9 @@ class Tags {
         values: ContentValues?,
     ): Long {
         try {
-            val tagsHelper = TagsHelper(context, TagsHelper.dbName, null, TagsHelper.version);
+            val tagsHelper = TagsHelper(context, DBEnv.dbName, null, TagsHelper.version);
             val db = tagsHelper.writableDatabase
-            val num = db.insert(TagsHelper.dbName, null, values)
+            val num = db.insert(DBEnv.dbName, null, values)
             db.close()
             return num
         } catch (e: Exception) {
@@ -173,7 +173,7 @@ class Tags {
         whereArgs: Array<String>?,
     ): Int {
         try {
-            val tagsHelper = TagsHelper(context, TagsHelper.dbName, null, TagsHelper.version)
+            val tagsHelper = TagsHelper(context, DBEnv.dbName, null, TagsHelper.version)
             val db = tagsHelper.writableDatabase
             val num = db.update(TagsHelper.tableName, values, whereClause, whereArgs)
             db.close()
@@ -199,7 +199,7 @@ class Tags {
         whereArgs: Array<String>?,
     ): Int {
         try {
-            val tagsHelper = TagsHelper(context, TagsHelper.dbName, null, TagsHelper.version)
+            val tagsHelper = TagsHelper(context, DBEnv.dbName, null, TagsHelper.version)
             val db = tagsHelper.writableDatabase
             val num = db.delete(TagsHelper.tableName, whereClause, whereArgs)
             db.close()

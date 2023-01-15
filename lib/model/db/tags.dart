@@ -1,31 +1,15 @@
-import 'package:flutter/services.dart';
-import 'package:reminder/model/db/db_interface.dart';
+import 'db.dart';
 
-import '../kotlin_method_calling/kotlin_method_calling.dart';
-import 'db_env.dart';
+class Tags {
+  late final DB db;
 
-class Tags implements DBInterface {
   static const idKey = "tag_id";
   static const tagKey = "tag";
-  static const createdAtKey = DBEnv.createdAtKey;
-  static const updatedAtKey = DBEnv.updatedAtKey;
+  static const createdAtKey = DB.createdAtKey;
+  static const updatedAtKey = DB.updatedAtKey;
 
-  /*
-   * whereArgsに使う値をListからMapへ変換
-   * @param list : Objectの配列
-   * @return Map<String, String>?
-   */
-  Map<String, String>? _createMapFromObjectList(
-    List<Object?>? list,
-  ) {
-    if (list == null) return null;
-
-    var map = <String, String>{};
-    for (int i = 0; i < list.length; i++) {
-      map[i.toString()] = list[i].toString();
-    }
-
-    return map;
+  Tags() {
+    db = DB();
   }
 
   /*
@@ -48,47 +32,37 @@ class Tags implements DBInterface {
     String? orderBy,
     int? limit,
   }) async {
-    var res = await const MethodChannel(KotlinMethodCalling.channelName)
-        .invokeMethod("tags_select", {
-      'columns': _createMapFromObjectList(columns),
-      'where': where,
-      'whereArgs': _createMapFromObjectList(whereArgs),
-      'groupBy': groupBy,
-      'having': having,
-      'orderBy': orderBy,
-      'limit': limit,
-    });
+    var res = await db.select(
+      "tags_select",
+      columns,
+      where: where,
+      whereArgs: whereArgs,
+      groupBy: groupBy,
+      having: having,
+      orderBy: orderBy,
+      limit: limit,
+    );
     return res;
   }
 
   /*
    * INSERT文
-   * @param title : タイトル
-   * @param content : メモ
-   * @param frequency : 間隔
-   * @param time : 発火時間
-   * @param setAlarm : アラームのオン(1)オフ(0)
-   * @param deleted : ごみ箱(1), ホーム(0)
+   * @param tag : タグ名
    * @return res : 挿入した行数
    */
   Future<int?> insert(
     String tag,
   ) async {
-    var res = await const MethodChannel(KotlinMethodCalling.channelName)
-        .invokeMethod("tags_insert", {
-      tagKey: tag,
-    });
+    var res = await db.insert(
+      "tags_insert",
+      {tagKey: tag},
+    );
     return res;
   }
 
   /*
    * UPDATE文
-   * @param title : タイトル
-   * @param content : メモ
-   * @param frequency : 間隔
-   * @param time : 発火時間
-   * @param setAlarm : アラームのオン(1)オフ(0)
-   * @param deleted : ごみ箱(1), ホーム(0)
+   * @param tag : タグ名
    * @param where : WHERE句
    * @param whereArgs : WHERE句のプレースホルダに入れる値
    * @return res : 更新した行数
@@ -98,12 +72,12 @@ class Tags implements DBInterface {
     String? where,
     List<Object?>? whereArgs,
   }) async {
-    var res = await const MethodChannel(KotlinMethodCalling.channelName)
-        .invokeMethod("tags_update", {
-      tagKey: tag,
-      'where': where,
-      'whereArgs': _createMapFromObjectList(whereArgs),
-    });
+    var res = await db.update(
+      "tags_update",
+      map: {tagKey: tag},
+      where: where,
+      whereArgs: whereArgs,
+    );
     return res;
   }
 
@@ -117,11 +91,11 @@ class Tags implements DBInterface {
     String? where,
     List<Object?>? whereArgs,
   ) async {
-    var res = await const MethodChannel(KotlinMethodCalling.channelName)
-        .invokeMethod("tags_delete", {
-      'where': where,
-      'whereArgs': _createMapFromObjectList(whereArgs),
-    });
+    var res = await db.delete(
+      "tags_delete",
+      where,
+      whereArgs,
+    );
     return res;
   }
 }
