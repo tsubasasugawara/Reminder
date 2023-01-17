@@ -3,7 +3,7 @@ import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/view/setting/auto_delete/auto_delete.dart';
 import 'package:reminder/view/setting/theme/primary_color_selector.dart';
 import 'package:reminder/view/setting/theme/ui_mode_selector.dart';
-import 'package:reminder/components/spacer/spacer.dart' as spacer;
+import 'package:reminder/utils/spacer/spacer.dart' as spacer;
 
 // ignore: must_be_immutable
 class SettingView extends StatelessWidget {

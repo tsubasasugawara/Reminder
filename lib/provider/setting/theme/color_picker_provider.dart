@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../components/text_field_cursor/text_field_cursor.dart';
+import '../../../utils/text_field_cursor/text_field_cursor.dart';
 
 class ColorPickerProvider extends ChangeNotifier {
   //選択している色のindex

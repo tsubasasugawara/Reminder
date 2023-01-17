@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
-import '../../../../components/text_field_cursor/text_field_cursor.dart';
+import '../../../../utils/text_field_cursor/text_field_cursor.dart';
 import '../../../../model/db/notifications.dart';
 
 class RepeatingSettingProvider extends ChangeNotifier {

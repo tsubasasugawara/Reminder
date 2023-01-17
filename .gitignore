@@ -49,5 +49,6 @@ connect.sh
 install.sh
 pair.sh
 count.sh
+boot_test.sh
 TODO
 .vscode/

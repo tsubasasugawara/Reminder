@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../components/text_field_cursor/text_field_cursor.dart';
+import '../../../utils/text_field_cursor/text_field_cursor.dart';
 import '../../../model/db/notifications.dart';
 import '../setting.dart';
 

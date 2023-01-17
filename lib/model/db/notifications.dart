@@ -1,9 +1,8 @@
-import 'package:flutter/services.dart';
-import 'package:reminder/model/db/db_env.dart';
-import 'package:reminder/model/db/db_interface.dart';
-import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
+import 'db.dart';
 
-class Notifications implements DBInterface {
+class Notifications {
+  late final DB db;
+
   static const idKey = "notification_id";
   static const titleKey = "title";
   static const contentKey = "content";
@@ -11,8 +10,8 @@ class Notifications implements DBInterface {
   static const timeKey = "time";
   static const setAlarmKey = "set_alarm";
   static const deletedKey = "deleted";
-  static const createdAtKey = DBEnv.createdAtKey;
-  static const updatedAtKey = DBEnv.updatedAtKey;
+  static const createdAtKey = DB.createdAtKey;
+  static const updatedAtKey = DB.updatedAtKey;
 
   //ゴミ箱かホームのどちらにあるのか
   static const int inHome = 0;
@@ -30,37 +29,8 @@ class Notifications implements DBInterface {
   static const everyYear = -4;
   static const notRepeating = -5;
 
-  /*
-   * whereArgsに使う値をListからMapへ変換
-   * @param list : Objectの配列
-   * @return Map<String, String>?
-   */
-  Map<String, String>? _createMapFromObjectList(
-    List<Object?>? list,
-  ) {
-    if (list == null) return null;
-
-    var map = <String, String>{};
-    for (int i = 0; i < list.length; i++) {
-      map[i.toString()] = list[i].toString();
-    }
-
-    return map;
-  }
-
-  /*
-   * IDによって複数のカラムを指定するwhere句を作成
-   * @param ids : IDのリスト
-   * @return プレースホルダを用いたwhere句
-   */
-  String createMultipleIDWhereClauses(List<int> ids) {
-    var statement = ' $idKey IN(?';
-    for (int i = 1; i < ids.length; i++) {
-      statement = statement + ',?';
-    }
-    statement = statement + ')';
-
-    return statement;
+  Notifications() {
+    db = DB();
   }
 
   /*
@@ -83,16 +53,16 @@ class Notifications implements DBInterface {
     String? orderBy,
     int? limit,
   }) async {
-    var res = await MethodChannel(KotlinMethodCalling.channelName)
-        .invokeMethod("select", {
-      'columns': _createMapFromObjectList(columns),
-      'where': where,
-      'whereArgs': _createMapFromObjectList(whereArgs),
-      'groupBy': groupBy,
-      'having': having,
-      'orderBy': orderBy,
-      'limit': limit,
-    });
+    var res = await db.select(
+      "notifications_select",
+      columns,
+      where: where,
+      whereArgs: whereArgs,
+      groupBy: groupBy,
+      having: having,
+      orderBy: orderBy,
+      limit: limit,
+    );
     return res;
   }
 
@@ -114,15 +84,17 @@ class Notifications implements DBInterface {
     int setAlarm,
     int deleted,
   ) async {
-    var res = await MethodChannel(KotlinMethodCalling.channelName)
-        .invokeMethod("insert", {
-      titleKey: title,
-      contentKey: content,
-      frequencyKey: frequency,
-      timeKey: time,
-      setAlarmKey: setAlarm,
-      deletedKey: deleted,
-    });
+    var res = await db.insert(
+      "notifications_insert",
+      {
+        titleKey: title,
+        contentKey: content,
+        frequencyKey: frequency,
+        timeKey: time,
+        setAlarmKey: setAlarm,
+        deletedKey: deleted,
+      },
+    );
     return res;
   }
 
@@ -148,17 +120,19 @@ class Notifications implements DBInterface {
     String? where,
     List<Object?>? whereArgs,
   }) async {
-    var res = await MethodChannel(KotlinMethodCalling.channelName)
-        .invokeMethod("update", {
-      titleKey: title,
-      contentKey: content,
-      frequencyKey: frequency,
-      timeKey: time,
-      setAlarmKey: setAlarm,
-      deletedKey: deleted,
-      'where': where,
-      'whereArgs': _createMapFromObjectList(whereArgs),
-    });
+    var res = await db.update(
+      "notifications_update",
+      map: {
+        titleKey: title,
+        contentKey: content,
+        frequencyKey: frequency,
+        timeKey: time,
+        setAlarmKey: setAlarm,
+        deletedKey: deleted,
+      },
+      where: where,
+      whereArgs: whereArgs,
+    );
     return res;
   }
 
@@ -172,11 +146,11 @@ class Notifications implements DBInterface {
     String? where,
     List<Object?>? whereArgs,
   ) async {
-    var res = await MethodChannel(KotlinMethodCalling.channelName)
-        .invokeMethod("delete", {
-      'where': where,
-      'whereArgs': _createMapFromObjectList(whereArgs),
-    });
+    var res = await db.delete(
+      "notifications_delete",
+      where,
+      whereArgs,
+    );
     return res;
   }
 
@@ -188,7 +162,7 @@ class Notifications implements DBInterface {
   Future<int?> multipleDelete(List<int> ids) async {
     if (ids.isEmpty) return null;
 
-    var where = createMultipleIDWhereClauses(ids);
+    var where = DB.createMultipleIDWhereClauses(idKey, ids);
 
     return await delete(where, ids);
   }

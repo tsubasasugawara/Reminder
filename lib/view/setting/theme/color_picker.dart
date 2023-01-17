@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reminder/components/brightness/brightness.dart';
+import 'package:reminder/utils/brightness/brightness.dart';
 import 'package:reminder/provider/setting/theme/color_picker_provider.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 

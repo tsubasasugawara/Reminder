@@ -166,7 +166,7 @@ class Notifications {
             db.close()
             return res
         } catch (e: Exception) {
-            Log.e("select data", e.toString())
+            Log.e("notifications_select", e.toString())
             return null
         }
     }
@@ -190,7 +190,7 @@ class Notifications {
             db.close()
             return num
         } catch (e: Exception) {
-            Log.e("insert data", e.toString())
+            Log.e("notifications_insert", e.toString())
             return -1
         }
     }
@@ -218,7 +218,7 @@ class Notifications {
             db.close()
             return num
         } catch (e: Exception) {
-            Log.e("update data", e.toString())
+            Log.e("notifications_update", e.toString())
             return -1
         }
     }
@@ -244,7 +244,7 @@ class Notifications {
             db.close()
             return num
         } catch (e: Exception) {
-            Log.e("delete data", e.toString())
+            Log.e("notifications_delete", e.toString())
             return -1
         }
     }

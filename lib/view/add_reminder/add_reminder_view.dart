@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reminder/components/brightness/brightness.dart';
+import 'package:reminder/utils/brightness/brightness.dart';
 import 'package:reminder/model/db/notifications.dart';
 import 'package:reminder/provider/add_reminder/add_reminder_provider.dart';
 import 'package:reminder/provider/add_reminder/alarm_switch_button.dart';
 import 'package:reminder/provider/add_reminder/datetime/datetime_provider.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
-import 'package:reminder/view/add_reminder/button/form_control_button.dart';
 
 // ignore: must_be_immutable
 class AddReminderView extends StatelessWidget {
@@ -146,12 +145,14 @@ class AddReminderView extends StatelessWidget {
           ),
           Expanded(
             flex: 3,
-            child: FormControlButton(
-              AppLocalizations.of(context)!.saveButton,
-              Theme.of(context).primaryColor,
-              () {
+            child: TextButton(
+              onPressed: () {
                 provider.saveBtn(context);
               },
+              child: Text(
+                AppLocalizations.of(context)!.saveButton,
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
             ),
           ),
         ],

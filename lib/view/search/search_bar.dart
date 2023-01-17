@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
-import '../../../provider/search/search_provider.dart';
+import '../../provider/search/search_provider.dart';
 
 class SearchBar {
   static PreferredSizeWidget generate(BuildContext context) {
