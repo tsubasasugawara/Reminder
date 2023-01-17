@@ -7,20 +7,18 @@
 <br>
 
 <div style="display: flex;">
-<img width="200" height="auto" src="./images/home_light.png">
-<img width="200" height="auto" src="./images/add_light.png">
-<img width="200" height="auto" src="./images/setting_light.png">
-<img width="200" height="auto" src="./images/item_selection_light.png">
-<img width="200" height="auto" src="./images/trash_light.png">
+<img width="200" height="auto" src="./images/home_dark.png">
+<img width="200" height="auto" src="./images/add_dark.png">
+<img width="200" height="auto" src="./images/setting_dark.png">
+<img width="200" height="auto" src="./images/trash_dark.png">
 </div>
 
 <br>
 <br>
 
 <div style="display: flex;">
-<img width="200" height="auto" src="./images/home_dark.png">
-<img width="200" height="auto" src="./images/add_dark.png">
-<img width="200" height="auto" src="./images/setting_dark.png">
-<img width="200" height="auto" src="./images/item_selection_dark.png">
-<img width="200" height="auto" src="./images/trash_dark.png">
+<img width="200" height="auto" src="./images/home_light.png">
+<img width="200" height="auto" src="./images/add_light.png">
+<img width="200" height="auto" src="./images/setting_light.png">
+<img width="200" height="auto" src="./images/trash_light.png">
 </div>
