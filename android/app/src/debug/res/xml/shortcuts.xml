@@ -1,0 +1,13 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+  <shortcut
+    android:shortcutId="add"
+    android:enabled="true"
+    android:icon="@drawable/notification_icon"
+    android:shortcutShortLabel="@string/add_short_label"
+    android:shortcutLongLabel="@string/add_long_label">
+    <intent
+      android:action="add_reminder_shortcut"
+      android:targetPackage="com.sugawara.reminder.debug"
+      android:targetClass="com.sugawara.reminder.MainActivity" />
+  </shortcut>
+</shortcuts>

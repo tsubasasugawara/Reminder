@@ -1,4 +1,4 @@
-package com.sugawara.reminder.boot_receiver
+package com.sugawara.reminder.receiver
 
 import android.annotation.SuppressLint
 import android.app.Notification
