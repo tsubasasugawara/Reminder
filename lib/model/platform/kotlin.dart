@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 
 import '../db/notifications.dart';
 
-class KotlinMethodCalling {
+class Kotlin {
   static const String channelName = "com.sugawara.reminder/alarm";
   static const String primaryColorKey = "primaryColor";
 
@@ -24,7 +24,7 @@ class KotlinMethodCalling {
     int time,
     int frequency,
   ) async {
-    await const MethodChannel(KotlinMethodCalling.channelName).invokeMethod(
+    await const MethodChannel(Kotlin.channelName).invokeMethod(
       "alarm",
       <String, dynamic>{
         Notifications.idKey: id,
@@ -51,7 +51,7 @@ class KotlinMethodCalling {
     int time,
     int frequency,
   ) async {
-    await const MethodChannel(KotlinMethodCalling.channelName).invokeMethod(
+    await const MethodChannel(Kotlin.channelName).invokeMethod(
       "deleteAlarm",
       <String, dynamic>{
         Notifications.idKey: id,

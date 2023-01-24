@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:reminder/utils/snack_bar/snackbar.dart';
 import 'package:reminder/model/add_reminder/add_reminder_model.dart';
 import 'package:reminder/model/db/notifications.dart';
-import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
+import 'package:reminder/model/platform/kotlin.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
 class AddReminderProvider {
@@ -100,7 +100,7 @@ class AddReminderProvider {
     var before = model.getBeforeEditingData();
     var being = model.getBeingEditingData();
 
-    await KotlinMethodCalling.deleteAlarm(
+    await Kotlin.deleteAlarm(
       id,
       before[Notifications.titleKey] ?? being[Notifications.titleKey],
       before[Notifications.contentKey] ?? being[Notifications.contentKey],
@@ -109,7 +109,7 @@ class AddReminderProvider {
     );
     if (being[Notifications.setAlarmKey] == 0) return;
 
-    await KotlinMethodCalling.registAlarm(
+    await Kotlin.registAlarm(
       id,
       being[Notifications.titleKey],
       being[Notifications.contentKey],

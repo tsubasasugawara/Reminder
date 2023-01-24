@@ -23,6 +23,7 @@ class MainActivity: FlutterActivity() {
         super.onCreate(savedInstanceState);
         if (getIntent().getAction().equals("add_reminder_shortcut")){
             Log.d("ON_CREATE:", "success");
+            }
         }
     }
 

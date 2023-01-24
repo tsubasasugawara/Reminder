@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 
-import '../kotlin_method_calling/kotlin_method_calling.dart';
+import '../platform/kotlin.dart';
 
 class DB {
   static const dbName = "reminder";
@@ -67,8 +67,8 @@ class DB {
     String? orderBy,
     int? limit,
   }) async {
-    var res = await const MethodChannel(KotlinMethodCalling.channelName)
-        .invokeMethod(method, {
+    var res =
+        await const MethodChannel(Kotlin.channelName).invokeMethod(method, {
       'columns': createMapFromObjectList(columns),
       'where': where,
       'whereArgs': createMapFromObjectList(whereArgs),
@@ -90,8 +90,8 @@ class DB {
     String method,
     Map<String, Object> map,
   ) async {
-    var res = await const MethodChannel(KotlinMethodCalling.channelName)
-        .invokeMethod(method, map);
+    var res =
+        await const MethodChannel(Kotlin.channelName).invokeMethod(method, map);
     return res;
   }
 
@@ -116,8 +116,8 @@ class DB {
       map['whereArgs'] = createMapFromObjectList(whereArgs);
     }
 
-    var res = await const MethodChannel(KotlinMethodCalling.channelName)
-        .invokeMethod(method, map);
+    var res =
+        await const MethodChannel(Kotlin.channelName).invokeMethod(method, map);
     return res;
   }
 
@@ -133,8 +133,8 @@ class DB {
     String? where,
     List<Object?>? whereArgs,
   ) async {
-    var res = await const MethodChannel(KotlinMethodCalling.channelName)
-        .invokeMethod(method, {
+    var res =
+        await const MethodChannel(Kotlin.channelName).invokeMethod(method, {
       'where': where,
       'whereArgs': createMapFromObjectList(whereArgs),
     });

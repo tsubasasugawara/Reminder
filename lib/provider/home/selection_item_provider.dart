@@ -1,5 +1,5 @@
 import 'package:reminder/model/db/notifications.dart';
-import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
+import 'package:reminder/model/platform/kotlin.dart';
 
 import '../../model/db/db.dart';
 
@@ -42,7 +42,7 @@ class SelectionItemProvider {
     int time,
     int frequency,
   ) async {
-    await KotlinMethodCalling.registAlarm(id, title, content, time, frequency);
+    await Kotlin.registAlarm(id, title, content, time, frequency);
   }
 
   /*
@@ -60,7 +60,7 @@ class SelectionItemProvider {
     int time,
     int frequency,
   ) async {
-    await KotlinMethodCalling.deleteAlarm(id, title, content, time, frequency);
+    await Kotlin.deleteAlarm(id, title, content, time, frequency);
   }
 
   /*

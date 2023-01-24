@@ -46,9 +46,6 @@ app.*.map.json
 /android/app/release
 
 connect.sh
-install.sh
 pair.sh
-count.sh
-boot_test.sh
 TODO
 .vscode/

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:reminder/model/kotlin_method_calling/kotlin_method_calling.dart';
+import 'package:reminder/model/platform/kotlin.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/appBar/sort_selection_provider.dart';
 import 'package:reminder/utils/complete_and_cancel_button/complete_and_cancel_button.dart';
@@ -48,8 +48,7 @@ class Actions {
           );
           if (res == null) return;
 
-          await KotlinMethodCalling.registAlarm(
-              res, title, content, time, frequency);
+          await Kotlin.registAlarm(res, title, content, time, frequency);
         },
       ),
     );
