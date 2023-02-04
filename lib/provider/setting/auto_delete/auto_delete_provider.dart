@@ -1,32 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../utils/text_field_cursor/text_field_cursor.dart';
 import '../../../model/db/notifications.dart';
 import '../setting.dart';
 
-class AutoDeleteProvider extends ChangeNotifier {
+final autoDeletionProvider =
+    StateNotifierProvider<AutoDeletionProvider, AutoDeletion>(
+        (ref) => AutoDeletionProvider());
+
+class AutoDeletion {
   final int defaultDate = 30;
   bool checkBoxCondition = false;
   int date = 0;
 
   TextEditingController controller = TextEditingController();
 
-  AutoDeleteProvider();
+  AutoDeletion({
+    this.checkBoxCondition = false,
+    this.date = 0,
+    TextEditingController? controller,
+  }) {
+    this.controller = controller ?? TextEditingController();
+  }
+
+  AutoDeletion copyWith({
+    bool? checkBoxCondition,
+    int? date,
+    TextEditingController? controller,
+  }) {
+    return AutoDeletion(
+      checkBoxCondition: checkBoxCondition ?? this.checkBoxCondition,
+      date: date ?? this.date,
+      controller: controller ?? this.controller,
+    );
+  }
+}
+
+class AutoDeletionProvider extends StateNotifier<AutoDeletion> {
+  AutoDeletionProvider() : super(AutoDeletion());
 
   //FutureBuilderで行う処理
   Future<void> init() async {
-    checkBoxCondition = await Setting.getBool(Setting.onOffKey) ?? false;
-    date = await Setting.getInt(Setting.dateUntilDeletedKey) ?? 0;
+    var checkBoxCondition = await Setting.getBool(Setting.onOffKey) ?? false;
+    var date = await Setting.getInt(Setting.dateUntilDeletedKey) ?? 0;
 
-    controller.text = date.toString();
-
+    state.controller.text = date.toString();
     //日付を編集したときにnotifyListneresで更新すると、
     //カーソルがずれるため、ここで修正する
-    TextFieldCursor.moveCursor(controller);
-  }
+    TextFieldCursor.moveCursor(state.controller);
 
-  void reload() {
-    notifyListeners();
+    state = state.copyWith(checkBoxCondition: checkBoxCondition, date: date);
   }
 
   /*
@@ -34,28 +58,27 @@ class AutoDeleteProvider extends ChangeNotifier {
    * @param value : 変更後の値
    */
   Future<void> onChangeCheckBox(bool? value) async {
-    checkBoxCondition = value ?? false;
+    var checkBoxCondition = value ?? false;
     await Setting.setBool(Setting.onOffKey, checkBoxCondition);
-    reload();
+    state = state.copyWith(checkBoxCondition: checkBoxCondition);
   }
 
   /*
    * 削除までの日数に負の数や数字以外が入力された時、それらを排除する
    * @param value : 入力値
    */
-  void _validate(String? value) {
-    if (value == null) return;
+  String? _validate(String? value) {
+    if (value == null) return null;
 
     if (RegExp(r'[^0-9]').hasMatch(value)) {
       value = value.replaceAll(RegExp(r'[^0-9]'), "");
-      controller.text = value;
-      TextFieldCursor.moveCursor(controller);
+      return value;
     }
     if (RegExp(r'^0+[0-9]+').hasMatch(value)) {
       value = value.replaceAll(RegExp(r'^0+'), '');
-      controller.text = value;
-      TextFieldCursor.moveCursor(controller);
+      return value;
     }
+    return null;
   }
 
   /*
@@ -63,13 +86,15 @@ class AutoDeleteProvider extends ChangeNotifier {
    * @param value : フォームの値
    */
   Future<void> onChangeTextField(String? value) async {
-    _validate(value);
+    var validateValue = _validate(value);
     await Setting.setInt(
       Setting.dateUntilDeletedKey,
-      int.tryParse(controller.text) ?? 0,
+      int.tryParse(state.controller.text) ?? 0,
     );
 
-    reload();
+    state.controller.text = validateValue ?? state.controller.text;
+    state = state.copyWith(controller: state.controller);
+    TextFieldCursor.moveCursor(state.controller);
   }
 
   //削除までの日にちを過ぎたリマインダーを削除する

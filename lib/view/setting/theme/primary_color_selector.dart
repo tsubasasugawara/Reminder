@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reminder/view/setting/theme/color_picker.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/setting/theme/theme_provider.dart';
@@ -23,14 +23,13 @@ class PrimaryColorSelector extends StatelessWidget {
         Center(
           child: Container(
             padding: const EdgeInsets.all(15),
-            child: Consumer<ThemeProvider>(
-              builder: (context, provider, child) => ColorPicker(
+            child: Consumer(
+              builder: (context, ref, child) => ColorPicker(
                 onPressed: (value, index) {
-                  provider.changePrimaryColor(value);
+                  ref.read(themeProvider.notifier).changePrimaryColor(value);
                 },
                 columnCount: 4,
-                colors: provider.colors,
-                checkedItemIndex: provider.selectedIndex,
+                colors: ref.read(themeProvider).colors,
                 mainAxisSpacing: 25,
                 crossAxisSpacing: 25,
                 checkedItemIconSize: 30,

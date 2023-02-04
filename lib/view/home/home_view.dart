@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reminder/utils/brightness/brightness.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/home_provider.dart';
 import 'package:reminder/view/add_reminder/add_reminder_view.dart';
 import 'package:reminder/view/home/appBar/actions.dart' as actions;
 import 'package:reminder/view/trash/trash.dart';
+import 'package:riverpod_context/riverpod_context.dart';
 
 import '../../model/db/notifications.dart';
 import '../setting/setting_view.dart';
@@ -15,22 +16,23 @@ import 'list/list_item.dart';
 class MainView extends StatelessWidget {
   const MainView({Key? key}) : super(key: key);
 
-  Widget? _leading(HomeProvider provider, BuildContext context) {
-    return provider.selectionMode
+  Widget? _leading(BuildContext context) {
+    return context.read(homeProvider).selectionMode
         ? IconButton(
             icon: const Icon(Icons.close_sharp),
             onPressed: () {
-              provider.changeMode(false);
+              context
+                  .read(homeProvider.notifier)
+                  .changeMode(selectionMode: false);
             },
           )
         : null;
   }
 
-  Widget _title(HomeProvider provider, BuildContext context) {
-    return provider.selectionMode
+  Widget _title(BuildContext context) {
+    return context.read(homeProvider).selectionMode
         ? Text(
-            "  " +
-                Provider.of<HomeProvider>(context).selectedItemsCnt.toString(),
+            "  " + context.read(homeProvider).selectedItemsCnt.toString(),
             style: Theme.of(context).textTheme.headline6,
           )
         : Text(
@@ -39,7 +41,7 @@ class MainView extends StatelessWidget {
           );
   }
 
-  Widget _drawer(HomeProvider provider, BuildContext context) {
+  Widget _drawer(BuildContext context) {
     return Drawer(
       child: ListView(
         children: [
@@ -83,8 +85,8 @@ class MainView extends StatelessWidget {
                   },
                 ),
               );
-              provider.update();
-              provider.allSelectOrNot(false);
+              context.read(homeProvider.notifier).update();
+              context.read(homeProvider.notifier).allSelectOrNot(false);
             },
           ),
           ListTile(
@@ -102,8 +104,8 @@ class MainView extends StatelessWidget {
                   },
                 ),
               );
-              provider.update();
-              provider.allSelectOrNot(false);
+              context.read(homeProvider.notifier).update();
+              context.read(homeProvider.notifier).allSelectOrNot(false);
             },
           ),
         ],
@@ -111,7 +113,7 @@ class MainView extends StatelessWidget {
     );
   }
 
-  Widget? _fab(HomeProvider provider, BuildContext context) {
+  Widget? _fab(BuildContext context) {
     return Visibility(
       visible: MediaQuery.of(context).viewInsets.bottom <= 0,
       child: FloatingActionButton(
@@ -123,8 +125,8 @@ class MainView extends StatelessWidget {
               },
             ),
           );
-          provider.update();
-          provider.allSelectOrNot(false);
+          context.read(homeProvider.notifier).update();
+          context.read(homeProvider.notifier).allSelectOrNot(false);
         },
         child: Icon(
           Icons.add,
@@ -138,55 +140,63 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => HomeProvider(false),
-      child: Consumer<HomeProvider>(
-        builder: (context, provider, child) {
-          return Scaffold(
-            appBar: AppBar(
-              leading: _leading(provider, context),
-              title: _title(provider, context),
-              actions: actions.Actions(provider, context).build(),
-            ),
-            drawer: _drawer(provider, context),
-            body: RefreshIndicator(
-              color: Theme.of(context).primaryColor,
-              displacement: 40,
-              onRefresh: () async {
-                await provider.setData();
+    // TODO:変更する必要のないところまで更新してしまっている
+    return Consumer(
+      builder: (context, ref, child) {
+        var dataList = ref.watch(homeProvider).dataList;
+        var selectionMode = ref.watch(homeProvider).selectionMode;
+        var selectedItems = ref.watch(homeProvider).selectedItems;
+
+        return Scaffold(
+          appBar: AppBar(
+            leading: _leading(context),
+            title: _title(context),
+            actions: actions.Actions(context, ref).build(),
+          ),
+          drawer: _drawer(context),
+          body: RefreshIndicator(
+            color: Theme.of(context).primaryColor,
+            displacement: 40,
+            onRefresh: () async {
+              await ref.read(homeProvider.notifier).setData();
+            },
+            child: ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: ref.read(homeProvider).dataList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: () async {
+                    if (selectionMode) {
+                      ref.read(homeProvider.notifier).changeSelected(index);
+                    } else {
+                      await ref
+                          .read(homeProvider.notifier)
+                          .moveToAddView(context, index: index);
+                    }
+                  },
+                  onLongPress: () {
+                    if (!selectionMode) {
+                      ref
+                          .read(homeProvider.notifier)
+                          .changeMode(selectionMode: true);
+                    }
+                    ref.read(homeProvider.notifier).changeSelected(index);
+                  },
+                  child: ListItem(
+                    selectedItems[index],
+                    dataList[index][Notifications.titleKey],
+                    dataList[index][Notifications.setAlarmKey],
+                    dataList[index][Notifications.timeKey],
+                  ),
+                );
               },
-              child: ListView.builder(
-                padding: const EdgeInsets.all(8),
-                itemCount: provider.getDataListLength(),
-                itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: () async {
-                      if (provider.selectionMode) {
-                        provider.changeSelected(index);
-                      } else {
-                        await provider.moveToAddView(context, index: index);
-                      }
-                    },
-                    onLongPress: () {
-                      if (!provider.selectionMode) provider.changeMode(true);
-                      provider.changeSelected(index);
-                    },
-                    child: ListItem(
-                      provider.selectedItems[index],
-                      provider.getString(index, Notifications.titleKey),
-                      provider.getInt(index, Notifications.setAlarmKey),
-                      provider.getInt(index, Notifications.timeKey),
-                    ),
-                  );
-                },
-              ),
             ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerFloat,
-            floatingActionButton: _fab(provider, context),
-          );
-        },
-      ),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: _fab(context),
+        );
+      },
     );
   }
 }

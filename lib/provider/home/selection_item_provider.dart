@@ -3,17 +3,10 @@ import 'package:reminder/model/platform/kotlin.dart';
 
 import '../../model/db/db.dart';
 
+// モードを変更したときにdataListをこのクラスに渡す
+
 //アイテムの複数選択のためのクラス
 class SelectionItemProvider {
-  //アイテムが選択されているかどうかを格納
-  List<bool> selectedItems = [];
-
-  //true: アイテムを選択できる, false: 通常
-  bool selectionMode = false;
-
-  //選択したアイテムの数
-  int selectedItemsCnt = 0;
-
   /*
    * データベースでの操作が正しく行われたか確認
    * @param num : 更新や削除した数
@@ -67,7 +60,7 @@ class SelectionItemProvider {
    * 選択されたアイテムのインデックスを取得
    * @return List<int>:インデックスのリスト
    */
-  List<int> _getSelectedIndex() {
+  List<int> _getSelectedIndex(List<bool> selectedItems) {
     List<int> indexs = [];
     for (int i = 0; i < selectedItems.length; i++) {
       if (selectedItems[i]) indexs.add(i);
@@ -82,9 +75,10 @@ class SelectionItemProvider {
    */
   Future<bool> delete(
     List<Map<dynamic, dynamic>> dataList,
+    List<bool> selectedItems,
   ) async {
     List<int> ids = [];
-    for (var i in _getSelectedIndex()) {
+    for (var i in _getSelectedIndex(selectedItems)) {
       ids.add(dataList[i][Notifications.idKey]);
       await _setOffAlarm(
         dataList[i][Notifications.idKey],
@@ -106,10 +100,11 @@ class SelectionItemProvider {
    */
   Future<bool> trash(
     List<Map<dynamic, dynamic>> dataList,
+    List<bool> selectedItems,
     bool trash,
   ) async {
     List<int> ids = [];
-    for (var i in _getSelectedIndex()) {
+    for (var i in _getSelectedIndex(selectedItems)) {
       ids.add(dataList[i][Notifications.idKey]);
       await _setOffAlarm(
         dataList[i][Notifications.idKey],
@@ -128,60 +123,4 @@ class SelectionItemProvider {
     );
     return _checkForOperation(res);
   }
-
-  /*
-   * selectedItemsの長さを変更
-   * @param length:変更後の長さ
-   */
-  void changeSelectedItemsLen({int? length}) {
-    selectedItems = List.filled(length ?? selectedItems.length, false);
-    selectedItemsCnt = 0;
-  }
-
-  /*
-   * アイテムの選択または解除
-   * @param index:選択または解除したいアイテムのインデックス
-   */
-  void changeSelected(int index) {
-    selectedItems[index] = !selectedItems[index];
-    updateSelectedItemsCnt(selectedItems[index]);
-    updateOrChangeMode();
-  }
-
-  /*
-   * 全てを選択または解除
-   * @param select:選択(true)か解除か(false)
-   */
-  void allSelectOrNot(bool select) {
-    if (select && selectedItemsCnt < selectedItems.length) {
-      selectedItemsCnt = selectedItems.length;
-    } else {
-      selectedItemsCnt = 0;
-    }
-    for (int i = 0; i < selectedItems.length; i++) {
-      selectedItems[i] = select;
-    }
-    updateOrChangeMode();
-  }
-
-  //モード変更時やアイテムをタップしたときの画面更新
-  void updateOrChangeMode() {}
-
-  /*
-   * 選択しているアイテムの数を更新
-   * @param val:選択(true),解除(false)
-   */
-  void updateSelectedItemsCnt(bool val) {
-    if (val) {
-      selectedItemsCnt++;
-    } else {
-      selectedItemsCnt--;
-    }
-  }
-
-  /*
-   * モード変更
-   * @param mode:アイテムを選択する(true),通常(false)
-   */
-  void changeMode(bool mode) {}
 }

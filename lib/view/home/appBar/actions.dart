@@ -1,10 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reminder/model/platform/kotlin.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/appBar/sort_selection_provider.dart';
 import 'package:reminder/utils/complete_and_cancel_button/complete_and_cancel_button.dart';
+import 'package:riverpod_context/riverpod_context.dart';
 
 import '../../../model/db/db.dart';
 import '../../../utils/snack_bar/snackbar.dart';
@@ -12,11 +13,19 @@ import '../../../model/db/notifications.dart';
 import '../../../provider/home/home_provider.dart';
 import '../../search/search_view.dart';
 
-class Actions {
-  late HomeProvider homeProvider;
-  late BuildContext context;
+final sortSelectionProvider =
+    StateNotifierProvider<SortSelectionProvider, SortSelection>(
+        (ref) => SortSelectionProvider(
+              ref.read(homeProvider).orderBy,
+              ref.read(homeProvider).sortBy,
+              ref.read(homeProvider).topup,
+            ));
 
-  Actions(this.homeProvider, this.context);
+class Actions {
+  late BuildContext context;
+  late WidgetRef ref;
+
+  Actions(this.context, this.ref);
 
   /*
    * デバッグ専用のリマインダーを追加するボタン
@@ -118,16 +127,20 @@ class Actions {
    * ソート方法選択ボタンの生成
    * @param dbKey : ソートに使うカラムのキー
    * @param text : ボタンに表示するテキスト
+   * @param context : BuildContext
    * @return Widget : ソート方法選択ボタン
    */
   Widget _makeButton(
-      String dbKey, String text, SortSelectionProvider provider) {
+    String dbKey,
+    String text,
+    BuildContext context,
+  ) {
     return TextButton(
       onPressed: () async {
-        provider.setOrderBy(dbKey);
+        context.read(sortSelectionProvider.notifier).setOrderBy(dbKey);
       },
       style: TextButton.styleFrom(minimumSize: const Size.fromHeight(50)),
-      child: (provider.equalsOrderBy(dbKey))
+      child: (context.read(sortSelectionProvider.notifier).equalsOrderBy(dbKey))
           ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -173,16 +186,16 @@ class Actions {
         children: [
           IconButton(
             onPressed: () {
-              homeProvider.allSelectOrNot(true);
+              ref.read(homeProvider.notifier).allSelectOrNot(true);
             },
             icon: const Icon(Icons.select_all),
           ),
           IconButton(
             onPressed: () async {
-              var res = await homeProvider.deleteButton(
-                context,
-                HomeProvider.moveToTrash,
-              );
+              var res = await ref.read(homeProvider.notifier).deleteButton(
+                    context,
+                    Home.moveToTrash,
+                  );
               if (res) {
                 ShowSnackBar(
                   context,
@@ -206,13 +219,10 @@ class Actions {
         onPressed: () async {
           await Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => SearchView(
-                homeProvider.model.dataList,
-                homeProvider.isTrash,
-              ),
+              builder: (context) => const SearchView(),
             ),
           );
-          await homeProvider.setData();
+          await ref.read(homeProvider.notifier).setData();
         },
       ),
       IconButton(
@@ -223,76 +233,77 @@ class Actions {
           await showDialog(
             builder: (BuildContext context) {
               return Dialog(
-                child: ChangeNotifierProvider(
-                  create: (_) => SortSelectionProvider(homeProvider.orderBy,
-                      homeProvider.sortBy, homeProvider.topup),
-                  child: Consumer<SortSelectionProvider>(
-                      builder: (context, provider, child) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 20),
-                          child: Text(
-                            AppLocalizations.of(context)!.orderMethod,
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
+                child: Consumer(builder: (context, ref, child) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        child: Text(
+                          AppLocalizations.of(context)!.orderMethod,
+                          style: Theme.of(context).textTheme.bodyText1,
                         ),
-                        _makeDivider(),
-                        _makeButton(
-                          Notifications.createdAtKey,
-                          AppLocalizations.of(context)!.orderByCreatedAt,
-                          provider,
-                        ),
-                        _makeDivider(),
-                        _makeButton(
-                          Notifications.updatedAtKey,
-                          AppLocalizations.of(context)!.orderByUpdatedAt,
-                          provider,
-                        ),
-                        _makeDivider(),
-                        _makeButton(
-                          Notifications.timeKey,
-                          AppLocalizations.of(context)!.orderByAlarmTime,
-                          provider,
-                        ),
-                        _makeDivider(),
-                        _makeButton(
-                          Notifications.titleKey,
-                          AppLocalizations.of(context)!.orderByTitle,
-                          provider,
-                        ),
-                        _makeDivider(),
-                        switchDescAscBtn(
-                          () {
-                            provider.changeSortBy();
-                          },
-                          provider.sortBy,
-                        ),
-                        _makeDivider(),
-                        switchOnAboveBringBtn(
-                          () {
-                            provider.changeTopUp();
-                          },
-                          provider.topup,
-                        ),
-                        _makeDivider(),
-                        CompleteAndCancelButton(
-                          () {
-                            Navigator.pop(context);
-                          },
-                          () async {
-                            homeProvider.setSortBy(provider.orderBy,
-                                provider.sortBy, provider.topup);
-                            await homeProvider.setData();
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    );
-                  }),
-                ),
+                      ),
+                      _makeDivider(),
+                      _makeButton(
+                        Notifications.createdAtKey,
+                        AppLocalizations.of(context)!.orderByCreatedAt,
+                        context,
+                      ),
+                      _makeDivider(),
+                      _makeButton(
+                        Notifications.updatedAtKey,
+                        AppLocalizations.of(context)!.orderByUpdatedAt,
+                        context,
+                      ),
+                      _makeDivider(),
+                      _makeButton(
+                        Notifications.timeKey,
+                        AppLocalizations.of(context)!.orderByAlarmTime,
+                        context,
+                      ),
+                      _makeDivider(),
+                      _makeButton(
+                        Notifications.titleKey,
+                        AppLocalizations.of(context)!.orderByTitle,
+                        context,
+                      ),
+                      _makeDivider(),
+                      switchDescAscBtn(
+                        () {
+                          ref
+                              .read(sortSelectionProvider.notifier)
+                              .changeSortBy();
+                        },
+                        ref.watch(sortSelectionProvider).sortBy,
+                      ),
+                      _makeDivider(),
+                      switchOnAboveBringBtn(
+                        () {
+                          ref
+                              .read(sortSelectionProvider.notifier)
+                              .changeTopUp();
+                        },
+                        ref.watch(sortSelectionProvider).topup,
+                      ),
+                      _makeDivider(),
+                      CompleteAndCancelButton(
+                        () {
+                          Navigator.pop(context);
+                        },
+                        () async {
+                          ref.read(homeProvider.notifier).setSortBy(
+                              ref.watch(sortSelectionProvider).orderBy,
+                              ref.watch(sortSelectionProvider).sortBy,
+                              ref.watch(sortSelectionProvider).topup);
+                          await ref.read(homeProvider.notifier).setData();
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  );
+                }),
               );
             },
             context: context,
@@ -307,6 +318,8 @@ class Actions {
    * @return List<Widget>
    */
   List<Widget> build() {
-    return homeProvider.selectionMode ? _selectionMode() : normalMode();
+    return ref.watch(homeProvider).selectionMode
+        ? _selectionMode()
+        : normalMode();
   }
 }

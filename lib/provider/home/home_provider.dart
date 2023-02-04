@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reminder/model/db/notifications.dart';
 import 'package:reminder/model/home/home_list_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
@@ -8,8 +9,12 @@ import 'package:reminder/view/home/confirmation_dialog.dart';
 
 import '../../model/db/db.dart';
 
-class HomeProvider extends ChangeNotifier with SelectionItemProvider {
-  late HomeListModel model;
+final homeProvider =
+    StateNotifierProvider<HomeProvider, Home>((ref) => HomeProvider(false));
+
+class Home {
+  // データベースから取得したデータを格納
+  List<Map> dataList = <Map>[];
 
   //完全削除
   static const int completeDeletion = 0;
@@ -21,7 +26,7 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
   static const int restoreFromTrash = 2;
 
   //ごみ箱(true)かホーム(false)
-  late bool isTrash;
+  bool isTrash;
 
   //ソートに使用するカラム
   String orderBy = Notifications.createdAtKey;
@@ -30,6 +35,15 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
   String sortBy = DB.asc;
 
   bool topup = false;
+
+  //アイテムが選択されているかどうかを格納
+  List<bool> selectedItems = [];
+
+  //true: アイテムを選択できる, false: 通常
+  bool selectionMode = false;
+
+  //選択したアイテムの数
+  int selectedItemsCnt = 0;
 
   //ソート条件をつけないときに取得するカラム
   final List<Object?> stdColumns = [
@@ -41,35 +55,82 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
     Notifications.frequencyKey,
   ];
 
-  HomeProvider(this.isTrash) {
-    model = HomeListModel();
-    update();
+  Home({
+    List<Map>? dataList,
+    required this.isTrash,
+    this.orderBy = Notifications.createdAtKey,
+    this.sortBy = DB.asc,
+    this.topup = false,
+    this.selectedItems = const [],
+    this.selectionMode = false,
+    this.selectedItemsCnt = 0,
+  }) {
+    this.dataList = dataList ?? <Map>[];
+    if (selectedItems.isEmpty && this.dataList.isNotEmpty) {
+      selectedItems = List.filled(
+        this.dataList.length,
+        false,
+      );
+    }
   }
 
-  void setSortBy(String _orderBy, String _sortBy, bool _topup) {
-    orderBy = _orderBy;
-    sortBy = _sortBy;
-    topup = _topup;
+  Home copyWith({
+    List<Map>? dataList,
+    bool? isTrash,
+    String? orderBy,
+    String? sortBy,
+    bool? topup,
+    List<bool>? selectedItems,
+    bool? selectionMode,
+    int? selectedItemsCnt,
+  }) {
+    return Home(
+      dataList: dataList ?? this.dataList,
+      isTrash: isTrash ?? this.isTrash,
+      orderBy: orderBy ?? this.orderBy,
+      sortBy: sortBy ?? this.sortBy,
+      topup: topup ?? this.topup,
+      selectedItems: selectedItems ?? this.selectedItems,
+      selectionMode: selectionMode ?? this.selectionMode,
+      selectedItemsCnt: selectedItemsCnt ?? this.selectedItemsCnt,
+    );
+  }
+}
+
+class HomeProvider extends StateNotifier<Home> {
+  HomeProvider(bool isTrash) : super(Home(isTrash: isTrash));
+
+  SelectionItemProvider selectionItemProvider = SelectionItemProvider();
+
+  void setSortBy(String orderBy, String sortBy, bool topup) {
+    state.orderBy = orderBy;
+    state.sortBy = sortBy;
+    state.topup = topup;
   }
 
   //データ一覧を取得し、modelに保存
   Future<void> setData() async {
     //もしカラムリストに含まれていなかったら追加する
-    var columns = [...stdColumns];
-    if (!stdColumns.contains(orderBy)) {
-      columns = [...columns, orderBy];
+    var columns = [...state.stdColumns];
+    if (!state.stdColumns.contains(state.orderBy)) {
+      columns = [...columns, state.orderBy];
     }
 
-    await model.select(
+    List<Map>? dataList = await HomeListModel.select(
       columns,
-      where: isTrash
+      where: state.isTrash
           ? '${Notifications.deletedKey} = 1'
           : '${Notifications.deletedKey} = 0',
       orderBy:
-          '${topup ? '${Notifications.setAlarmKey} ${DB.desc}, ' : ''} $orderBy $sortBy',
+          '${state.topup ? '${Notifications.setAlarmKey} ${DB.desc}, ' : ''} ${state.orderBy} ${state.sortBy}',
     );
-    changeSelectedItemsLen(length: model.dataList.length);
-    notifyListeners();
+
+    state = state.copyWith(
+      dataList: dataList,
+      selectedItems: List.filled(dataList != null ? dataList.length : 0, false),
+      selectedItemsCnt: 0,
+      selectionMode: false,
+    );
   }
 
   //すでに発火しているアラームのsetAlarmをオフ(0)にする
@@ -82,34 +143,6 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
       whereArgs: [DateTime.now().millisecondsSinceEpoch],
     );
     setData();
-  }
-
-  /*
-   * modelから文字列を取得する
-   * @param index:データのインデックス
-   * @param key:データのキー
-   * @return String:keyに格納されている文字列
-   */
-  String getString(int index, String key) {
-    return model.dataList[index][key];
-  }
-
-  /*
-   * modelから整数値を取得する
-   * @param index:データのインデックス
-   * @param key:データのキー
-   * @return String:keyに格納されている整数値
-   */
-  int getInt(int index, String key) {
-    return model.dataList[index][key];
-  }
-
-  /*
-   * データの行数を取得
-   * @return int:データの行数
-   */
-  int getDataListLength() {
-    return model.dataList.length;
   }
 
   /*
@@ -128,12 +161,12 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
         builder: (context) {
           if (index != null) {
             return AddReminderView(
-              id: model.dataList[index][Notifications.idKey],
-              title: model.dataList[index][Notifications.titleKey],
-              content: model.dataList[index][Notifications.contentKey],
-              time: model.dataList[index][Notifications.timeKey],
-              setAlarm: model.dataList[index][Notifications.setAlarmKey],
-              frequency: model.dataList[index][Notifications.frequencyKey],
+              id: state.dataList[index][Notifications.idKey],
+              title: state.dataList[index][Notifications.titleKey],
+              content: state.dataList[index][Notifications.contentKey],
+              time: state.dataList[index][Notifications.timeKey],
+              setAlarm: state.dataList[index][Notifications.setAlarmKey],
+              frequency: state.dataList[index][Notifications.frequencyKey],
               isTrash: isTrash,
             );
           }
@@ -154,11 +187,11 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
     int movement,
   ) async {
     bool res = true;
-    if (movement != HomeProvider.restoreFromTrash) {
+    if (movement != Home.restoreFromTrash) {
       res = await showDialog(
         context: context,
         builder: (context) => ConfirmationDialog(
-          movement == HomeProvider.completeDeletion
+          movement == Home.completeDeletion
               ? AppLocalizations.of(context)!.deletionConfirmationMsg
               : AppLocalizations.of(context)!.movingToTrashConfirmationMsg,
         ),
@@ -169,34 +202,100 @@ class HomeProvider extends ChangeNotifier with SelectionItemProvider {
     if (!res) return res;
 
     switch (movement) {
-      case HomeProvider.completeDeletion: //完全削除
-        res = await delete(model.dataList);
+      case Home.completeDeletion: //完全削除
+        res = await selectionItemProvider.delete(
+          state.dataList,
+          state.selectedItems,
+        );
         break;
-      case HomeProvider.moveToTrash: //ごみ箱へ
-        res = await trash(model.dataList, true);
+      case Home.moveToTrash: //ごみ箱へ
+        res = await selectionItemProvider.trash(
+          state.dataList,
+          state.selectedItems,
+          true,
+        );
         break;
-      case HomeProvider.restoreFromTrash: //ごみ箱から復元
-        res = await trash(model.dataList, false);
+      case Home.restoreFromTrash: //ごみ箱から復元
+        res = await selectionItemProvider.trash(
+          state.dataList,
+          state.selectedItems,
+          false,
+        );
         break;
     }
     update();
-    allSelectOrNot(false);
     return res;
   }
 
-  @override
-  void updateOrChangeMode() {
-    if (selectedItemsCnt <= 0) {
-      changeMode(false);
-    } else {
-      notifyListeners();
-    }
+  void changeMode({required bool selectionMode}) {
+    state = state.copyWith(
+      selectedItemsCnt: 0,
+      selectedItems: List.filled(state.dataList.length, false),
+      selectionMode: selectionMode,
+    );
   }
 
-  @override
-  void changeMode(bool mode) {
-    selectionMode = mode;
-    changeSelectedItemsLen();
-    notifyListeners();
+  /*
+   * アイテムの選択または解除
+   * @param index:選択または解除したいアイテムのインデックス
+   */
+  void changeSelected(int index) {
+    var selectedItems = state.selectedItems;
+    selectedItems[index] = !selectedItems[index];
+
+    var selectedCnt =
+        state.selectedItemsCnt + updateSelectedItemsCnt(selectedItems[index]);
+
+    state = state.copyWith(
+      selectedItems: selectedItems,
+      selectedItemsCnt: selectedCnt,
+      selectionMode: selectedCnt <= 0 ? false : state.selectionMode,
+    );
+  }
+
+  /*
+   * 全てを選択または解除
+   * @param select:選択(true)か解除か(false)
+   */
+  void allSelectOrNot(bool select) {
+    int selectedItemsCnt;
+    var selectedItems = state.selectedItems;
+
+    if (select && state.selectedItemsCnt < state.selectedItems.length) {
+      selectedItemsCnt = state.selectedItems.length;
+    } else {
+      selectedItemsCnt = 0;
+      select = !select;
+    }
+
+    for (int i = 0; i < selectedItems.length; i++) {
+      selectedItems[i] = select;
+    }
+
+    state = state.copyWith(
+      selectedItemsCnt: selectedItemsCnt,
+      selectedItems: selectedItems,
+      selectionMode: select,
+    );
+  }
+
+  /*
+   * selectedItemsの長さを変更
+   * @param length:変更後の長さ
+   */
+  void changeSelectedItemsLen({int? length}) {
+    state = state.copyWith(
+      selectedItems: List.filled(length ?? state.selectedItems.length, false),
+      selectedItemsCnt: 0,
+    );
+  }
+
+  /*
+   * 選択しているアイテムの数を更新
+   * @param val:選択(true),解除(false)
+   */
+  int updateSelectedItemsCnt(bool val) {
+    if (val) return 1;
+    return -1;
   }
 }

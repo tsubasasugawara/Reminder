@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reminder/utils/brightness/brightness.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/setting/theme/theme_provider.dart';
@@ -25,54 +25,64 @@ class UiModeSelector extends StatelessWidget {
         Center(
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
-            child: Consumer<ThemeProvider>(
-              builder: (context, themeProvider, child) => Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      themeProvider.changeUiMode(ThemeProvider.lightTheme);
-                    },
-                    icon: Icon(
-                      themeProvider.uiMode == ThemeProvider.lightTheme
-                          ? Icons.wb_sunny
-                          : Icons.wb_sunny_outlined,
-                      color: judgeBlackWhite(
-                        Theme.of(context).backgroundColor,
+            child: Consumer(
+              builder: (context, ref, child) {
+                var uiMode = ref.watch(themeProvider).uiMode;
+
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        ref
+                            .read(themeProvider.notifier)
+                            .changeUiMode(ThemeProviderData.lightTheme);
+                      },
+                      icon: Icon(
+                        uiMode == ThemeProviderData.lightTheme
+                            ? Icons.wb_sunny
+                            : Icons.wb_sunny_outlined,
+                        color: judgeBlackWhite(
+                          Theme.of(context).backgroundColor,
+                        ),
                       ),
+                      iconSize: 60,
                     ),
-                    iconSize: 60,
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      themeProvider.changeUiMode(ThemeProvider.darkTheme);
-                    },
-                    icon: Icon(
-                      themeProvider.uiMode == ThemeProvider.darkTheme
-                          ? Icons.mode_night
-                          : Icons.mode_night_outlined,
-                      color: judgeBlackWhite(
-                        Theme.of(context).backgroundColor,
+                    IconButton(
+                      onPressed: () {
+                        ref
+                            .read(themeProvider.notifier)
+                            .changeUiMode(ThemeProviderData.darkTheme);
+                      },
+                      icon: Icon(
+                        uiMode == ThemeProviderData.darkTheme
+                            ? Icons.mode_night
+                            : Icons.mode_night_outlined,
+                        color: judgeBlackWhite(
+                          Theme.of(context).backgroundColor,
+                        ),
                       ),
+                      iconSize: 60,
                     ),
-                    iconSize: 60,
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      themeProvider.changeUiMode(ThemeProvider.auto);
-                    },
-                    icon: Icon(
-                      themeProvider.uiMode == ThemeProvider.auto
-                          ? Icons.brightness_auto
-                          : Icons.brightness_auto_outlined,
-                      color: judgeBlackWhite(
-                        Theme.of(context).backgroundColor,
+                    IconButton(
+                      onPressed: () {
+                        ref
+                            .read(themeProvider.notifier)
+                            .changeUiMode(ThemeProviderData.auto);
+                      },
+                      icon: Icon(
+                        uiMode == ThemeProviderData.auto
+                            ? Icons.brightness_auto
+                            : Icons.brightness_auto_outlined,
+                        color: judgeBlackWhite(
+                          Theme.of(context).backgroundColor,
+                        ),
                       ),
+                      iconSize: 60,
                     ),
-                    iconSize: 60,
-                  ),
-                ],
-              ),
+                  ],
+                );
+              },
             ),
           ),
         ),

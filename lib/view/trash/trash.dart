@@ -1,32 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reminder/utils/snack_bar/snackbar.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/home_provider.dart';
 import 'package:reminder/view/home/appBar/actions.dart' as actions;
+import 'package:riverpod_context/riverpod_context.dart';
 
 import '../../model/db/notifications.dart';
+
+final trashProvider =
+    StateNotifierProvider<HomeProvider, Home>((ref) => HomeProvider(true));
 
 // ignore: must_be_immutable
 class Trash extends StatelessWidget {
   const Trash({Key? key}) : super(key: key);
 
-  Widget? _leading(HomeProvider provider, BuildContext context) {
-    return provider.selectionMode
+  Widget? _leading(BuildContext context) {
+    return context.read(trashProvider).selectionMode
         ? IconButton(
             icon: const Icon(Icons.close_sharp),
             onPressed: () {
-              provider.changeMode(false);
+              context
+                  .read(trashProvider.notifier)
+                  .changeMode(selectionMode: false);
             },
           )
         : null;
   }
 
-  Widget _title(HomeProvider provider, BuildContext context) {
-    return provider.selectionMode
+  Widget _title(BuildContext context) {
+    return context.read(trashProvider).selectionMode
         ? Text(
-            "  " +
-                Provider.of<HomeProvider>(context).selectedItemsCnt.toString(),
+            "  " + context.read(trashProvider).selectedItemsCnt.toString(),
             style: Theme.of(context).textTheme.headline6,
           )
         : Text(
@@ -35,23 +40,24 @@ class Trash extends StatelessWidget {
           );
   }
 
-  List<Widget>? _actions(HomeProvider provider, BuildContext context) {
-    return provider.selectionMode
+  List<Widget>? _actions(BuildContext context, WidgetRef ref) {
+    return context.read(trashProvider).selectionMode
         ? [
             Row(
               children: [
                 IconButton(
                   onPressed: () {
-                    provider.allSelectOrNot(true);
+                    context.read(trashProvider.notifier).allSelectOrNot(true);
                   },
                   icon: const Icon(Icons.select_all),
                 ),
                 IconButton(
                   onPressed: () async {
-                    var res = await provider.deleteButton(
-                      context,
-                      HomeProvider.restoreFromTrash,
-                    );
+                    var res =
+                        await context.read(trashProvider.notifier).deleteButton(
+                              context,
+                              Home.restoreFromTrash,
+                            );
                     if (res) {
                       ShowSnackBar(
                         context,
@@ -64,8 +70,9 @@ class Trash extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () async {
-                    var res = await provider.deleteButton(
-                        context, HomeProvider.completeDeletion);
+                    var res = await context
+                        .read(trashProvider.notifier)
+                        .deleteButton(context, Home.completeDeletion);
                     if (res) {
                       ShowSnackBar(
                         context,
@@ -79,97 +86,116 @@ class Trash extends StatelessWidget {
               ],
             ),
           ]
-        : actions.Actions(provider, context).build();
+        : actions.Actions(context, ref).build();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => HomeProvider(true),
-      child: Consumer<HomeProvider>(
-        builder: (context, provider, child) => Scaffold(
-          appBar: AppBar(
-            leading: _leading(provider, context),
-            title: _title(provider, context),
-            actions: _actions(provider, context),
-          ),
-          body: Center(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: provider.getDataListLength(),
-              itemBuilder: (BuildContext context, int index) {
-                return GestureDetector(
-                  onTap: () async {
-                    if (provider.selectionMode) {
-                      provider.changeSelected(index);
-                    } else {
-                      await provider.moveToAddView(
-                        context,
-                        index: index,
-                        isTrash: provider.isTrash,
-                      );
-                    }
-                  },
-                  onLongPress: () {
-                    if (!provider.selectionMode) provider.changeMode(true);
-                    provider.changeSelected(index);
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 10, top: 5),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(15),
-                        ),
-                        border: Border.all(
-                          color: provider.selectedItems[index]
-                              ? Theme.of(context).primaryColor
-                              : Theme.of(context).hintColor,
-                          width: provider.selectedItems[index] ? 2.5 : 1.5,
-                        ),
-                        color: Theme.of(context).backgroundColor,
-                      ),
-                      padding: const EdgeInsets.all(10),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        alignment: Alignment.topLeft,
-                        margin: const EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 10,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    provider.getString(
-                                        index, Notifications.titleKey),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        ?.apply(
-                                          fontSizeDelta: 6,
+    return FutureBuilder(
+        future: context.read(trashProvider.notifier).setData(),
+        builder: (context, snapshot) {
+          return Consumer(
+            builder: (context, ref, child) {
+              var dataList = ref.watch(trashProvider).dataList;
+              var selectionMode = ref.watch(trashProvider).selectionMode;
+              var selectedItems = ref.watch(trashProvider).selectedItems;
+
+              return Scaffold(
+                appBar: AppBar(
+                  leading: _leading(context),
+                  title: _title(context),
+                  actions: _actions(context, ref),
+                ),
+                body: Center(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(8),
+                    itemCount: dataList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: () async {
+                          if (selectionMode) {
+                            ref
+                                .read(trashProvider.notifier)
+                                .changeSelected(index);
+                          } else {
+                            await ref
+                                .read(trashProvider.notifier)
+                                .moveToAddView(
+                                  context,
+                                  index: index,
+                                  isTrash: ref.read(trashProvider).isTrash,
+                                );
+                          }
+                        },
+                        onLongPress: () {
+                          if (!selectionMode) {
+                            ref
+                                .read(trashProvider.notifier)
+                                .changeMode(selectionMode: true);
+                          }
+                          ref
+                              .read(trashProvider.notifier)
+                              .changeSelected(index);
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 10, top: 5),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(15),
+                              ),
+                              border: Border.all(
+                                color: selectedItems[index]
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context).hintColor,
+                                width: selectedItems[index] ? 2.5 : 1.5,
+                              ),
+                              color: Theme.of(context).backgroundColor,
+                            ),
+                            padding: const EdgeInsets.all(10),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              alignment: Alignment.topLeft,
+                              margin: const EdgeInsets.symmetric(
+                                vertical: 5,
+                                horizontal: 10,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          dataList[index]
+                                              [Notifications.titleKey],
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1
+                                              ?.apply(
+                                                fontSizeDelta: 6,
+                                              ),
+                                          overflow: TextOverflow.ellipsis,
+                                          softWrap: false,
                                         ),
-                                    overflow: TextOverflow.ellipsis,
-                                    softWrap: false,
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
-          ),
-        ),
-      ),
-    );
+                ),
+              );
+            },
+          );
+        });
   }
 }

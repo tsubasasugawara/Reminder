@@ -4,16 +4,13 @@ import 'package:reminder/model/db/notifications.dart';
 class HomeListModel {
   HomeListModel();
 
-  // データベースから取得したデータを格納
-  List<Map> dataList = <Map>[];
-
   /*
    * notificationsからデータを取得(複数)
    * @param columns : 取得したいカラムの指定。
    * @param where : WHERE句
    * @param orderBy : orderBy句
    */
-  Future<void> select(
+  static Future<List<Map>?> select(
     List<Object?> columns, {
     String? where,
     String? orderBy,
@@ -27,7 +24,7 @@ class HomeListModel {
       );
 
       if (_dataList == null) {
-        return;
+        return null;
       }
 
       var res = <Map<String, dynamic>>[];
@@ -37,9 +34,9 @@ class HomeListModel {
         res.add(map);
       }
 
-      dataList = res;
+      return res;
     } catch (e) {
-      return;
+      return null;
     }
   }
 }

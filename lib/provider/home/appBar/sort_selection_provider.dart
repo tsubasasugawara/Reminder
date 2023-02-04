@@ -1,31 +1,53 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../model/db/db.dart';
 
-class SortSelectionProvider extends ChangeNotifier {
+// TODO:ソートの動作確認
+class SortSelection {
   late String orderBy;
   late String sortBy;
   late bool topup;
 
-  SortSelectionProvider(this.orderBy, this.sortBy, this.topup);
+  SortSelection({
+    required this.orderBy,
+    required this.sortBy,
+    required this.topup,
+  });
+
+  SortSelection copyWith({
+    String? orderBy,
+    String? sortBy,
+    bool? topup,
+  }) {
+    return SortSelection(
+      orderBy: orderBy ?? this.orderBy,
+      sortBy: sortBy ?? this.sortBy,
+      topup: topup ?? this.topup,
+    );
+  }
+}
+
+class SortSelectionProvider extends StateNotifier<SortSelection> {
+  SortSelectionProvider(
+    String orderBy,
+    String sortBy,
+    bool topup,
+  ) : super(SortSelection(orderBy: orderBy, sortBy: sortBy, topup: topup));
 
   void setOrderBy(String orderBy) {
-    this.orderBy = orderBy;
-    notifyListeners();
+    state = state.copyWith(orderBy: orderBy);
   }
 
   bool equalsOrderBy(String str) {
-    if (orderBy == str) return true;
+    if (state.orderBy == str) return true;
     return false;
   }
 
   void changeSortBy() {
-    sortBy = sortBy == DB.asc ? DB.desc : DB.asc;
-    notifyListeners();
+    state = state.copyWith(sortBy: state.sortBy == DB.asc ? DB.desc : DB.asc);
   }
 
   void changeTopUp() {
-    topup = !topup;
-    notifyListeners();
+    state = state.copyWith(topup: !state.topup);
   }
 }

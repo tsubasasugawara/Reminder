@@ -1,51 +1,72 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reminder/provider/setting/theme/theme_provider.dart';
 
 import '../../../utils/text_field_cursor/text_field_cursor.dart';
 
-class ColorPickerProvider extends ChangeNotifier {
-  //選択している色のindex
-  late int _checkedItemIndex;
+final colorPickerProvider =
+    StateNotifierProvider<ColorPickerProvider, ColorPicker>(
+  (ref) => ColorPickerProvider(
+    ref.read(themeProvider).selectedIndex,
+    ref.read(themeProvider).primaryColor,
+  ),
+);
+
+class ColorPicker {
+//選択している色のindex
+  late int checkedItemIndex;
 
   //0~255
-  late int _red;
-  late int _green;
-  late int _blue;
+  late int red;
+  late int green;
+  late int blue;
 
   TextEditingController rController = TextEditingController();
   TextEditingController gController = TextEditingController();
   TextEditingController bController = TextEditingController();
 
-  /*
-   * コンストラクタ
-   * @param checkedItemIndex : 選択されている色のindex
-   * @param primaryColor : 現在のプライマリーカラー
-   */
-  ColorPickerProvider(int checkedItemIndex, Color primaryColor) {
-    _init(checkedItemIndex, primaryColor);
+  ColorPicker({
+    required this.checkedItemIndex,
+    required this.red,
+    required this.green,
+    required this.blue,
+  }) {
+    rController.text = red.toString();
+    gController.text = green.toString();
+    bController.text = blue.toString();
   }
 
-  /*
-   * 初期化
-   * @param index : 選択されている色のindex
-   * @param color : 現在のプライマリーカラー
-   */
-  void _init(int index, Color color) {
-    _checkedItemIndex = index;
-    _red = color.red;
-    _green = color.green;
-    _blue = color.blue;
-    rController.text = _red.toString();
-    gController.text = _green.toString();
-    bController.text = _blue.toString();
+  ColorPicker copyWith({
+    int? checkedItemIndex,
+    int? red,
+    int? green,
+    int? blue,
+  }) {
+    return ColorPicker(
+      checkedItemIndex: checkedItemIndex ?? this.checkedItemIndex,
+      red: red ?? this.red,
+      green: green ?? this.green,
+      blue: blue ?? this.blue,
+    );
   }
+}
+
+class ColorPickerProvider extends StateNotifier<ColorPicker> {
+  ColorPickerProvider(int checkedItemIndex, Color primaryColor)
+      : super(ColorPicker(
+          checkedItemIndex: checkedItemIndex,
+          red: primaryColor.red,
+          green: primaryColor.green,
+          blue: primaryColor.blue,
+        ));
 
   /*
    * 選択されている色のindexを取得
    * @param @return int : 選択されている色のindex
    */
   int getCheckedItemIndex() {
-    return _checkedItemIndex;
+    return state.checkedItemIndex;
   }
 
   /*
@@ -54,8 +75,12 @@ class ColorPickerProvider extends ChangeNotifier {
    * @param color : 現在のプライマリーカラー
    */
   void changeCheckedItemIndex(int index, Color color) {
-    _init(index, color);
-    notifyListeners();
+    state = state.copyWith(
+      checkedItemIndex: index,
+      red: color.red,
+      green: color.green,
+      blue: color.blue,
+    );
   }
 
   /* RGBEditor
@@ -72,10 +97,11 @@ class ColorPickerProvider extends ChangeNotifier {
     int? g,
     int? b,
   }) {
-    if (r != null) _red = r;
-    if (g != null) _green = g;
-    if (b != null) _blue = b;
-    notifyListeners();
+    state = state.copyWith(
+      red: r,
+      green: g,
+      blue: b,
+    );
   }
 
   /*
@@ -83,7 +109,7 @@ class ColorPickerProvider extends ChangeNotifier {
    * @param @return Color : 現在の色
    */
   Color getColor() {
-    return Color.fromARGB(255, _red, _green, _blue);
+    return Color.fromARGB(255, state.red, state.green, state.blue);
   }
 
   /*

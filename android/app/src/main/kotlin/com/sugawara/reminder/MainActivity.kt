@@ -1,8 +1,8 @@
+
 package com.sugawara.reminder
 
 import io.flutter.embedding.android.FlutterActivity
 
-import android.os.Bundle
 import android.content.ContentValues
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugins.GeneratedPluginRegistrant
@@ -18,14 +18,6 @@ import com.sugawara.reminder.sqlite.notificationsTags.NotificationsTagsHelper
 import android.util.Log
 
 class MainActivity: FlutterActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState);
-        if (getIntent().getAction().equals("add_reminder_shortcut")){
-            Log.d("ON_CREATE:", "success");
-            }
-        }
-    }
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         GeneratedPluginRegistrant.registerWith(flutterEngine)

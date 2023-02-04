@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
+import 'package:riverpod_context/riverpod_context.dart';
 
 import '../../provider/search/search_provider.dart';
 
 class SearchBar {
   static PreferredSizeWidget generate(BuildContext context) {
-    var provider = Provider.of<SearchProvider>(context);
-    provider.isKeyboardShown = 0 < MediaQuery.of(context).viewInsets.bottom;
+    context.read(searchProvider).isKeyboardShown =
+        0 < MediaQuery.of(context).viewInsets.bottom;
 
     return AppBar(
       title: TextField(
         autofocus: true,
         style: Theme.of(context).textTheme.headline6,
-        controller: provider.controller,
-        focusNode: provider.focusNode,
+        controller: context.read(searchProvider).controller,
+        focusNode: context.read(searchProvider).focusNode,
         onChanged: (str) {
-          provider.search(str);
+          context.read(searchProvider.notifier).search(str);
         },
         decoration: InputDecoration(
           contentPadding:
@@ -29,8 +29,8 @@ class SearchBar {
         IconButton(
           icon: const Icon(Icons.clear),
           onPressed: () {
-            provider.controller.clear();
-            provider.search("");
+            context.read(searchProvider).controller.clear();
+            context.read(searchProvider.notifier).search("");
           },
         )
       ],

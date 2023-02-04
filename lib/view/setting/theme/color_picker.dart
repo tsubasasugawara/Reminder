@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reminder/utils/brightness/brightness.dart';
 import 'package:reminder/provider/setting/theme/color_picker_provider.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
@@ -11,7 +11,6 @@ class ColorPicker extends StatelessWidget {
   late int columnCount;
   late double mainAxisSpacing;
   late double crossAxisSpacing;
-  late int checkedItemIndex;
   late double checkedItemIconSize;
   late double width;
 
@@ -29,7 +28,6 @@ class ColorPicker extends StatelessWidget {
   ColorPicker({
     required this.onPressed,
     required this.colors,
-    required this.checkedItemIndex,
     required this.width,
     int? columnCount,
     double? mainAxisSpacing,
@@ -50,16 +48,15 @@ class ColorPicker extends StatelessWidget {
    * @param name : フォームの名前
    * @param color : nameのテキストカラー
    * @param action : 変更時の処理
-   * @param provider : ColorPickerProvider
    * @return Widget : フォーム
    */
   Widget _textField(
     BuildContext context,
+    WidgetRef ref,
     TextEditingController controller,
     String name,
     Color color,
     Function(int) action,
-    ColorPickerProvider provider,
   ) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -81,7 +78,9 @@ class ColorPicker extends StatelessWidget {
             maxLines: 1,
             textAlign: TextAlign.center,
             onChanged: (value) {
-              provider.checkEditorValue(controller, value, action);
+              ref
+                  .read(colorPickerProvider.notifier)
+                  .checkEditorValue(controller, value, action);
             },
             style: Theme.of(context).textTheme.bodyText1?.apply(
                   fontSizeFactor: 1,
@@ -111,13 +110,12 @@ class ColorPicker extends StatelessWidget {
 
   /*
    * カラー選択ボタンを作成
-   * @param provider : ColorPickerProvider
    * @param color : ボタンの色
    * @param index : 選択されている色のindex
    * @return Widget : カラー選択ボタン
    */
   Widget _createColorButton(
-    ColorPickerProvider provider,
+    WidgetRef ref,
     Color color,
     int index,
   ) {
@@ -130,152 +128,169 @@ class ColorPicker extends StatelessWidget {
       ),
       onPressed: () {
         onPressed(color.value, index);
-        provider.changeCheckedItemIndex(index, color);
+        ref
+            .read(colorPickerProvider.notifier)
+            .changeCheckedItemIndex(index, color);
       },
-      child: provider.getCheckedItemIndex() == index
-          ? Icon(
-              Icons.check,
-              size: checkedItemIconSize,
-              color: judgeBlackWhite(
-                Color(color.value),
-              ),
-            )
-          : null,
+      child:
+          ref.read(colorPickerProvider.notifier).getCheckedItemIndex() == index
+              ? Icon(
+                  Icons.check,
+                  size: checkedItemIconSize,
+                  color: judgeBlackWhite(
+                    Color(color.value),
+                  ),
+                )
+              : null,
     );
   }
 
   /*
    * カラー選択ボタンのリストを作成
-   * @param provider : ColorPickerProvider
    * @return List<Widget : カラー選択ボタンのリスト
    */
-  List<Widget> createButtonsList(ColorPickerProvider provider) {
+  List<Widget> createButtonsList(WidgetRef ref) {
     return [
       for (int index = 0; index < colors.length; index++)
-        _createColorButton(provider, Color(colors[index]), index)
+        _createColorButton(ref, Color(colors[index]), index)
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    Color primaryColor = Theme.of(context).primaryColor;
-    return ChangeNotifierProvider(
-      create: (context) => ColorPickerProvider(checkedItemIndex, primaryColor),
-      child: Consumer<ColorPickerProvider>(
-        builder: (context, provider, child) {
-          return Column(
-            children: [
-              Container(
-                width: width,
-                margin: const EdgeInsets.only(bottom: 30),
-                child: GridView.count(
-                  shrinkWrap: true,
-                  children: createButtonsList(provider),
-                  crossAxisCount: columnCount,
-                  mainAxisSpacing: mainAxisSpacing,
-                  crossAxisSpacing: crossAxisSpacing,
-                  controller: ScrollController(
-                    keepScrollOffset: false,
-                  ),
+    return Consumer(
+      builder: (context, ref, child) {
+        return Column(
+          children: [
+            Container(
+              width: width,
+              margin: const EdgeInsets.only(bottom: 30),
+              child: GridView.count(
+                shrinkWrap: true,
+                children: createButtonsList(ref),
+                crossAxisCount: columnCount,
+                mainAxisSpacing: mainAxisSpacing,
+                crossAxisSpacing: crossAxisSpacing,
+                controller: ScrollController(
+                  keepScrollOffset: false,
                 ),
               ),
-              Center(
-                child: Column(
-                  children: [
-                    Row(
+            ),
+            Center(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(left: 5),
+                        child: _textField(
+                          context,
+                          ref,
+                          ref.watch(colorPickerProvider).rController,
+                          "Red",
+                          Colors.red,
+                          (red) {
+                            ref
+                                .read(colorPickerProvider.notifier)
+                                .editRGB(r: red);
+                          },
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 5),
+                        child: _textField(
+                          context,
+                          ref,
+                          ref.watch(colorPickerProvider).gController,
+                          "Green",
+                          Colors.green,
+                          (green) {
+                            ref
+                                .read(colorPickerProvider.notifier)
+                                .editRGB(g: green);
+                          },
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 5),
+                        child: _textField(
+                          context,
+                          ref,
+                          ref.watch(colorPickerProvider).bController,
+                          "Blue",
+                          Colors.blue,
+                          (blue) {
+                            ref
+                                .read(colorPickerProvider.notifier)
+                                .editRGB(b: blue);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 15),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        _createColorButton(
+                            ref,
+                            ref.read(colorPickerProvider.notifier).getColor(),
+                            -1),
                         Container(
-                          margin: const EdgeInsets.only(left: 5),
-                          child: _textField(
-                            context,
-                            provider.rController,
-                            "Red",
-                            Colors.red,
-                            (red) {
-                              provider.editRGB(r: red);
-                            },
-                            provider,
+                          margin: const EdgeInsets.only(
+                            top: 10,
                           ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 5),
-                          child: _textField(
-                            context,
-                            provider.gController,
-                            "Green",
-                            Colors.green,
-                            (green) {
-                              provider.editRGB(g: green);
-                            },
-                            provider,
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 5),
-                          child: _textField(
-                            context,
-                            provider.bController,
-                            "Blue",
-                            Colors.blue,
-                            (blue) {
-                              provider.editRGB(b: blue);
-                            },
-                            provider,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          _createColorButton(provider, provider.getColor(), -1),
-                          Container(
-                            margin: const EdgeInsets.only(
-                              top: 10,
-                            ),
-                            child: ElevatedButton.icon(
-                              style: ButtonStyle(
-                                minimumSize: MaterialStateProperty.all(
-                                  const Size(110, 40),
-                                ),
-                                maximumSize: MaterialStateProperty.all(
-                                  const Size(110, 40),
-                                ),
+                          child: ElevatedButton.icon(
+                            style: ButtonStyle(
+                              minimumSize: MaterialStateProperty.all(
+                                const Size(110, 40),
                               ),
-                              onPressed: () {
-                                onPressed(provider.getColor().value, -1);
-                                provider.changeCheckedItemIndex(
-                                    -1, provider.getColor());
-                              },
-                              icon: Icon(
-                                Icons.refresh,
+                              maximumSize: MaterialStateProperty.all(
+                                const Size(110, 40),
+                              ),
+                            ),
+                            onPressed: () {
+                              onPressed(
+                                  ref
+                                      .read(colorPickerProvider.notifier)
+                                      .getColor()
+                                      .value,
+                                  -1);
+                              ref
+                                  .read(colorPickerProvider.notifier)
+                                  .changeCheckedItemIndex(
+                                      -1,
+                                      ref
+                                          .read(colorPickerProvider.notifier)
+                                          .getColor());
+                            },
+                            icon: Icon(
+                              Icons.refresh,
+                              color: judgeBlackWhite(
+                                Theme.of(context).backgroundColor,
+                              ),
+                            ),
+                            label: Text(
+                              AppLocalizations.of(context)!.refresh,
+                              style: TextStyle(
                                 color: judgeBlackWhite(
                                   Theme.of(context).backgroundColor,
                                 ),
                               ),
-                              label: Text(
-                                AppLocalizations.of(context)!.refresh,
-                                style: TextStyle(
-                                  color: judgeBlackWhite(
-                                    Theme.of(context).backgroundColor,
-                                  ),
-                                ),
-                              ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              )
-            ],
-          );
-        },
-      ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        );
+      },
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_context/riverpod_context.dart';
 import 'package:reminder/view/search/search_bar.dart';
 
 import '../../utils/brightness/brightness.dart';
@@ -10,14 +11,11 @@ import '../home/list/list_item.dart';
 
 // ignore: must_be_immutable
 class SearchView extends StatelessWidget {
-  late List<Map> dataList;
-  late bool isTrash;
+  const SearchView({Key? key}) : super(key: key);
 
-  SearchView(this.dataList, this.isTrash, {Key? key}) : super(key: key);
-
-  Widget _fab(BuildContext context, SearchProvider provider) {
+  Widget _fab(BuildContext context) {
     return Visibility(
-      visible: provider.isKeyboardShown,
+      visible: context.read(searchProvider).isKeyboardShown,
       child: FloatingActionButton(
         onPressed: () {
           FocusManager.instance.primaryFocus?.unfocus();
@@ -33,55 +31,49 @@ class SearchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => SearchProvider(dataList),
-      builder: (context, child) {
-        var provider = Provider.of<SearchProvider>(context);
+    return Scaffold(
+      appBar: SearchBar.generate(context),
+      body: Consumer(builder: (context, ref, child) {
+        var displayDataList = ref.watch(searchProvider).displayDataList;
 
-        return Scaffold(
-          appBar: SearchBar.generate(context),
-          body: ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: provider.displayDataList.length,
-            itemBuilder: (BuildContext context, int index) {
-              return GestureDetector(
-                onTap: () {
-                  // タップしても遷移できない
-                  Navigator.of(context).pop();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return AddReminderView(
-                          id: provider.displayDataList[index]
-                              [Notifications.idKey],
-                          title: provider.displayDataList[index]
-                              [Notifications.titleKey],
-                          content: provider.displayDataList[index]
-                              [Notifications.contentKey],
-                          time: provider.displayDataList[index]
-                              [Notifications.timeKey],
-                          setAlarm: provider.displayDataList[index]
-                              [Notifications.setAlarmKey],
-                          frequency: provider.displayDataList[index]
-                              [Notifications.frequencyKey],
-                          isTrash: isTrash,
-                        );
-                      },
-                    ),
-                  );
-                },
-                child: ListItem(
-                  false,
-                  provider.displayDataList[index][Notifications.titleKey],
-                  provider.displayDataList[index][Notifications.setAlarmKey],
-                  provider.displayDataList[index][Notifications.timeKey],
-                ),
-              );
-            },
-          ),
-          floatingActionButton: _fab(context, provider),
+        return ListView.builder(
+          padding: const EdgeInsets.all(8),
+          itemCount: displayDataList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return GestureDetector(
+              onTap: () {
+                // タップしても遷移できない
+                Navigator.of(context).pop();
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return AddReminderView(
+                        id: displayDataList[index][Notifications.idKey],
+                        title: displayDataList[index][Notifications.titleKey],
+                        content: displayDataList[index]
+                            [Notifications.contentKey],
+                        time: displayDataList[index][Notifications.timeKey],
+                        setAlarm: displayDataList[index]
+                            [Notifications.setAlarmKey],
+                        frequency: displayDataList[index]
+                            [Notifications.frequencyKey],
+                        isTrash: ref.read(searchProvider).isTrash,
+                      );
+                    },
+                  ),
+                );
+              },
+              child: ListItem(
+                false,
+                displayDataList[index][Notifications.titleKey],
+                displayDataList[index][Notifications.setAlarmKey],
+                displayDataList[index][Notifications.timeKey],
+              ),
+            );
+          },
         );
-      },
+      }),
+      floatingActionButton: _fab(context),
     );
   }
 }
