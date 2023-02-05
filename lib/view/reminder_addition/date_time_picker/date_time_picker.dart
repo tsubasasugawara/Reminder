@@ -1,14 +1,15 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+import 'package:reminder/provider/reminder_addition/datetime/datetime_provider.dart';
+import 'package:reminder/provider/reminder_addition/datetime/repeating_setting/repeating_setting_provider.dart';
 import 'package:reminder/utils/brightness/brightness.dart';
-import 'package:reminder/provider/add_reminder/datetime/repeating_setting/repeating_dialog_button_provider.dart';
-import 'package:reminder/provider/add_reminder/datetime/time_provider.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/setting/theme/theme_provider.dart';
 import 'package:reminder/utils/complete_and_cancel_button/complete_and_cancel_button.dart';
-import 'package:reminder/view/add_reminder/date_time_picker/repeating_setting_view.dart';
+import 'package:reminder/view/reminder_addition/date_time_picker/repeating_setting_view.dart';
+import 'package:riverpod_context/riverpod_context.dart';
 
 import '../../../utils/pair/pair.dart';
 
@@ -17,40 +18,6 @@ class DateTimePicker {
   static const Size _calendarLandscapeDialogSize = Size(496.0, 346.0);
   static const Duration _dialogSizeAnimationDuration =
       Duration(milliseconds: 200);
-
-  int year = 0;
-  int month = 0;
-  int day = 0;
-  int hour = 0;
-  int minute = 0;
-
-  int? _frequency;
-
-  /*
-   * コンストラクタ
-   * @param dt : 日時の初期値
-   */
-  DateTimePicker(DateTime dt, this._frequency) {
-    year = dt.year;
-    month = dt.month;
-    day = dt.day;
-    hour = dt.hour;
-    minute = dt.minute;
-  }
-
-  /*
-   * 日時を取得
-   * @return DateTime : 時刻
-   */
-  DateTime _getDateTime() {
-    var dt = DateTime(year, month, day, hour, minute);
-    var dtn = DateTime.now();
-    if (dt.millisecondsSinceEpoch - dtn.millisecondsSinceEpoch < 0) {
-      return dtn;
-    } else {
-      return dt;
-    }
-  }
 
   /*
    * ダイアログのサイズ
@@ -77,10 +44,13 @@ class DateTimePicker {
     BuildContext context,
     Color backgroundColor,
   ) {
-    return ChangeNotifierProvider(
-      create: (_) => RepeatingDialogButtonProvider(context, _frequency),
-      child: Consumer<RepeatingDialogButtonProvider>(
-          builder: (context, provider, child) {
+    return Consumer(
+      builder: (context, ref, child) {
+        var days = ref.watch(repeatingSettingProvider).days;
+        var option = ref.watch(repeatingSettingProvider).option;
+        var buttonMsg =
+            RepeatingSettingProvider.buttonMsg(context, days, option);
+
         return ElevatedButton.icon(
           icon: Icon(
             Icons.repeat,
@@ -89,21 +59,17 @@ class DateTimePicker {
             ),
           ),
           label: Text(
-            provider.buttonMsg,
+            buttonMsg,
             style: TextStyle(
               color: Theme.of(context).textTheme.bodyText1!.color,
             ),
           ),
           onPressed: () async {
-            var res = await RepeatingSettingView(_frequency)
+            await RepeatingSettingView(ref.read(repeatingSettingProvider).days)
                 .showSettingRepeatDays(context);
-            if (res != null) {
-              _frequency = res;
-              provider.changeFrequency(_frequency);
-            }
           },
         );
-      }),
+      },
     );
   }
 
@@ -125,8 +91,8 @@ class DateTimePicker {
       context: context,
       builder: (context) {
         return Theme(
-          data: Provider.of<ThemeProvider>(context).uiMode ==
-                  ThemeProvider.darkTheme
+          data: context.read(themeProvider).uiMode ==
+                  ThemeProviderData.darkTheme
               ? Theme.of(context).copyWith(
                   colorScheme: ColorScheme.dark(
                     primary: Theme.of(context).primaryColor,
@@ -165,25 +131,28 @@ class DateTimePicker {
                           Expanded(
                             child: CalendarDatePicker(
                               firstDate: DateTime.now(),
-                              initialDate: _getDateTime(),
+                              initialDate: context.read(dateTimeProvider).dt,
                               lastDate: DateTime(
                                 DateTime.now().year + 10,
                                 DateTime.now().month,
                                 DateTime.now().day,
                               ),
                               onDateChanged: (DateTime value) {
-                                year = value.year;
-                                month = value.month;
-                                day = value.day;
+                                context
+                                    .read(dateTimeProvider.notifier)
+                                    .changeDate(
+                                      year: value.year,
+                                      month: value.month,
+                                      day: value.day,
+                                    );
                               },
                             ),
                           ),
-                          ChangeNotifierProvider(
-                            create: (BuildContext context) =>
-                                TimeProvider(hour, minute),
-                            child: Consumer<TimeProvider>(
-                              builder: (context, timeProvider, child) =>
-                                  Container(
+                          Consumer(
+                            builder: (context, ref, child) {
+                              var dt = ref.watch(dateTimeProvider).dt;
+
+                              return Container(
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 child: ElevatedButton.icon(
                                   onPressed: () async {
@@ -191,16 +160,19 @@ class DateTimePicker {
                                       context: context,
                                       confirmText:
                                           AppLocalizations.of(context)!.ok,
-                                      initialTime:
-                                          TimeOfDay(hour: hour, minute: minute),
+                                      initialTime: TimeOfDay(
+                                          hour: dt.hour, minute: dt.minute),
                                       builder: (context, child) {
                                         return child!;
                                       },
                                     );
                                     if (picked != null) {
-                                      hour = picked.hour;
-                                      minute = picked.minute;
-                                      timeProvider.changeTime(hour, minute);
+                                      ref
+                                          .read(dateTimeProvider.notifier)
+                                          .changeTime(
+                                            hour: picked.hour,
+                                            minute: picked.minute,
+                                          );
                                     }
                                   },
                                   icon: Icon(
@@ -214,11 +186,11 @@ class DateTimePicker {
                                             .timeFormat)
                                         .format(
                                       DateTime(
-                                        year,
-                                        month,
-                                        day,
-                                        hour,
-                                        minute,
+                                        dt.year,
+                                        dt.month,
+                                        dt.day,
+                                        dt.hour,
+                                        dt.minute,
                                       ),
                                     ),
                                     style: TextStyle(
@@ -229,8 +201,8 @@ class DateTimePicker {
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
+                              );
+                            },
                           ),
                           _generateRepeatSettingButton(
                               context, backgroundColor),
@@ -239,19 +211,7 @@ class DateTimePicker {
                               Navigator.pop(context);
                             },
                             () {
-                              Navigator.pop(
-                                context,
-                                Pair(
-                                  DateTime(
-                                    year,
-                                    month,
-                                    day,
-                                    hour,
-                                    minute,
-                                  ),
-                                  _frequency,
-                                ),
-                              );
+                              Navigator.pop(context);
                             },
                           ),
                         ],

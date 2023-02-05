@@ -4,7 +4,7 @@ import 'package:reminder/model/db/notifications.dart';
 import 'package:reminder/model/home/home_list_model.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/selection_item_provider.dart';
-import 'package:reminder/view/add_reminder/add_reminder_view.dart';
+import 'package:reminder/view/reminder_addition/reminder_addition_view.dart';
 import 'package:reminder/view/home/confirmation_dialog.dart';
 
 import '../../model/db/db.dart';
@@ -156,25 +156,21 @@ class HomeProvider extends StateNotifier<Home> {
     int? index,
     bool isTrash = false,
   }) async {
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) {
-          if (index != null) {
-            return AddReminderView(
-              id: state.dataList[index][Notifications.idKey],
-              title: state.dataList[index][Notifications.titleKey],
-              content: state.dataList[index][Notifications.contentKey],
-              time: state.dataList[index][Notifications.timeKey],
-              setAlarm: state.dataList[index][Notifications.setAlarmKey],
-              frequency: state.dataList[index][Notifications.frequencyKey],
-              isTrash: isTrash,
-            );
-          }
-          return AddReminderView();
-        },
-      ),
-    );
-    setData();
+    if (index != null) {
+      await ReminderAdditionalView.moveTo(
+        context,
+        id: state.dataList[index][Notifications.idKey],
+        title: state.dataList[index][Notifications.titleKey],
+        content: state.dataList[index][Notifications.contentKey],
+        time: state.dataList[index][Notifications.timeKey],
+        setAlarm: state.dataList[index][Notifications.setAlarmKey],
+        frequency: state.dataList[index][Notifications.frequencyKey],
+        isTrash: isTrash,
+      );
+    } else {
+      await ReminderAdditionalView.moveTo(context, isTrash: isTrash);
+    }
+    update();
   }
 
   /*

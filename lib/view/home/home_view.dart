@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reminder/utils/brightness/brightness.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/home/home_provider.dart';
-import 'package:reminder/view/add_reminder/add_reminder_view.dart';
+import 'package:reminder/view/reminder_addition/reminder_addition_view.dart';
 import 'package:reminder/view/home/appBar/actions.dart' as actions;
 import 'package:reminder/view/trash/trash.dart';
 import 'package:riverpod_context/riverpod_context.dart';
@@ -118,13 +118,8 @@ class MainView extends StatelessWidget {
       visible: MediaQuery.of(context).viewInsets.bottom <= 0,
       child: FloatingActionButton(
         onPressed: () async {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) {
-                return AddReminderView();
-              },
-            ),
-          );
+          // TODO: ホームにいることを示すbool型の定数を作成
+          await ReminderAdditionalView.moveTo(context, isTrash: false);
           context.read(homeProvider.notifier).update();
           context.read(homeProvider.notifier).allSelectOrNot(false);
         },

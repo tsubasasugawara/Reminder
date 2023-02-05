@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:reminder/provider/reminder_addition/alarm_switch.dart';
+import 'package:reminder/provider/reminder_addition/datetime/datetime_provider.dart';
+import 'package:reminder/provider/reminder_addition/datetime/repeating_setting/repeating_setting_provider.dart';
 import 'package:reminder/utils/snack_bar/snackbar.dart';
-import 'package:reminder/model/add_reminder/add_reminder_model.dart';
+import 'package:reminder/model/reminder_addition/reminder_addition_model.dart';
 import 'package:reminder/model/db/notifications.dart';
 import 'package:reminder/model/platform/kotlin.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
+import 'package:riverpod_context/riverpod_context.dart';
 
-class AddReminderProvider {
+class ReminderAdditionalProvider {
   late AddReminderModel model;
 
   TextEditingController titleController = TextEditingController();
@@ -25,7 +29,7 @@ class AddReminderProvider {
    * @param time : 発火時間
    * @param setAlarm : アラームがオン(1)かオフ(0)か
    */
-  AddReminderProvider(
+  ReminderAdditionalProvider(
     int? id,
     String? title,
     String? content,
@@ -43,43 +47,23 @@ class AddReminderProvider {
   }
 
   /*
-   * 編集中のデータを一時的に保存する
-   * @param title : タイトル
-   * @param content : メモ
-   * @param time : 発火時間
-   * @param setAlarm : オン(1),オフ(0)
+   * データベースに保存する
+   * @return [id, status] : [保存したデータのID, 保存(1)か更新(0)か失敗(null)]
    */
-  void setData({
-    String? title,
-    String? content,
-    int? time,
-    int? setAlarm,
-    int? frequency,
-  }) {
-    model.editData(
+  Future<List<int>?> _saveToDb({
+    required String title,
+    required String content,
+    required int time,
+    required int setAlarm,
+    required int? frequency,
+  }) async {
+    var res = await model.updateOrInsert(
       title: title,
       content: content,
       time: time,
       setAlarm: setAlarm,
       frequency: frequency,
     );
-  }
-
-  /*
-   * modelから編集中のデータを取得
-   * @param key:データのキー値
-   * @return dynamic:キーに格納されているデータ
-   */
-  dynamic getData(String key) {
-    return model.getBeingEditingData()[key];
-  }
-
-  /*
-   * データベースに保存する
-   * @return [id, status] : [保存したデータのID, 保存(1)か更新(0)か失敗(null)]
-   */
-  Future<List<int>?> _saveToDb() async {
-    var res = await model.updateOrInsert();
     var id = res[0];
     var status = res[1];
 
@@ -96,26 +80,19 @@ class AddReminderProvider {
    * @param status : 保存(1)か更新(0)
    * @param 更新の場合はアラームを削除してから登録しなおす
    */
-  Future<void> _registerAlarm(int id, int status) async {
-    var before = model.getBeforeEditingData();
-    var being = model.getBeingEditingData();
+  Future<void> _registerAlarm(
+    int id,
+    int status, {
+    required String title,
+    String content = "",
+    required int time,
+    int frequency = Notifications.notRepeating,
+    int? setAlarm,
+  }) async {
+    await Kotlin.deleteAlarm(id, title, content, time, frequency);
+    if (setAlarm == null || setAlarm == 0) return;
 
-    await Kotlin.deleteAlarm(
-      id,
-      before[Notifications.titleKey] ?? being[Notifications.titleKey],
-      before[Notifications.contentKey] ?? being[Notifications.contentKey],
-      before[Notifications.timeKey] ?? being[Notifications.timeKey],
-      being[Notifications.frequencyKey] ?? being[Notifications.frequencyKey],
-    );
-    if (being[Notifications.setAlarmKey] == 0) return;
-
-    await Kotlin.registAlarm(
-      id,
-      being[Notifications.titleKey],
-      being[Notifications.contentKey],
-      being[Notifications.timeKey],
-      being[Notifications.frequencyKey],
-    );
+    await Kotlin.registAlarm(id, title, content, time, frequency);
   }
 
   /*
@@ -131,9 +108,9 @@ class AddReminderProvider {
    * 発火時間の確認
    * @return bool : 正常(true),異常(false)
    */
-  bool _timeValidate() {
-    var diff = model.getBeingEditingData()[Notifications.timeKey] -
-        DateTime.now().millisecondsSinceEpoch;
+  bool _timeValidate(DateTime dt) {
+    var diff =
+        dt.millisecondsSinceEpoch - DateTime.now().millisecondsSinceEpoch;
 
     if (diff <= 0) {
       return false;
@@ -146,7 +123,7 @@ class AddReminderProvider {
    * @return bool : オン(true),オフ(false)
    */
   bool _checkSettingAlarm(int num) {
-    return num == 0 ? false : true;
+    return num == Notifications.alarmOff ? false : true;
   }
 
   /*
@@ -154,6 +131,19 @@ class AddReminderProvider {
    * @param context : BuildContext
    */
   Future<void> saveBtn(BuildContext context) async {
+    var title = titleController.text;
+    var content = contentController.text;
+    var dateTime = context.read(dateTimeProvider).dt;
+    var setAlarm = context.read(alarmSwhitchProvider).setAlarm;
+    var days = context.read(repeatingSettingProvider).days;
+    var option = context.read(repeatingSettingProvider).option;
+    int frequency;
+    if (days > 0) {
+      frequency = days;
+    } else {
+      frequency = option;
+    }
+
     if (_titleValidate() == false) {
       ShowSnackBar(
         context,
@@ -163,9 +153,7 @@ class AddReminderProvider {
       return;
     }
 
-    if (_checkSettingAlarm(
-            model.getBeingEditingData()[Notifications.setAlarmKey]) &&
-        _timeValidate() == false) {
+    if (_checkSettingAlarm(setAlarm) && _timeValidate(dateTime) == false) {
       ShowSnackBar(
         context,
         AppLocalizations.of(context)!.dateTimeError,
@@ -174,10 +162,25 @@ class AddReminderProvider {
       return;
     }
 
-    var res = await _saveToDb();
+    // TODO:処理がわかりづらい
+    var res = await _saveToDb(
+      title: title,
+      content: content,
+      time: dateTime.millisecondsSinceEpoch,
+      setAlarm: setAlarm,
+      frequency: frequency,
+    );
     if (res == null) return;
 
-    _registerAlarm(res[0], res[1]);
+    _registerAlarm(
+      res[0],
+      res[1],
+      title: title,
+      content: content,
+      time: dateTime.millisecondsSinceEpoch,
+      setAlarm: setAlarm,
+      frequency: frequency,
+    );
 
     ShowSnackBar(
       context,
@@ -191,7 +194,13 @@ class AddReminderProvider {
       titleController.clear();
       contentController.clear();
     } else {
-      model.copyToBeforeEditingData();
+      model.changeBeforeEditingData(
+        title: title,
+        content: content,
+        time: dateTime.millisecondsSinceEpoch,
+        setAlarm: setAlarm,
+        frequency: frequency,
+      );
     }
   }
 }

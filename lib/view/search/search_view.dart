@@ -6,7 +6,7 @@ import 'package:reminder/view/search/search_bar.dart';
 import '../../utils/brightness/brightness.dart';
 import '../../model/db/notifications.dart';
 import '../../provider/search/search_provider.dart';
-import '../add_reminder/add_reminder_view.dart';
+import '../reminder_addition/reminder_addition_view.dart';
 import '../home/list/list_item.dart';
 
 // ignore: must_be_immutable
@@ -41,26 +41,18 @@ class SearchView extends StatelessWidget {
           itemCount: displayDataList.length,
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
-              onTap: () {
+              onTap: () async {
                 // タップしても遷移できない
                 Navigator.of(context).pop();
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return AddReminderView(
-                        id: displayDataList[index][Notifications.idKey],
-                        title: displayDataList[index][Notifications.titleKey],
-                        content: displayDataList[index]
-                            [Notifications.contentKey],
-                        time: displayDataList[index][Notifications.timeKey],
-                        setAlarm: displayDataList[index]
-                            [Notifications.setAlarmKey],
-                        frequency: displayDataList[index]
-                            [Notifications.frequencyKey],
-                        isTrash: ref.read(searchProvider).isTrash,
-                      );
-                    },
-                  ),
+                await ReminderAdditionalView.moveTo(
+                  context,
+                  id: displayDataList[index][Notifications.idKey],
+                  title: displayDataList[index][Notifications.titleKey],
+                  content: displayDataList[index][Notifications.contentKey],
+                  time: displayDataList[index][Notifications.timeKey],
+                  setAlarm: displayDataList[index][Notifications.setAlarmKey],
+                  frequency: displayDataList[index][Notifications.frequencyKey],
+                  isTrash: ref.read(searchProvider).isTrash,
                 );
               },
               child: ListItem(
