@@ -44,28 +44,29 @@ class ReminderAdditionalView extends StatelessWidget {
     int? frequency,
     required bool isTrash,
   }) async {
-    // TODO:初期値が入っていない(アラームのON/OFF, DateTime)
     var dt = time != null
         ? DateTime.fromMillisecondsSinceEpoch(time)
         : DateTime.now();
-    context
-        .read(alarmSwhitchProvider.notifier)
-        .changeAlarmOnOff(setAlarm ?? Notifications.alarmOff);
-    context
-        .read(dateTimeProvider.notifier)
-        .changeDateTime(dateTime: dt, frequency: frequency);
-    context.read(repeatingSettingProvider.notifier).setDays(frequency);
 
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
-        return ReminderAdditionalView(
-          id: id,
-          title: title,
-          content: content,
-          time: time,
-          setAlarm: setAlarm,
-          frequency: frequency,
-          isTrash: isTrash,
+        return ProviderScope(
+          overrides: [
+            alarmSwhitchProvider.overrideWith((ref) =>
+                AlarmSwitchProvider(setAlarm ?? Notifications.alarmOff)),
+            dateTimeProvider.overrideWith((ref) => DateTimeProvider(dt)),
+            repeatingSettingProvider
+                .overrideWith((ref) => RepeatingSettingProvider(frequency)),
+          ],
+          child: ReminderAdditionalView(
+            id: id,
+            title: title,
+            content: content,
+            time: time,
+            setAlarm: setAlarm,
+            frequency: frequency,
+            isTrash: isTrash,
+          ),
         );
       }),
     );

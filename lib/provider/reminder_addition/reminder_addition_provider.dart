@@ -9,6 +9,7 @@ import 'package:reminder/model/platform/kotlin.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:riverpod_context/riverpod_context.dart';
 
+// TODO:modelとの切り離し
 class ReminderAdditionalProvider {
   late AddReminderModel model;
 
