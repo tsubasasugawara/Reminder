@@ -46,7 +46,7 @@ class RepeatingSettingView {
                   ),
                   Text(
                     text,
-                    style: Theme.of(context).textTheme.bodyText1?.apply(
+                    style: Theme.of(context).textTheme.bodyLarge?.apply(
                           color: Theme.of(context).primaryColor,
                         ),
                   ),
@@ -75,14 +75,14 @@ class RepeatingSettingView {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
-                  width: Theme.of(context).textTheme.bodyText1!.fontSize! *
+                  width: Theme.of(context).textTheme.bodyLarge!.fontSize! *
                       numberOfCharacters,
                   child: TextField(
                     enabled: option == 0 ? true : false,
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
                     controller: ref.read(repeatingSettingProvider).controller,
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context).textTheme.bodyLarge,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Theme.of(context).highlightColor,
@@ -107,7 +107,7 @@ class RepeatingSettingView {
                             "1"
                         ? AppLocalizations.of(context)!.day
                         : AppLocalizations.of(context)!.days,
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
               ],
@@ -147,7 +147,7 @@ class RepeatingSettingView {
                 margin: const EdgeInsets.symmetric(vertical: 20),
                 child: Text(
                   AppLocalizations.of(context)!.repeatingInterval,
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
               _createDivider(context),

@@ -15,21 +15,15 @@ class ReminderAdditionalView extends StatelessWidget {
 
   ReminderAdditionalView({
     Key? key,
-    int? id,
     String? title,
     String? content,
-    int? time,
-    int? setAlarm,
-    int? frequency,
-    bool isTrash = false, // ごみ箱のアイテム(true)、それ以外(false)
+    int? id,
+    required bool isTrash, // ごみ箱のアイテム(true)、それ以外(false)
   }) : super(key: key) {
     provider = ReminderAdditionalProvider(
       id,
       title,
       content,
-      time,
-      setAlarm,
-      frequency,
       isTrash,
     );
   }
@@ -51,20 +45,22 @@ class ReminderAdditionalView extends StatelessWidget {
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
         return ProviderScope(
+          // TODO: DateTimePickerで値の取得と保存ができない
           overrides: [
-            alarmSwhitchProvider.overrideWith((ref) =>
-                AlarmSwitchProvider(setAlarm ?? Notifications.alarmOff)),
-            dateTimeProvider.overrideWith((ref) => DateTimeProvider(dt)),
-            repeatingSettingProvider
-                .overrideWith((ref) => RepeatingSettingProvider(frequency)),
+            alarmSwhitchProvider.overrideWith(
+              (ref) => AlarmSwitchProvider(setAlarm ?? Notifications.alarmOn),
+            ),
+            dateTimeProvider.overrideWith(
+              (ref) => DateTimeProvider(dt),
+            ),
+            repeatingSettingProvider.overrideWith(
+              (ref) => RepeatingSettingProvider(frequency),
+            ),
           ],
           child: ReminderAdditionalView(
             id: id,
             title: title,
             content: content,
-            time: time,
-            setAlarm: setAlarm,
-            frequency: frequency,
             isTrash: isTrash,
           ),
         );
@@ -90,13 +86,13 @@ class ReminderAdditionalView extends StatelessWidget {
               margin: const EdgeInsets.only(top: 10),
               child: TextFormField(
                 controller: provider.titleController,
-                style: Theme.of(context).textTheme.bodyText1?.apply(
+                style: Theme.of(context).textTheme.bodyLarge?.apply(
                       fontSizeDelta: 6,
                     ),
                 maxLines: 1,
                 decoration: InputDecoration(
                   hintText: AppLocalizations.of(context)!.titleHintText,
-                  hintStyle: Theme.of(context).textTheme.bodyText1?.apply(
+                  hintStyle: Theme.of(context).textTheme.bodyLarge?.apply(
                         fontSizeDelta: 6,
                         color: Theme.of(context).hintColor,
                       ),
@@ -112,11 +108,11 @@ class ReminderAdditionalView extends StatelessWidget {
                 child: TextFormField(
                   controller: provider.contentController,
                   expands: true,
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyLarge,
                   maxLines: null,
                   decoration: InputDecoration(
                     hintText: AppLocalizations.of(context)!.memoHintText,
-                    hintStyle: Theme.of(context).textTheme.bodyText1?.apply(
+                    hintStyle: Theme.of(context).textTheme.bodyLarge?.apply(
                           color: Theme.of(context).hintColor,
                         ),
                     border: InputBorder.none,
@@ -166,9 +162,6 @@ class ReminderAdditionalView extends StatelessWidget {
   ) {
     return TextButton.icon(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(
-          Theme.of(context).bottomAppBarColor,
-        ),
         foregroundColor: MaterialStateProperty.all(
           foregroundColor,
         ),
@@ -261,7 +254,9 @@ class ReminderAdditionalView extends StatelessWidget {
             color: Theme.of(context).primaryColor,
           ),
           label: Text(
-            ref.read(dateTimeProvider.notifier).dateTimeFormat(context),
+            ref
+                .read(dateTimeProvider.notifier)
+                .dateTimeFormat(AppLocalizations.of(context)!.dateTimeFormat),
             style: TextStyle(
               color: Theme.of(context).primaryColor,
             ),

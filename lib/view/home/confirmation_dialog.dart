@@ -25,7 +25,7 @@ class ConfirmationDialog extends StatelessWidget {
           child: Text(
             AppLocalizations.of(context)!.cancelButton,
             style: TextStyle(
-              color: judgeBlackWhite(Theme.of(context).backgroundColor),
+              color: judgeBlackWhite(Theme.of(context).colorScheme.background),
             ),
           ),
           onPressed: () => Navigator.of(context).pop(false),
@@ -42,7 +42,8 @@ class ConfirmationDialog extends StatelessWidget {
             child: Text(
               AppLocalizations.of(context)!.ok,
               style: TextStyle(
-                color: judgeBlackWhite(Theme.of(context).backgroundColor),
+                color:
+                    judgeBlackWhite(Theme.of(context).colorScheme.background),
               ),
             ),
           ),

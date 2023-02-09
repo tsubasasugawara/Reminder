@@ -33,11 +33,11 @@ class MainView extends StatelessWidget {
     return context.read(homeProvider).selectionMode
         ? Text(
             "  " + context.read(homeProvider).selectedItemsCnt.toString(),
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           )
         : Text(
             AppLocalizations.of(context)!.appTitle,
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           );
   }
 
@@ -57,7 +57,7 @@ class MainView extends StatelessWidget {
                 ),
                 Text(
                   AppLocalizations.of(context)!.appTitle,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ],
             ),

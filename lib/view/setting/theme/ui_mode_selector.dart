@@ -18,7 +18,7 @@ class UiModeSelector extends StatelessWidget {
           child: Text(
             AppLocalizations.of(context)!.uiModeSetting,
             style:
-                Theme.of(context).textTheme.bodyText1?.apply(fontSizeDelta: 3),
+                Theme.of(context).textTheme.bodyLarge?.apply(fontSizeDelta: 3),
           ),
         ),
         spacer.Spacer(20, 0, 0, 0),
@@ -43,7 +43,7 @@ class UiModeSelector extends StatelessWidget {
                             ? Icons.wb_sunny
                             : Icons.wb_sunny_outlined,
                         color: judgeBlackWhite(
-                          Theme.of(context).backgroundColor,
+                          Theme.of(context).colorScheme.background,
                         ),
                       ),
                       iconSize: 60,
@@ -59,7 +59,7 @@ class UiModeSelector extends StatelessWidget {
                             ? Icons.mode_night
                             : Icons.mode_night_outlined,
                         color: judgeBlackWhite(
-                          Theme.of(context).backgroundColor,
+                          Theme.of(context).colorScheme.background,
                         ),
                       ),
                       iconSize: 60,
@@ -75,7 +75,7 @@ class UiModeSelector extends StatelessWidget {
                             ? Icons.brightness_auto
                             : Icons.brightness_auto_outlined,
                         color: judgeBlackWhite(
-                          Theme.of(context).backgroundColor,
+                          Theme.of(context).colorScheme.background,
                         ),
                       ),
                       iconSize: 60,

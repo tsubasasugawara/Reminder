@@ -12,7 +12,7 @@ class SearchBar {
     return AppBar(
       title: TextField(
         autofocus: true,
-        style: Theme.of(context).textTheme.headline6,
+        style: Theme.of(context).textTheme.titleLarge,
         controller: context.read(searchProvider).controller,
         focusNode: context.read(searchProvider).focusNode,
         onChanged: (str) {

@@ -61,7 +61,7 @@ class ListItem extends StatelessWidget {
                 : Theme.of(context).hintColor,
             width: selected ? 2.5 : 1.5,
           ),
-          color: Theme.of(context).backgroundColor,
+          color: Theme.of(context).colorScheme.background,
         ),
         padding: const EdgeInsets.all(10),
         child: Container(
@@ -80,7 +80,7 @@ class ListItem extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: Theme.of(context).textTheme.bodyText1?.apply(
+                      style: Theme.of(context).textTheme.bodyLarge?.apply(
                             fontSizeDelta: 6,
                           ),
                       overflow: TextOverflow.ellipsis,
@@ -90,7 +90,7 @@ class ListItem extends StatelessWidget {
                       margin: const EdgeInsets.only(top: 5),
                       child: Text(
                         _alarmOnOff(context),
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: Theme.of(context).textTheme.bodyLarge,
                       ),
                     ),
                   ],

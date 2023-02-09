@@ -32,11 +32,11 @@ class Trash extends StatelessWidget {
     return context.read(trashProvider).selectionMode
         ? Text(
             "  " + context.read(trashProvider).selectedItemsCnt.toString(),
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           )
         : Text(
             AppLocalizations.of(context)!.trash,
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           );
   }
 
@@ -150,7 +150,7 @@ class Trash extends StatelessWidget {
                                     : Theme.of(context).hintColor,
                                 width: selectedItems[index] ? 2.5 : 1.5,
                               ),
-                              color: Theme.of(context).backgroundColor,
+                              color: Theme.of(context).colorScheme.background,
                             ),
                             padding: const EdgeInsets.all(10),
                             child: Container(
@@ -174,7 +174,7 @@ class Trash extends StatelessWidget {
                                               [Notifications.titleKey],
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodyText1
+                                              .bodyLarge
                                               ?.apply(
                                                 fontSizeDelta: 6,
                                               ),

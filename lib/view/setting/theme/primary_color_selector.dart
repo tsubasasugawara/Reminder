@@ -17,7 +17,7 @@ class PrimaryColorSelector extends StatelessWidget {
           child: Text(
             AppLocalizations.of(context)!.colorSetting,
             style:
-                Theme.of(context).textTheme.bodyText1?.apply(fontSizeDelta: 3),
+                Theme.of(context).textTheme.bodyLarge?.apply(fontSizeDelta: 3),
           ),
         ),
         Center(

@@ -80,7 +80,7 @@ class Actions {
                 ),
                 Text(
                   AppLocalizations.of(context)!.sortBy,
-                  style: Theme.of(context).textTheme.bodyText1?.apply(
+                  style: Theme.of(context).textTheme.bodyLarge?.apply(
                         color: Theme.of(context).primaryColor,
                       ),
                 ),
@@ -110,7 +110,7 @@ class Actions {
                 ),
                 Text(
                   AppLocalizations.of(context)!.topUpSetAlarmReminder,
-                  style: Theme.of(context).textTheme.bodyText1?.apply(
+                  style: Theme.of(context).textTheme.bodyLarge?.apply(
                         color: Theme.of(context).primaryColor,
                       ),
                 ),
@@ -151,7 +151,7 @@ class Actions {
                 ),
                 Text(
                   text,
-                  style: Theme.of(context).textTheme.bodyText1?.apply(
+                  style: Theme.of(context).textTheme.bodyLarge?.apply(
                         color: Theme.of(context).primaryColor,
                       ),
                 ),
@@ -242,7 +242,7 @@ class Actions {
                         margin: const EdgeInsets.symmetric(vertical: 20),
                         child: Text(
                           AppLocalizations.of(context)!.orderMethod,
-                          style: Theme.of(context).textTheme.bodyText1,
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
                       _makeDivider(),

@@ -63,7 +63,7 @@ class ColorPicker extends StatelessWidget {
       children: [
         Text(
           name,
-          style: Theme.of(context).textTheme.bodyText1?.apply(
+          style: Theme.of(context).textTheme.bodyLarge?.apply(
                 color: color,
                 fontSizeFactor: 1,
               ),
@@ -82,7 +82,7 @@ class ColorPicker extends StatelessWidget {
                   .read(colorPickerProvider.notifier)
                   .checkEditorValue(controller, value, action);
             },
-            style: Theme.of(context).textTheme.bodyText1?.apply(
+            style: Theme.of(context).textTheme.bodyLarge?.apply(
                   fontSizeFactor: 1,
                 ),
             decoration: InputDecoration(
@@ -269,14 +269,14 @@ class ColorPicker extends StatelessWidget {
                             icon: Icon(
                               Icons.refresh,
                               color: judgeBlackWhite(
-                                Theme.of(context).backgroundColor,
+                                Theme.of(context).colorScheme.background,
                               ),
                             ),
                             label: Text(
                               AppLocalizations.of(context)!.refresh,
                               style: TextStyle(
                                 color: judgeBlackWhite(
-                                  Theme.of(context).backgroundColor,
+                                  Theme.of(context).colorScheme.background,
                                 ),
                               ),
                             ),

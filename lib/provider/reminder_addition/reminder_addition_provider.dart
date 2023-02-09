@@ -9,9 +9,8 @@ import 'package:reminder/model/platform/kotlin.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:riverpod_context/riverpod_context.dart';
 
-// TODO:modelとの切り離し
 class ReminderAdditionalProvider {
-  late AddReminderModel model;
+  int? id;
 
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
@@ -31,20 +30,13 @@ class ReminderAdditionalProvider {
    * @param setAlarm : アラームがオン(1)かオフ(0)か
    */
   ReminderAdditionalProvider(
-    int? id,
+    this.id,
     String? title,
     String? content,
-    int? time,
-    int? setAlarm,
-    int? frequency,
     this.isTrash,
   ) {
-    model = AddReminderModel(id, title, content, time, setAlarm, frequency);
-
-    var before = model.getBeforeEditingData();
-
-    titleController.text = before[Notifications.titleKey] ?? "";
-    contentController.text = before[Notifications.contentKey] ?? "";
+    titleController.text = title ?? "";
+    contentController.text = content ?? "";
   }
 
   /*
@@ -58,7 +50,8 @@ class ReminderAdditionalProvider {
     required int setAlarm,
     required int? frequency,
   }) async {
-    var res = await model.updateOrInsert(
+    var res = await ReminderAdditionModel().updateOrInsert(
+      this.id,
       title: title,
       content: content,
       time: time,
@@ -149,7 +142,7 @@ class ReminderAdditionalProvider {
       ShowSnackBar(
         context,
         AppLocalizations.of(context)!.titleError,
-        Theme.of(context).errorColor,
+        Theme.of(context).colorScheme.error,
       );
       return;
     }
@@ -158,7 +151,7 @@ class ReminderAdditionalProvider {
       ShowSnackBar(
         context,
         AppLocalizations.of(context)!.dateTimeError,
-        Theme.of(context).errorColor,
+        Theme.of(context).colorScheme.error,
       );
       return;
     }
@@ -185,23 +178,15 @@ class ReminderAdditionalProvider {
 
     ShowSnackBar(
       context,
-      model.id == null
+      id == null
           ? AppLocalizations.of(context)!.saved
           : AppLocalizations.of(context)!.edited,
       Theme.of(context).primaryColor,
     );
 
-    if (model.id == null) {
+    if (id == null) {
       titleController.clear();
       contentController.clear();
-    } else {
-      model.changeBeforeEditingData(
-        title: title,
-        content: content,
-        time: dateTime.millisecondsSinceEpoch,
-        setAlarm: setAlarm,
-        frequency: frequency,
-      );
     }
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:reminder/view/reminder_addition/date_time_picker/date_time_picker.dart';
-import 'package:reminder/multilingualization/app_localizations.dart';
 
 import '../../../utils/pair/pair.dart';
 
@@ -72,10 +71,8 @@ class DateTimeProvider extends StateNotifier<DateTimeData> {
    * @param context : BuildContext
    * @return String : 整形した日時の文字列
    */
-  String dateTimeFormat(BuildContext context) {
-    return DateFormat(AppLocalizations.of(context)!.dateTimeFormat).format(
-      createDateTime(state.dt),
-    );
+  String dateTimeFormat(String format) {
+    return DateFormat(format).format(state.dt);
   }
 
   /*
@@ -84,13 +81,5 @@ class DateTimeProvider extends StateNotifier<DateTimeData> {
    */
   int getMilliSecondsFromEpoch() {
     return state.dt.millisecondsSinceEpoch;
-  }
-
-  /*
-   * 現在保存されている日時情報を基にインスタンス化
-   * @return DateTime : DateTimeインスタンス
-   */
-  DateTime createDateTime(DateTime dt) {
-    return DateTime(dt.year, dt.month, dt.day, dt.hour, dt.minute);
   }
 }

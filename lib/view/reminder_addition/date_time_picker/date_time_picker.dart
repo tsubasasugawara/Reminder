@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:reminder/provider/reminder_addition/datetime/datetime_provider.dart';
 import 'package:reminder/provider/reminder_addition/datetime/repeating_setting/repeating_setting_provider.dart';
 import 'package:reminder/utils/brightness/brightness.dart';
@@ -61,7 +60,7 @@ class DateTimePicker {
           label: Text(
             buttonMsg,
             style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1!.color,
+              color: Theme.of(context).textTheme.bodyLarge!.color,
             ),
           ),
           onPressed: () async {
@@ -182,21 +181,15 @@ class DateTimePicker {
                                     ),
                                   ),
                                   label: Text(
-                                    DateFormat(AppLocalizations.of(context)!
-                                            .timeFormat)
-                                        .format(
-                                      DateTime(
-                                        dt.year,
-                                        dt.month,
-                                        dt.day,
-                                        dt.hour,
-                                        dt.minute,
-                                      ),
-                                    ),
+                                    ref
+                                        .read(dateTimeProvider.notifier)
+                                        .dateTimeFormat(
+                                            AppLocalizations.of(context)!
+                                                .timeFormat),
                                     style: TextStyle(
                                       color: Theme.of(context)
                                           .textTheme
-                                          .bodyText1!
+                                          .bodyLarge!
                                           .color,
                                     ),
                                   ),

@@ -17,7 +17,7 @@ class AutoRemove extends StatelessWidget {
           child: Text(
             AppLocalizations.of(context)!.automaticDelete,
             style:
-                Theme.of(context).textTheme.bodyText1?.apply(fontSizeDelta: 3),
+                Theme.of(context).textTheme.bodyLarge?.apply(fontSizeDelta: 3),
           ),
         ),
         Consumer(
@@ -33,7 +33,7 @@ class AutoRemove extends StatelessWidget {
                             ref.watch(autoDeletionProvider).checkBoxCondition,
                         title: Text(
                           AppLocalizations.of(context)!.automaticDeleteMsg,
-                          style: Theme.of(context).textTheme.bodyText1,
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         controlAffinity: ListTileControlAffinity.leading,
                         onChanged: (value) async {
@@ -57,7 +57,7 @@ class AutoRemove extends StatelessWidget {
                             textAlign: TextAlign.center,
                             controller:
                                 ref.watch(autoDeletionProvider).controller,
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: Theme.of(context).textTheme.bodyLarge,
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
@@ -85,7 +85,7 @@ class AutoRemove extends StatelessWidget {
                                     "1"
                                 ? AppLocalizations.of(context)!.dayLater
                                 : AppLocalizations.of(context)!.daysLater,
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ),
                       ],

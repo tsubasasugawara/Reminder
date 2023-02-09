@@ -17,7 +17,7 @@ class SettingView extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context)!.setting,
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
       body: SingleChildScrollView(

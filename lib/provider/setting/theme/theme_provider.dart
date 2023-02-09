@@ -170,13 +170,9 @@ class ThemeProvider extends StateNotifier<ThemeProviderData> {
   //ThemeDataを作成し、返す
   ThemeData? getTheme() {
     return ThemeData(
-      primarySwatch: Colors.grey,
       scaffoldBackgroundColor: state.backgroundColor,
       primaryColor: state.primaryColor,
-      errorColor: state.error,
       hintColor: state.hintTextColor,
-      backgroundColor: state.backgroundColor,
-      bottomAppBarColor: state.barColor,
       dialogBackgroundColor: state.dialogBackground,
       unselectedWidgetColor: judgeBlackWhite(state.backgroundColor),
       highlightColor: state.highlightColor,
@@ -187,13 +183,13 @@ class ThemeProvider extends StateNotifier<ThemeProviderData> {
         ),
       ),
       textTheme: TextTheme(
-        headline6: TextStyle(
+        titleLarge: TextStyle(
           color: state.textColor,
         ),
-        bodyText1: TextStyle(
+        bodyLarge: TextStyle(
           color: state.textColor,
         ),
-        bodyText2: const TextStyle(color: Colors.black),
+        bodyMedium: const TextStyle(color: Colors.black),
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: state.barColor,
@@ -228,6 +224,10 @@ class ThemeProvider extends StateNotifier<ThemeProviderData> {
         ),
       ),
       canvasColor: state.canvasColor,
+      colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.grey)
+          .copyWith(error: state.error)
+          .copyWith(background: state.backgroundColor),
+      bottomAppBarTheme: BottomAppBarTheme(color: state.barColor),
     );
   }
 
