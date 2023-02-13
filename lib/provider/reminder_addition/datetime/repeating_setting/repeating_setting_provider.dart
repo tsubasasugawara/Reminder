@@ -5,8 +5,7 @@ import 'package:reminder/utils/text_field_cursor/text_field_cursor.dart';
 import '../../../../model/db/notifications.dart';
 import '../../../../multilingualization/app_localizations.dart';
 
-final repeatingSettingProvider = StateNotifierProvider.autoDispose<
-    RepeatingSettingProvider,
+final repeatingSettingProvider = StateNotifierProvider<RepeatingSettingProvider,
     RepeatingSettingProviderData>((ref) => RepeatingSettingProvider(null));
 
 class RepeatingSettingProviderData {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reminder/provider/reminder_addition/datetime/repeating_setting/repeating_setting_provider.dart';
+import 'package:reminder/provider/setting/theme/theme_provider.dart';
 import 'package:reminder/utils/brightness/brightness.dart';
 import 'package:reminder/model/db/notifications.dart';
 import 'package:reminder/provider/reminder_addition/reminder_addition_provider.dart';
@@ -42,27 +43,19 @@ class ReminderAdditionalView extends StatelessWidget {
         ? DateTime.fromMillisecondsSinceEpoch(time)
         : DateTime.now();
 
+    context
+        .read(alarmSwhitchProvider.notifier)
+        .changeAlarmOnOff(setAlarm ?? Notifications.alarmOn);
+    context.read(dateTimeProvider.notifier).changeDateTime(dateTime: dt);
+    context.read(repeatingSettingProvider.notifier).setDays(frequency);
+
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
-        return ProviderScope(
-          // TODO: DateTimePickerで値の取得と保存ができない
-          overrides: [
-            alarmSwhitchProvider.overrideWith(
-              (ref) => AlarmSwitchProvider(setAlarm ?? Notifications.alarmOn),
-            ),
-            dateTimeProvider.overrideWith(
-              (ref) => DateTimeProvider(dt),
-            ),
-            repeatingSettingProvider.overrideWith(
-              (ref) => RepeatingSettingProvider(frequency),
-            ),
-          ],
-          child: ReminderAdditionalView(
-            id: id,
-            title: title,
-            content: content,
-            isTrash: isTrash,
-          ),
+        return ReminderAdditionalView(
+          id: id,
+          title: title,
+          content: content,
+          isTrash: isTrash,
         );
       }),
     );
@@ -200,7 +193,7 @@ class ReminderAdditionalView extends StatelessWidget {
                             ? Theme.of(context).hintColor
                             : Theme.of(context).primaryColor,
                         () {
-                          context
+                          ref
                               .read(alarmSwhitchProvider.notifier)
                               .changeAlarmOnOff(1 - setAlarm);
                         },
@@ -216,7 +209,7 @@ class ReminderAdditionalView extends StatelessWidget {
           ),
           Expanded(
             flex: 5,
-            child: _dateTimeSelector(context),
+            child: _dateTimeSelector(),
           ),
           Expanded(
             flex: 3,
@@ -235,7 +228,7 @@ class ReminderAdditionalView extends StatelessWidget {
     );
   }
 
-  Widget _dateTimeSelector(BuildContext context) {
+  Widget _dateTimeSelector() {
     return Consumer(
       builder: (context, ref, child) {
         var dt = ref.watch(dateTimeProvider).dt;
@@ -246,6 +239,7 @@ class ReminderAdditionalView extends StatelessWidget {
 
             await ref.read(dateTimeProvider.notifier).selectDateTime(
                   context,
+                  ref.read(themeProvider).uiMode,
                   dateTime: dt,
                 );
           },

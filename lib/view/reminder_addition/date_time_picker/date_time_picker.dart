@@ -8,7 +8,6 @@ import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/setting/theme/theme_provider.dart';
 import 'package:reminder/utils/complete_and_cancel_button/complete_and_cancel_button.dart';
 import 'package:reminder/view/reminder_addition/date_time_picker/repeating_setting_view.dart';
-import 'package:riverpod_context/riverpod_context.dart';
 
 import '../../../utils/pair/pair.dart';
 
@@ -80,18 +79,20 @@ class DateTimePicker {
    */
   Future<Pair<DateTime, int?>?> showDateTimePicker(
     BuildContext context,
+    String uiMode,
     Color backgroundColor,
   ) async {
     final double textScaleFactor =
         math.min(MediaQuery.of(context).textScaleFactor, 1.3);
     final Size dialogSize = _dialogSize(context) * textScaleFactor;
 
+    // TODO:値を変更したときにProviderの状態を変更しているため、キャンセルしても前の状態に戻らない(繰り返し頻度も同様)
+    // 解決策:ダイアログを開いたときの値を保存しておく
     return await showDialog(
       context: context,
       builder: (context) {
         return Theme(
-          data: context.read(themeProvider).uiMode ==
-                  ThemeProviderData.darkTheme
+          data: uiMode == ThemeProviderData.darkTheme
               ? Theme.of(context).copyWith(
                   colorScheme: ColorScheme.dark(
                     primary: Theme.of(context).primaryColor,
@@ -128,24 +129,26 @@ class DateTimePicker {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Expanded(
-                            child: CalendarDatePicker(
-                              firstDate: DateTime.now(),
-                              initialDate: context.read(dateTimeProvider).dt,
-                              lastDate: DateTime(
-                                DateTime.now().year + 10,
-                                DateTime.now().month,
-                                DateTime.now().day,
-                              ),
-                              onDateChanged: (DateTime value) {
-                                context
-                                    .read(dateTimeProvider.notifier)
-                                    .changeDate(
-                                      year: value.year,
-                                      month: value.month,
-                                      day: value.day,
-                                    );
-                              },
-                            ),
+                            child: Consumer(builder: (context, ref, child) {
+                              return CalendarDatePicker(
+                                firstDate: DateTime.now(),
+                                initialDate: ref.read(dateTimeProvider).dt,
+                                lastDate: DateTime(
+                                  DateTime.now().year + 10,
+                                  DateTime.now().month,
+                                  DateTime.now().day,
+                                ),
+                                onDateChanged: (DateTime value) {
+                                  ref
+                                      .read(dateTimeProvider.notifier)
+                                      .changeDate(
+                                        year: value.year,
+                                        month: value.month,
+                                        day: value.day,
+                                      );
+                                },
+                              );
+                            }),
                           ),
                           Consumer(
                             builder: (context, ref, child) {

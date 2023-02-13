@@ -1,8 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reminder/model/db/notifications.dart';
 
-final alarmSwhitchProvider = StateNotifierProvider.autoDispose<
-    AlarmSwitchProvider,
-    AlarmSwitchProviderData>((ref) => AlarmSwitchProvider(1));
+final alarmSwhitchProvider =
+    StateNotifierProvider<AlarmSwitchProvider, AlarmSwitchProviderData>(
+        (ref) => AlarmSwitchProvider(Notifications.alarmOn));
 
 class AlarmSwitchProviderData {
   late int setAlarm;

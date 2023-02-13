@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../model/db/db.dart';
 
-// TODO:ソートの動作確認
 class SortSelection {
   late String orderBy;
   late String sortBy;

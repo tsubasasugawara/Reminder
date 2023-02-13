@@ -5,9 +5,8 @@ import 'package:reminder/view/reminder_addition/date_time_picker/date_time_picke
 
 import '../../../utils/pair/pair.dart';
 
-final dateTimeProvider =
-    StateNotifierProvider.autoDispose<DateTimeProvider, DateTimeData>(
-        (ref) => DateTimeProvider(DateTime.now()));
+final dateTimeProvider = StateNotifierProvider<DateTimeProvider, DateTimeData>(
+    (ref) => DateTimeProvider(DateTime.now()));
 
 class DateTimeData {
   DateTime dt;
@@ -30,11 +29,13 @@ class DateTimeProvider extends StateNotifier<DateTimeData> {
    * @param context : BuildContext
    */
   Future<Pair<DateTime, int?>?> selectDateTime(
-    BuildContext context, {
+    BuildContext context,
+    String uiMode, {
     DateTime? dateTime,
   }) async {
     return await DateTimePicker().showDateTimePicker(
       context,
+      uiMode,
       Theme.of(context).dialogBackgroundColor,
     );
   }
