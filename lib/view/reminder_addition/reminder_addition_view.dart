@@ -231,7 +231,7 @@ class ReminderAdditionalView extends StatelessWidget {
   Widget _dateTimeSelector() {
     return Consumer(
       builder: (context, ref, child) {
-        var dt = ref.watch(dateTimeProvider).dt;
+        var dt = ref.watch(dateTimeProvider).currentDateTime;
 
         return TextButton.icon(
           onPressed: () async {

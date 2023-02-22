@@ -9,19 +9,30 @@ final dateTimeProvider = StateNotifierProvider<DateTimeProvider, DateTimeData>(
     (ref) => DateTimeProvider(DateTime.now()));
 
 class DateTimeData {
-  DateTime dt;
+  DateTime currentDateTime;
+  DateTime editingDateTime;
 
-  DateTimeData({required this.dt});
+  DateTimeData({
+    required this.currentDateTime,
+    required this.editingDateTime,
+  });
 
-  DateTimeData copyWith({DateTime? dt}) {
-    return DateTimeData(dt: dt ?? this.dt);
+  DateTimeData copyWith({
+    DateTime? currentDateTime,
+    DateTime? editingDateTime,
+  }) {
+    return DateTimeData(
+      currentDateTime: currentDateTime ?? this.currentDateTime,
+      editingDateTime: editingDateTime ?? this.editingDateTime,
+    );
   }
 }
 
 class DateTimeProvider extends StateNotifier<DateTimeData> {
-  DateTimeProvider(DateTime? dt)
+  DateTimeProvider(DateTime? currentDateTime)
       : super(DateTimeData(
-          dt: dt ?? DateTime.now(),
+          currentDateTime: currentDateTime ?? DateTime.now(),
+          editingDateTime: currentDateTime ?? DateTime.now(),
         ));
 
   /*
@@ -40,31 +51,35 @@ class DateTimeProvider extends StateNotifier<DateTimeData> {
     );
   }
 
-  void changeDateTime({DateTime? dateTime, int? frequency}) {
-    state = state.copyWith(dt: dateTime);
+  void saveDateTime() {
+    state = state.copyWith(currentDateTime: state.editingDateTime);
+  }
+
+  void changeDateTime({DateTime? dateTime}) {
+    state = state.copyWith(editingDateTime: dateTime);
   }
 
   void changeDate({int? year, int? month, int? day}) {
-    DateTime dt = DateTime(
-      year ?? state.dt.year,
-      month ?? state.dt.month,
-      day ?? state.dt.day,
-      state.dt.hour,
-      state.dt.minute,
+    DateTime editingDateTime = DateTime(
+      year ?? state.editingDateTime.year,
+      month ?? state.editingDateTime.month,
+      day ?? state.editingDateTime.day,
+      state.editingDateTime.hour,
+      state.editingDateTime.minute,
     );
 
-    state = state.copyWith(dt: dt);
+    state = state.copyWith(editingDateTime: editingDateTime);
   }
 
   void changeTime({int? hour, int? minute}) {
-    DateTime dt = DateTime(
-      state.dt.year,
-      state.dt.month,
-      state.dt.day,
-      hour ?? state.dt.hour,
-      minute ?? state.dt.minute,
+    DateTime editingDateTime = DateTime(
+      state.editingDateTime.year,
+      state.editingDateTime.month,
+      state.editingDateTime.day,
+      hour ?? state.editingDateTime.hour,
+      minute ?? state.editingDateTime.minute,
     );
-    state = state.copyWith(dt: dt);
+    state = state.copyWith(editingDateTime: editingDateTime);
   }
 
   /*
@@ -73,7 +88,7 @@ class DateTimeProvider extends StateNotifier<DateTimeData> {
    * @return String : 整形した日時の文字列
    */
   String dateTimeFormat(String format) {
-    return DateFormat(format).format(state.dt);
+    return DateFormat(format).format(state.editingDateTime);
   }
 
   /*
@@ -81,6 +96,6 @@ class DateTimeProvider extends StateNotifier<DateTimeData> {
    * @return int : ミリ秒
    */
   int getMilliSecondsFromEpoch() {
-    return state.dt.millisecondsSinceEpoch;
+    return state.editingDateTime.millisecondsSinceEpoch;
   }
 }

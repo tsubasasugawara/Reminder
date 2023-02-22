@@ -8,6 +8,7 @@ import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:reminder/provider/setting/theme/theme_provider.dart';
 import 'package:reminder/utils/complete_and_cancel_button/complete_and_cancel_button.dart';
 import 'package:reminder/view/reminder_addition/date_time_picker/repeating_setting_view.dart';
+import 'package:riverpod_context/riverpod_context.dart';
 
 import '../../../utils/pair/pair.dart';
 
@@ -131,8 +132,13 @@ class DateTimePicker {
                           Expanded(
                             child: Consumer(builder: (context, ref, child) {
                               return CalendarDatePicker(
-                                firstDate: DateTime.now(),
-                                initialDate: ref.read(dateTimeProvider).dt,
+                                firstDate: DateTime(
+                                  DateTime.now().year - 10,
+                                  DateTime.now().month,
+                                  DateTime.now().day,
+                                ),
+                                initialDate:
+                                    ref.read(dateTimeProvider).currentDateTime,
                                 lastDate: DateTime(
                                   DateTime.now().year + 10,
                                   DateTime.now().month,
@@ -152,7 +158,8 @@ class DateTimePicker {
                           ),
                           Consumer(
                             builder: (context, ref, child) {
-                              var dt = ref.watch(dateTimeProvider).dt;
+                              var dt =
+                                  ref.watch(dateTimeProvider).editingDateTime;
 
                               return Container(
                                 margin: const EdgeInsets.only(bottom: 10.0),
@@ -204,6 +211,9 @@ class DateTimePicker {
                               context, backgroundColor),
                           CompleteAndCancelButton(
                             () {
+                              context
+                                  .read(dateTimeProvider.notifier)
+                                  .saveDateTime();
                               Navigator.pop(context);
                             },
                             () {

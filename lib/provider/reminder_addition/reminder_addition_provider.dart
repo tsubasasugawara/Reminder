@@ -127,7 +127,7 @@ class ReminderAdditionalProvider {
   Future<void> saveBtn(BuildContext context) async {
     var title = titleController.text;
     var content = contentController.text;
-    var dateTime = context.read(dateTimeProvider).dt;
+    var dateTime = context.read(dateTimeProvider).currentDateTime;
     var setAlarm = context.read(alarmSwhitchProvider).setAlarm;
     var days = context.read(repeatingSettingProvider).days;
     var option = context.read(repeatingSettingProvider).option;
