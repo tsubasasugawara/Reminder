@@ -3,7 +3,8 @@ import 'package:reminder/model/platform/kotlin.dart';
 
 import '../../model/db/db.dart';
 
-// モードを変更したときにdataListをこのクラスに渡す
+// TODO:モードを変更したときにdataListをこのクラスに渡す
+// TODO:リマインダー追加・編集画面からホームに戻ったときに一瞬アイテムを選択した状態になってしまっている
 
 //アイテムの複数選択のためのクラス
 class SelectionItemProvider {

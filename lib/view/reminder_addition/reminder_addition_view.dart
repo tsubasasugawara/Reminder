@@ -46,7 +46,10 @@ class ReminderAdditionalView extends StatelessWidget {
     context
         .read(alarmSwhitchProvider.notifier)
         .changeAlarmOnOff(setAlarm ?? Notifications.alarmOn);
-    context.read(dateTimeProvider.notifier).changeDateTime(dateTime: dt);
+    context.read(dateTimeProvider.notifier).changeDateTime(
+          currentDateTime: dt,
+          editingDateTime: dt,
+        );
     context.read(repeatingSettingProvider.notifier).setDays(frequency);
 
     await Navigator.of(context).push(

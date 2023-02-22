@@ -51,12 +51,15 @@ class DateTimeProvider extends StateNotifier<DateTimeData> {
     );
   }
 
-  void saveDateTime() {
-    state = state.copyWith(currentDateTime: state.editingDateTime);
+  void changeDateTime({DateTime? currentDateTime, DateTime? editingDateTime}) {
+    state = state.copyWith(
+      currentDateTime: currentDateTime,
+      editingDateTime: editingDateTime,
+    );
   }
 
-  void changeDateTime({DateTime? dateTime}) {
-    state = state.copyWith(editingDateTime: dateTime);
+  void saveDateTime() {
+    state = state.copyWith(currentDateTime: state.editingDateTime);
   }
 
   void changeDate({int? year, int? month, int? day}) {

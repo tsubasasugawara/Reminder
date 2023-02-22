@@ -17,7 +17,7 @@ class CompleteAndCancelButton extends StatelessWidget {
       children: [
         TextButton(
           onPressed: () async {
-            await okAction();
+            await cancelAction();
           },
           child: Text(
             AppLocalizations.of(context)!.cancelButton,
@@ -26,7 +26,7 @@ class CompleteAndCancelButton extends StatelessWidget {
         ),
         TextButton(
           onPressed: () async {
-            await cancelAction();
+            await okAction();
           },
           child: Text(
             AppLocalizations.of(context)!.ok,
