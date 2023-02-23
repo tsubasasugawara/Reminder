@@ -137,7 +137,8 @@ class DateTimePicker {
                                   DateTime.now().month,
                                   DateTime.now().day,
                                 ),
-                                initialDate:
+                                initialDate: DateTime.now(),
+                                currentDate:
                                     ref.read(dateTimeProvider).currentDateTime,
                                 lastDate: DateTime(
                                   DateTime.now().year + 10,
