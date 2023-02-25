@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reminder/multilingualization/app_localizations_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:reminder/provider/home/home_provider.dart';
-import 'package:reminder/provider/setting/theme/color_picker_provider.dart';
 import 'package:reminder/provider/setting/theme/theme_provider.dart';
 import 'package:reminder/view/home/home_view.dart';
 

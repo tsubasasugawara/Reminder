@@ -12,33 +12,46 @@ class RepeatingSettingProviderData {
   // TODO:listItemの初期化の仕方を変更
   late List<String> listItem;
 
-  int days = 0; // 繰り返しの間隔(日数)を格納
-  int option = Notifications.notRepeating; // 選択肢の中から選択した場合
+  int editingDays = 0; // 繰り返しの間隔(日数)を格納
+  int editingOption = Notifications.notRepeating; // 選択肢の中から選択した場合
+
+  int currentDays = 0;
+  int currentOption = Notifications.notRepeating;
 
   late TextEditingController controller; //間隔を指定するフォームのコントローラ
 
   RepeatingSettingProviderData({
     required this.listItem,
-    required int days,
-    required int option,
+    required int editingDays,
+    required int editingOption,
+    required int currentDays,
+    required int currentOption,
     TextEditingController? controller,
   }) {
-    this.days = days > 0 ? days : 0;
-    this.option = option < 0 ? option : 0;
+    this.editingDays = editingDays > 0 ? editingDays : 0;
+    this.editingOption = editingOption < 0 ? editingOption : 0;
+
+    this.currentDays = currentDays > 0 ? currentDays : 0;
+    this.currentOption = currentOption < 0 ? currentOption : 0;
+
     this.controller =
-        controller ?? TextEditingController(text: this.days.toString());
+        controller ?? TextEditingController(text: this.editingDays.toString());
   }
 
   RepeatingSettingProviderData copyWith({
     List<String>? listItem,
-    int? days,
-    int? option,
+    int? editingDays,
+    int? editingOption,
+    int? currentDays,
+    int? currentOption,
     TextEditingController? controller,
   }) {
     return RepeatingSettingProviderData(
       listItem: listItem ?? this.listItem,
-      days: days ?? this.days,
-      option: option ?? this.option,
+      editingDays: editingDays ?? this.editingDays,
+      editingOption: editingOption ?? this.editingOption,
+      currentDays: currentDays ?? this.currentDays,
+      currentOption: currentOption ?? this.currentOption,
       controller: controller ?? this.controller,
     );
   }
@@ -50,8 +63,10 @@ class RepeatingSettingProvider
       : super(
           RepeatingSettingProviderData(
             listItem: [],
-            days: days ?? 0,
-            option: days ?? 0,
+            editingDays: days ?? 0,
+            editingOption: days ?? 0,
+            currentDays: days ?? 0,
+            currentOption: days ?? 0,
             controller: TextEditingController(
                 text: days != null ? days.toString() : "0"),
           ),
@@ -63,18 +78,35 @@ class RepeatingSettingProvider
    */
   void onChanged(String? value) {
     var res = _validate(value);
-    state = state.copyWith(days: int.parse(value ?? "0"), controller: res);
+    state =
+        state.copyWith(editingDays: int.parse(value ?? "0"), controller: res);
   }
 
   // TODO:関数名
-  void setDays(int? days) {
+  void editDays(int? days) {
     if (days == null || days == 0) {
-      state = state.copyWith(days: 0, option: Notifications.custom);
+      state =
+          state.copyWith(editingDays: 0, editingOption: Notifications.custom);
     } else if (days < 0) {
-      state = state.copyWith(days: 0, option: days);
+      state = state.copyWith(editingDays: 0, editingOption: days);
     } else {
-      state = state.copyWith(days: days, option: Notifications.custom);
+      state = state.copyWith(
+          editingDays: days, editingOption: Notifications.custom);
     }
+  }
+
+  void setCurerntDays({int? days}) {
+    state = state.copyWith(
+      currentDays: days ?? state.editingDays,
+      currentOption: days ?? state.editingOption,
+    );
+  }
+
+  void setEditingDays({int? days}) {
+    state = state.copyWith(
+      editingDays: days ?? state.currentDays,
+      editingOption: days ?? state.currentOption,
+    );
   }
 
   /*

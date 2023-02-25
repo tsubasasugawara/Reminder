@@ -28,11 +28,11 @@ class RepeatingSettingView {
     BuildContext context,
   ) {
     return Consumer(builder: (context, ref, child) {
-      var option = ref.watch(repeatingSettingProvider).option;
+      var option = ref.watch(repeatingSettingProvider).editingOption;
 
       return TextButton(
         onPressed: () {
-          context.read(repeatingSettingProvider.notifier).setDays(value);
+          context.read(repeatingSettingProvider.notifier).editDays(value);
         },
         style: TextButton.styleFrom(minimumSize: const Size.fromHeight(50)),
         child: (value == option)
@@ -68,7 +68,7 @@ class RepeatingSettingView {
         padding: const EdgeInsets.all(5.0),
         child: Consumer(
           builder: (context, ref, child) {
-            var option = ref.watch(repeatingSettingProvider).option;
+            var option = ref.watch(repeatingSettingProvider).editingOption;
 
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -191,9 +191,15 @@ class RepeatingSettingView {
               // TODO:同じ関数を渡しているため意味がない
               CompleteAndCancelButton(
                 () {
+                  context
+                      .read(repeatingSettingProvider.notifier)
+                      .setCurerntDays();
                   Navigator.pop(context);
                 },
                 () {
+                  context
+                      .read(repeatingSettingProvider.notifier)
+                      .setEditingDays();
                   Navigator.pop(context);
                 },
               ),

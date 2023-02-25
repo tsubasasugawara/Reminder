@@ -45,8 +45,8 @@ class DateTimePicker {
   ) {
     return Consumer(
       builder: (context, ref, child) {
-        var days = ref.watch(repeatingSettingProvider).days;
-        var option = ref.watch(repeatingSettingProvider).option;
+        var days = ref.watch(repeatingSettingProvider).currentDays;
+        var option = ref.watch(repeatingSettingProvider).currentOption;
         var buttonMsg =
             RepeatingSettingProvider.buttonMsg(context, days, option);
 
@@ -64,7 +64,8 @@ class DateTimePicker {
             ),
           ),
           onPressed: () async {
-            await RepeatingSettingView(ref.read(repeatingSettingProvider).days)
+            await RepeatingSettingView(
+                    ref.read(repeatingSettingProvider).currentDays)
                 .showSettingRepeatDays(context);
           },
         );

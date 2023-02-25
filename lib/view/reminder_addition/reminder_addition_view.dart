@@ -50,7 +50,8 @@ class ReminderAdditionalView extends StatelessWidget {
           currentDateTime: dt,
           editingDateTime: dt,
         );
-    context.read(repeatingSettingProvider.notifier).setDays(frequency);
+    context.read(repeatingSettingProvider.notifier).editDays(frequency);
+    context.read(repeatingSettingProvider.notifier).setCurerntDays();
 
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) {
