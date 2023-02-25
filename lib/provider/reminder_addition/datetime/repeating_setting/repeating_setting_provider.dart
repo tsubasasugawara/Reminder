@@ -69,7 +69,7 @@ class RepeatingSettingProvider
   // TODO:関数名
   void setDays(int? days) {
     if (days == null || days == 0) {
-      state = state.copyWith(days: 0, option: Notifications.notRepeating);
+      state = state.copyWith(days: 0, option: Notifications.custom);
     } else if (days < 0) {
       state = state.copyWith(days: 0, option: days);
     } else {
