@@ -91,7 +91,7 @@ class DateTimeProvider extends StateNotifier<DateTimeData> {
    * @return String : 整形した日時の文字列
    */
   String dateTimeFormat(String format) {
-    return DateFormat(format).format(state.editingDateTime);
+    return DateFormat(format).format(state.currentDateTime);
   }
 
   /*
