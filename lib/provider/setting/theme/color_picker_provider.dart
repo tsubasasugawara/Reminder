@@ -61,6 +61,8 @@ class ColorPickerProvider extends StateNotifier<ColorPicker> {
           blue: primaryColor.blue,
         ));
 
+  static const int custom = -1;
+
   /*
    * 選択されている色のindexを取得
    * @param @return int : 選択されている色のindex
@@ -126,25 +128,23 @@ class ColorPickerProvider extends StateNotifier<ColorPicker> {
     if (RegExp(r'[^0-9]').hasMatch(value)) {
       value = value.replaceAll(RegExp(r'[^0-9]'), "");
       controller.text = value;
-      TextFieldCursor.moveCursor(controller);
     }
     if (RegExp(r'^0+[0-9]+').hasMatch(value)) {
       value = value.replaceAll(RegExp(r'^0+'), "");
       controller.text = value;
-      TextFieldCursor.moveCursor(controller);
     }
 
     int code = int.tryParse(value) ?? 0;
     if (code <= 0) {
       controller.text = "0";
       code = 0;
-      TextFieldCursor.moveCursor(controller);
     }
     if (code > 255) {
       controller.text = "255";
       code = 255;
-      TextFieldCursor.moveCursor(controller);
     }
+
+    TextFieldCursor.moveCursor(controller);
     action(code);
   }
 }

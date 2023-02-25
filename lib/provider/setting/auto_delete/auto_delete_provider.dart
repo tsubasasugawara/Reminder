@@ -68,7 +68,7 @@ class AutoDeletionProvider extends StateNotifier<AutoDeletion> {
    * @param value : 入力値
    */
   String? _validate(String? value) {
-    if (value == null) return null;
+    if (value == null || value == "") return null;
 
     if (RegExp(r'[^0-9]').hasMatch(value)) {
       value = value.replaceAll(RegExp(r'[^0-9]'), "");
@@ -78,7 +78,7 @@ class AutoDeletionProvider extends StateNotifier<AutoDeletion> {
       value = value.replaceAll(RegExp(r'^0+'), '');
       return value;
     }
-    return null;
+    return value;
   }
 
   /*
@@ -92,8 +92,7 @@ class AutoDeletionProvider extends StateNotifier<AutoDeletion> {
       int.tryParse(state.controller.text) ?? 0,
     );
 
-    state.controller.text = validateValue ?? state.controller.text;
-    state = state.copyWith(controller: state.controller);
+    state.controller.text = validateValue ?? "0";
     TextFieldCursor.moveCursor(state.controller);
   }
 
