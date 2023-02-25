@@ -288,19 +288,16 @@ class Actions {
                         ref.watch(sortSelectionProvider).topup,
                       ),
                       _makeDivider(),
-                      CompleteAndCancelButton(
-                        () {
-                          Navigator.pop(context);
-                        },
-                        () async {
-                          ref.read(homeProvider.notifier).setSortBy(
-                              ref.watch(sortSelectionProvider).orderBy,
-                              ref.watch(sortSelectionProvider).sortBy,
-                              ref.watch(sortSelectionProvider).topup);
-                          await ref.read(homeProvider.notifier).setData();
-                          Navigator.pop(context);
-                        },
-                      ),
+                      CompleteAndCancelButton(() async {
+                        ref.read(homeProvider.notifier).setSortBy(
+                            ref.watch(sortSelectionProvider).orderBy,
+                            ref.watch(sortSelectionProvider).sortBy,
+                            ref.watch(sortSelectionProvider).topup);
+                        await ref.read(homeProvider.notifier).setData();
+                        Navigator.pop(context);
+                      }, () {
+                        Navigator.pop(context);
+                      }),
                     ],
                   );
                 }),

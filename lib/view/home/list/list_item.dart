@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:reminder/model/db/notifications.dart';
 import 'package:reminder/multilingualization/app_localizations.dart';
 
 // ignore: must_be_immutable
@@ -97,7 +98,7 @@ class ListItem extends StatelessWidget {
                 ),
               ),
               Container(
-                child: setAlarm == 1
+                child: setAlarm == Notifications.alarmOn
                     ? Icon(
                         Icons.alarm_on,
                         color: Theme.of(context).primaryColor,
