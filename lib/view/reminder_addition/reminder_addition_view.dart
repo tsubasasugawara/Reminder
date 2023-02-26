@@ -10,6 +10,8 @@ import 'package:reminder/provider/reminder_addition/datetime/datetime_provider.d
 import 'package:reminder/multilingualization/app_localizations.dart';
 import 'package:riverpod_context/riverpod_context.dart';
 
+import 'date_time_picker/date_time_picker.dart';
+
 // ignore: must_be_immutable
 class ReminderAdditionalView extends StatelessWidget {
   late ReminderAdditionalProvider provider;
@@ -241,20 +243,21 @@ class ReminderAdditionalView extends StatelessWidget {
           onPressed: () async {
             FocusScope.of(context).unfocus();
 
-            await ref.read(dateTimeProvider.notifier).selectDateTime(
-                  context,
-                  ref.read(themeProvider).uiMode,
-                  dateTime: dt,
-                );
+            await DateTimePicker().showDateTimePicker(
+              context,
+              ref.read(themeProvider).uiMode,
+              Theme.of(context).dialogBackgroundColor,
+            );
           },
           icon: Icon(
             Icons.calendar_month,
             color: Theme.of(context).primaryColor,
           ),
           label: Text(
-            ref
-                .read(dateTimeProvider.notifier)
-                .dateTimeFormat(AppLocalizations.of(context)!.dateTimeFormat),
+            ref.read(dateTimeProvider.notifier).dateTimeFormat(
+                  AppLocalizations.of(context)!.dateTimeFormat,
+                  dt,
+                ),
             style: TextStyle(
               color: Theme.of(context).primaryColor,
             ),

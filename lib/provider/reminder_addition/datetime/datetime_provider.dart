@@ -35,22 +35,6 @@ class DateTimeProvider extends StateNotifier<DateTimeData> {
           editingDateTime: currentDateTime ?? DateTime.now(),
         ));
 
-  /*
-   * 日時を選択
-   * @param context : BuildContext
-   */
-  Future<Pair<DateTime, int?>?> selectDateTime(
-    BuildContext context,
-    String uiMode, {
-    DateTime? dateTime,
-  }) async {
-    return await DateTimePicker().showDateTimePicker(
-      context,
-      uiMode,
-      Theme.of(context).dialogBackgroundColor,
-    );
-  }
-
   void changeDateTime({DateTime? currentDateTime, DateTime? editingDateTime}) {
     state = state.copyWith(
       currentDateTime: currentDateTime,
@@ -90,8 +74,8 @@ class DateTimeProvider extends StateNotifier<DateTimeData> {
    * @param context : BuildContext
    * @return String : 整形した日時の文字列
    */
-  String dateTimeFormat(String format) {
-    return DateFormat(format).format(state.currentDateTime);
+  String dateTimeFormat(String format, DateTime dt) {
+    return DateFormat(format).format(dt);
   }
 
   /*

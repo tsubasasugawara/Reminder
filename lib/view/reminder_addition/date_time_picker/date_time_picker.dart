@@ -79,7 +79,7 @@ class DateTimePicker {
    * @param backgroundColor : バックグランドカラー
    * @return DateTime? : 選択した日時
    */
-  Future<Pair<DateTime, int?>?> showDateTimePicker(
+  Future<void> showDateTimePicker(
     BuildContext context,
     String uiMode,
     Color backgroundColor,
@@ -196,8 +196,10 @@ class DateTimePicker {
                                     ref
                                         .read(dateTimeProvider.notifier)
                                         .dateTimeFormat(
-                                            AppLocalizations.of(context)!
-                                                .timeFormat),
+                                          AppLocalizations.of(context)!
+                                              .timeFormat,
+                                          dt,
+                                        ),
                                     style: TextStyle(
                                       color: Theme.of(context)
                                           .textTheme
