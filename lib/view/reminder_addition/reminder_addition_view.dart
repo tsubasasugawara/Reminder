@@ -155,7 +155,7 @@ class ReminderAdditionalView extends StatelessWidget {
   Widget _textButtonIcon(
     BuildContext context,
     Color foregroundColor,
-    Function() action,
+    Function()? action,
     IconData icon,
     String label,
   ) {
@@ -165,9 +165,7 @@ class ReminderAdditionalView extends StatelessWidget {
           foregroundColor,
         ),
       ),
-      onPressed: () {
-        action();
-      },
+      onPressed: action,
       icon: Icon(icon),
       label: Text(label),
     );
@@ -189,7 +187,7 @@ class ReminderAdditionalView extends StatelessWidget {
                     ? _textButtonIcon(
                         context,
                         Theme.of(context).hintColor,
-                        () => null,
+                        null,
                         Icons.alarm_off,
                         AppLocalizations.of(context)!.setAlarmOff,
                       )
@@ -217,18 +215,31 @@ class ReminderAdditionalView extends StatelessWidget {
             flex: 5,
             child: _dateTimeSelector(),
           ),
-          Expanded(
-            flex: 3,
-            child: TextButton(
-              onPressed: () {
-                provider.saveBtn(context);
-              },
-              child: Text(
-                AppLocalizations.of(context)!.saveButton,
-                style: TextStyle(color: Theme.of(context).primaryColor),
-              ),
-            ),
-          ),
+          provider.isTrash
+              ? Expanded(
+                  flex: 3,
+                  child: TextButton(
+                    onPressed: null,
+                    child: Text(
+                      AppLocalizations.of(context)!.saveButton,
+                      style: TextStyle(
+                        color: Theme.of(context).hintColor,
+                      ),
+                    ),
+                  ),
+                )
+              : Expanded(
+                  flex: 3,
+                  child: TextButton(
+                    onPressed: () {
+                      provider.saveBtn(context);
+                    },
+                    child: Text(
+                      AppLocalizations.of(context)!.saveButton,
+                      style: TextStyle(color: Theme.of(context).primaryColor),
+                    ),
+                  ),
+                ),
         ],
       ),
     );
@@ -238,29 +249,32 @@ class ReminderAdditionalView extends StatelessWidget {
     return Consumer(
       builder: (context, ref, child) {
         var dt = ref.watch(dateTimeProvider).currentDateTime;
+        var color = provider.isTrash
+            ? Theme.of(context).hintColor
+            : Theme.of(context).primaryColor;
 
         return TextButton.icon(
-          onPressed: () async {
-            FocusScope.of(context).unfocus();
+          onPressed: provider.isTrash
+              ? null
+              : () async {
+                  FocusScope.of(context).unfocus();
 
-            await DateTimePicker().showDateTimePicker(
-              context,
-              ref.read(themeProvider).uiMode,
-              Theme.of(context).dialogBackgroundColor,
-            );
-          },
+                  await DateTimePicker().showDateTimePicker(
+                    context,
+                    ref.read(themeProvider).uiMode,
+                    Theme.of(context).dialogBackgroundColor,
+                  );
+                },
           icon: Icon(
             Icons.calendar_month,
-            color: Theme.of(context).primaryColor,
+            color: color,
           ),
           label: Text(
             ref.read(dateTimeProvider.notifier).dateTimeFormat(
                   AppLocalizations.of(context)!.dateTimeFormat,
                   dt,
                 ),
-            style: TextStyle(
-              color: Theme.of(context).primaryColor,
-            ),
+            style: TextStyle(color: color),
           ),
         );
       },

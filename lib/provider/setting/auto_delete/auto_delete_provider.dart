@@ -108,7 +108,7 @@ class AutoDeletionProvider extends StateNotifier<AutoDeletion> {
         .subtract(Duration(days: daysLater))
         .millisecondsSinceEpoch;
     String where =
-        "${Notifications.timeKey} <= ? AND ${Notifications.deletedKey} = 1";
+        "${Notifications.updatedAtKey} <= ? AND ${Notifications.deletedKey} = 1";
     await Notifications().delete(where, [deleteDate]);
   }
 }
