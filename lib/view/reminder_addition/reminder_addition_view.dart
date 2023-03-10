@@ -84,6 +84,7 @@ class ReminderAdditionalView extends StatelessWidget {
             Container(
               margin: const EdgeInsets.only(top: 10),
               child: TextFormField(
+                readOnly: provider.isTrash,
                 controller: provider.titleController,
                 style: Theme.of(context).textTheme.bodyLarge?.apply(
                       fontSizeDelta: 6,
@@ -105,6 +106,7 @@ class ReminderAdditionalView extends StatelessWidget {
               child: Container(
                 margin: const EdgeInsets.only(top: 20),
                 child: TextFormField(
+                  readOnly: provider.isTrash,
                   controller: provider.contentController,
                   expands: true,
                   style: Theme.of(context).textTheme.bodyLarge,
